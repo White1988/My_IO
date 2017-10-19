@@ -1,1 +1,2 @@
-include 'android', 'core', ':BaseGameUtils'
+include 'android', 'core', ':BaseGameUtils', ':desktop2'
+project(':desktop2').projectDir = new File('desktop')

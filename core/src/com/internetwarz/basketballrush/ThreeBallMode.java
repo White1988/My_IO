@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -226,7 +225,7 @@ public class ThreeBallMode implements Screen,InputProcessor{
                 if (dot.overlaps(playerDotRectangle)) {
                     if (entry.getString().equals(touchImage)) {
                         score.setScore(score.getScore()+1);
-                        game.playServices.unlockAchievement(score.getScore(),gameType);
+                        game.getPlayServices().unlockAchievement(score.getScore(),gameType);
                         if(entry.getString().equals("image2")){
                             blueballs++;
                         }

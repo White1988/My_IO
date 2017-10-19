@@ -12,13 +12,18 @@ public class BasketBallRush extends Game {
 	SpriteBatch batch;
 	BitmapFont font;
 	FreeTypeFontGenerator generator;
-    public static PlayServices playServices;
+    private static PlayServices playServices;
 	Assets assets;
 
     public BasketBallRush(PlayServices playServices)
     {
         this.playServices = playServices;
     }
+
+
+	public static PlayServices getPlayServices() {
+		return playServices;
+	}
 
 	@Override
 	public void create () {

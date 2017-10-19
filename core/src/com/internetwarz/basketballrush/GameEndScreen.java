@@ -74,16 +74,16 @@ public class GameEndScreen implements Screen,InputProcessor {
         }
         prefs.flush();
         highScoreString = "Best : "+prefs.getInteger(gameType,0);
-        game.playServices.submitScore(score.getScore(),gameType);
+        game.getPlayServices().submitScore(score.getScore(),gameType);
 
         //setting games Played preferences
         prefs.putInteger(gameType+" played",prefs.getInteger(gameType+" played",0)+1);
 
         prefs.flush();
 
-        game.playServices.gamesPlayedAchievements(gameType,prefs.getInteger(gameType+" played",0));
-        game.playServices.blueBallsCounter(blueballs);
-        game.playServices.greenBallsCounter(greenballs);
+        game.getPlayServices().gamesPlayedAchievements(gameType,prefs.getInteger(gameType+" played",0));
+        game.getPlayServices().blueBallsCounter(blueballs);
+        game.getPlayServices().greenBallsCounter(greenballs);
 
         layoutGameOver = new GlyphLayout();
         layoutGameOver.setText(game.font,"Game Over");
@@ -125,7 +125,7 @@ public class GameEndScreen implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
-                game.playServices.showScore();
+                game.getPlayServices().showScore();
             }
         });
         stage.addActor(leaderboardButton);
@@ -137,7 +137,7 @@ public class GameEndScreen implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
-                game.playServices.showAchievement();
+                game.getPlayServices().showAchievement();
             }
         });
         stage.addActor(achievementsButton);

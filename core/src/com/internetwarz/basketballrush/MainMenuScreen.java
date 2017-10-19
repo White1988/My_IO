@@ -36,7 +36,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
     public MainMenuScreen(final BasketBallRush gam){
         this.game=gam;
-        game.playServices.signIn();
+        game.getPlayServices().signIn();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, appWidth, appHeight);
         batch = new SpriteBatch();
@@ -78,7 +78,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
-                game.playServices.showScore();
+                game.getPlayServices().showScore();
             }
         });
         stage.addActor(leaderboardButton);
@@ -90,7 +90,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
-                game.playServices.showAchievement();
+                game.getPlayServices().showAchievement();
             }
         });
         stage.addActor(achievementsButton);
@@ -102,7 +102,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
-                game.playServices.rateGame();
+                game.getPlayServices().rateGame();
             }
         });
         stage.addActor(rateButton);

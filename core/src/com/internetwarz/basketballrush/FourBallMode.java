@@ -234,7 +234,7 @@ public class FourBallMode implements Screen,InputProcessor{
                 if (dot.overlaps(playerDotRectangle)) {
                     if (entry.getString().equals(touchImage)) {
                         score.setScore(score.getScore()+1);
-                        game.playServices.unlockAchievement(score.getScore(),gameType);
+                        game.getPlayServices().unlockAchievement(score.getScore(),gameType);
                         if(entry.getString().equals("image2")){
                             blueballs++;
                         }
