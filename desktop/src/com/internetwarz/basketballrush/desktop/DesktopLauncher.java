@@ -13,6 +13,6 @@ public class DesktopLauncher {
 		config.useGL30   = false;
 		config.width = 480;
 		config.height = 320;
-	  	 new LwjglApplication(new BasketBallRush(new PlayServicesStub()), config);
+		new LwjglApplication(new BasketBallRush(new PlayServicesStub()), config);
 	}
 }

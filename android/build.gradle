@@ -47,7 +47,7 @@ task copyAndroidNatives() {
         }
     }
 }
-task run(type: Exec) {
+/*task run(type: Exec) {
     def path
     def localProperties = project.file("../local.properties")
     if (localProperties.exists()) {
@@ -67,7 +67,7 @@ task run(type: Exec) {
 
     def adb = path + "/platform-tools/adb"
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.internetwarz.amazingdot/AndroidLauncher'
-}
+}*/
 
 // sets up the Android Idea project, using the old Ant based build.
 idea {

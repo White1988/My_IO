@@ -6,7 +6,7 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 project.ext.mainClassName = "com.internetwarz.basketballrush.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../android/assets");
 
-task run(dependsOn: classes, type: JavaExec) {
+task desctopRun(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
@@ -14,7 +14,7 @@ task run(dependsOn: classes, type: JavaExec) {
     ignoreExitValue = true
 }
 
-task debug(dependsOn: classes, type: JavaExec) {
+task desctop_debug(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
@@ -23,7 +23,7 @@ task debug(dependsOn: classes, type: JavaExec) {
     debug = true
 }
 
-task dist(type: Jar) {
+task desctop_dist(type: Jar) {
     from files(sourceSets.main.output.classesDir)
     from files(sourceSets.main.output.resourcesDir)
     from {configurations.compile.collect {zipTree(it)}}
@@ -34,5 +34,5 @@ task dist(type: Jar) {
     }
 }
 
-dist.dependsOn classes
+desctop_dist.dependsOn classes
 
