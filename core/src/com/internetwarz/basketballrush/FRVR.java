@@ -8,10 +8,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.internetwarz.basketballrush.utils.GameUtils;
 import com.internetwarz.basketballrush.utils.Score;
@@ -30,38 +28,15 @@ public class FRVR implements Screen,InputProcessor{
     private static int gameSpeed;
     private static int touchCounter;
 
-    //private static int blueballs;
-   // private static int greenballs;
-
     Score score;
     private GameUtils gameutils;
 
-    private String touchImage;
-    private String startMessage;
-    private String gameType;
 
     //setting variables to store two different color balls and the net
     private Texture targetNet;     //Contains net image resource
-    private Texture playerBallTexture;       //Contains ball 1 resource
- //   private Texture gameDotImage1;
+    private Texture playerBallTexture;       //Contains ball texture
+    private Rectangle palyerBallRectangle;   // ball physic body
 
-    private Rectangle playerDotRectangle;
-  //  private Array<GameBallValues> gameDot;
-
-    //storing the time of last dot in nano seconds
-    private long lastDotTime;
-
-
-    //Code to show the tutorial animation
-    private static final int        FRAME_COLS = 6;         // #1
-    private static final int        FRAME_ROWS = 4;         // #2
-
-    Animation walkAnimation;          // #3
-    Texture walkSheet;              // #4
-    TextureRegion[]                 walkFrames;             // #5
-    TextureRegion                   currentFrame;           // #7
-
-    float stateTime;                                        // #8
 
     public FRVR(final BasketBallRush gam){
         this.game = gam;
@@ -73,8 +48,6 @@ public class FRVR implements Screen,InputProcessor{
 
         layoutScore = new GlyphLayout();
 
-      //  blueballs =0;
-      //  greenballs =0;
 
         InputMultiplexer plex = new InputMultiplexer();
         plex.addProcessor(this);
@@ -107,37 +80,21 @@ public class FRVR implements Screen,InputProcessor{
         }));
         Gdx.input.setInputProcessor(plex);
 
-        gameType="FRVR";
+
         gameSpeed = 600;
         touchCounter =0;
         gameutils = new GameUtils();
         score = new Score(0);
-        //touchImage = "image1";
-        //startMessage = "Swipe";
 
         //loading the images in the variables
         targetNet = game.assets.getTexture("net_frvr");
         playerBallTexture = game.assets.getTexture("ball_frvr");
-        //gameDotImage1 = game.assets.getTexture("ball2");
+
 
         //placing the player dot in the middle of the screen
-        playerDotRectangle = new Rectangle(appWidth/2 - targetNet.getWidth()/2,20, targetNet.getWidth(), targetNet.getHeight());
-
-       // gameDot = new Array<GameBallValues>();
+        palyerBallRectangle = new Rectangle(appWidth/2 - targetNet.getWidth()/2,20, targetNet.getWidth(), targetNet.getHeight());
 
 
-        //animation code initialization
-        walkSheet = game.assets.getTexture("two"); // #9
-        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth()/FRAME_COLS, walkSheet.getHeight()/FRAME_ROWS);              // #10
-        walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
-        int index = 0;
-        for (int i = 0; i < FRAME_ROWS; i++) {
-            for (int j = 0; j < FRAME_COLS; j++) {
-                walkFrames[index++] = tmp[i][j];
-            }
-        }
-        walkAnimation = new Animation(0.083f, walkFrames);      // #11
-        stateTime = 0f;                         // #13
     }
 
     /*private void populateDots(){
@@ -166,13 +123,11 @@ public class FRVR implements Screen,InputProcessor{
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        stateTime += Gdx.graphics.getDeltaTime();           // #15
-        currentFrame = walkAnimation.getKeyFrame(stateTime, true);  // #16
 
         batch.begin();
 
         //Drawing the net image
-        batch.draw(targetNet, playerDotRectangle.x, playerDotRectangle.y, playerDotRectangle.width, playerDotRectangle.height);
+        batch.draw(targetNet, palyerBallRectangle.x, palyerBallRectangle.y, palyerBallRectangle.width, palyerBallRectangle.height);
 
         layoutScore.setText(game.font,""+score.getStringScore());
         if(touchCounter >= 1) {
@@ -180,10 +135,6 @@ public class FRVR implements Screen,InputProcessor{
                 game.font.draw(batch,score.getStringScore(),appWidth/2-layoutScore.width/2,90*(appHeight/100));
                 batch.draw(gameBallValues.getTexture(), gameBallValues.getRectangle().x, gameBallValues.getRectangle().y);
             }*/
-        }
-        else{
-            game.font.draw(batch,startMessage,appWidth/2-startMessage.length()*40/2,appHeight/2);
-            batch.draw(currentFrame, appWidth/2-currentFrame.getRegionWidth()/2, 50);             // #17
         }
 
         batch.end();
