@@ -13,17 +13,11 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.internetwarz.basketballrush.utils.GameBallValues;
 import com.internetwarz.basketballrush.utils.GameUtils;
 import com.internetwarz.basketballrush.utils.Score;
 import com.internetwarz.basketballrush.utils.SimpleDirectionGestureDetector;
 
-import java.util.Iterator;
-import java.util.Random;
-
-public class ThreeBallMode implements Screen,InputProcessor{
+public class FRVR implements Screen,InputProcessor{
     final BasketBallRush game;
     final float appWidth = 768;
     final float appHeight = 1280;
@@ -36,8 +30,8 @@ public class ThreeBallMode implements Screen,InputProcessor{
     private static int gameSpeed;
     private static int touchCounter;
 
-    private static int blueballs;
-    private static int greenballs;
+    //private static int blueballs;
+   // private static int greenballs;
 
     Score score;
     private GameUtils gameutils;
@@ -47,20 +41,20 @@ public class ThreeBallMode implements Screen,InputProcessor{
     private String gameType;
 
     //setting variables to store two different color balls and the net
-    private Texture playerDotImage;     //Contains net image resource
-    private Texture gameDotImage;       //Contains ball 1 resource
-    private Texture gameDotImage1;
-    private Texture gameDotImage2;
+    private Texture targetNet;     //Contains net image resource
+    private Texture playerBallTexture;       //Contains ball 1 resource
+ //   private Texture gameDotImage1;
 
     private Rectangle playerDotRectangle;
-    private Array<GameBallValues> gameDot;
+  //  private Array<GameBallValues> gameDot;
 
     //storing the time of last dot in nano seconds
     private long lastDotTime;
 
-    //animation code
+
+    //Code to show the tutorial animation
     private static final int        FRAME_COLS = 6;         // #1
-    private static final int        FRAME_ROWS = 6;         // #2
+    private static final int        FRAME_ROWS = 4;         // #2
 
     Animation walkAnimation;          // #3
     Texture walkSheet;              // #4
@@ -69,7 +63,7 @@ public class ThreeBallMode implements Screen,InputProcessor{
 
     float stateTime;                                        // #8
 
-    public ThreeBallMode(final BasketBallRush gam){
+    public FRVR(final BasketBallRush gam){
         this.game = gam;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, appWidth, appHeight);
@@ -77,34 +71,33 @@ public class ThreeBallMode implements Screen,InputProcessor{
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
 
-        blueballs =0;
-        greenballs =0;
-
         layoutScore = new GlyphLayout();
+
+      //  blueballs =0;
+      //  greenballs =0;
 
         InputMultiplexer plex = new InputMultiplexer();
         plex.addProcessor(this);
         plex.addProcessor(new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
 
+            //Chainging the ball color according to swipe action of the user.
             @Override
             public void onUp() {
-                touchCounter++;
-                playerDotImage = game.assets.getTexture("net3");
-                touchImage="image2";
             }
 
             @Override
             public void onRight() {
                 touchCounter++;
-                playerDotImage = game.assets.getTexture("net1");
-                touchImage="image";
+                //todo make ball move
+               // targetNet = game.assets.getTexture("net1");
+               // touchImage="image";
             }
 
             @Override
             public void onLeft() {
                 touchCounter++;
-                playerDotImage = game.assets.getTexture("net2");
-                touchImage="image1";
+               // targetNet = game.assets.getTexture("net2");
+               // touchImage="image1";
             }
 
             @Override
@@ -114,28 +107,27 @@ public class ThreeBallMode implements Screen,InputProcessor{
         }));
         Gdx.input.setInputProcessor(plex);
 
-        gameType="three color mode";
-        gameSpeed = 700;
+        gameType="FRVR";
+        gameSpeed = 600;
         touchCounter =0;
         gameutils = new GameUtils();
         score = new Score(0);
-        touchImage = "image1";
-        startMessage = "Swipe";
+        //touchImage = "image1";
+        //startMessage = "Swipe";
 
         //loading the images in the variables
-        playerDotImage = game.assets.getTexture("net1");
-
-        gameDotImage = game.assets.getTexture("ball1");
-        gameDotImage1 = game.assets.getTexture("ball2");
-        gameDotImage2 = game.assets.getTexture("ball3");
+        targetNet = game.assets.getTexture("net_frvr");
+        playerBallTexture = game.assets.getTexture("ball_frvr");
+        //gameDotImage1 = game.assets.getTexture("ball2");
 
         //placing the player dot in the middle of the screen
-        playerDotRectangle = new Rectangle(appWidth/2 -playerDotImage.getWidth()/2,20,playerDotImage.getWidth(),playerDotImage.getHeight());
+        playerDotRectangle = new Rectangle(appWidth/2 - targetNet.getWidth()/2,20, targetNet.getWidth(), targetNet.getHeight());
 
-        gameDot = new Array<GameBallValues>();
+       // gameDot = new Array<GameBallValues>();
+
 
         //animation code initialization
-        walkSheet = game.assets.getTexture("three"); // #9
+        walkSheet = game.assets.getTexture("two"); // #9
         TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth()/FRAME_COLS, walkSheet.getHeight()/FRAME_ROWS);              // #10
         walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
         int index = 0;
@@ -148,29 +140,26 @@ public class ThreeBallMode implements Screen,InputProcessor{
         stateTime = 0f;                         // #13
     }
 
-    private void populateDots(){
+    /*private void populateDots(){
         Rectangle dots = new Rectangle();
         dots.x = gameutils.randomLocation((int)appWidth);
         dots.y = appHeight;
-        dots.width = gameDotImage.getWidth();
-        dots.height = gameDotImage.getHeight();
+        dots.width = playerBallTexture.getWidth();
+        dots.height = playerBallTexture.getHeight();
 
         Random rand = new Random();
-        int  n = rand.nextInt(3) + 1;
+        int  n = rand.nextInt(2) + 1;
         GameBallValues g;
         if(n==1){
             g = new GameBallValues(dots,gameDotImage1,"image1");
         }
-        else if(n==2){
-            g = new GameBallValues(dots,gameDotImage,"image");
-        }
         else{
-            g = new GameBallValues(dots,gameDotImage2,"image2");
+            g = new GameBallValues(dots, playerBallTexture,"image");
         }
         gameDot.add(g);
 
         lastDotTime = TimeUtils.nanoTime();
-    }
+    }*/
 
     @Override
     public void render(float delta) {
@@ -180,17 +169,17 @@ public class ThreeBallMode implements Screen,InputProcessor{
         stateTime += Gdx.graphics.getDeltaTime();           // #15
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);  // #16
 
-
         batch.begin();
 
-        batch.draw(playerDotImage, playerDotRectangle.x, playerDotRectangle.y, playerDotRectangle.width, playerDotRectangle.height);
+        //Drawing the net image
+        batch.draw(targetNet, playerDotRectangle.x, playerDotRectangle.y, playerDotRectangle.width, playerDotRectangle.height);
 
         layoutScore.setText(game.font,""+score.getStringScore());
         if(touchCounter >= 1) {
-            for(GameBallValues gameBallValues : gameDot){
+            /*for(GameBallValues gameBallValues : gameDot){
                 game.font.draw(batch,score.getStringScore(),appWidth/2-layoutScore.width/2,90*(appHeight/100));
                 batch.draw(gameBallValues.getTexture(), gameBallValues.getRectangle().x, gameBallValues.getRectangle().y);
-            }
+            }*/
         }
         else{
             game.font.draw(batch,startMessage,appWidth/2-startMessage.length()*40/2,appHeight/2);
@@ -199,44 +188,7 @@ public class ThreeBallMode implements Screen,InputProcessor{
 
         batch.end();
 
-        if(touchCounter >=1) {
-            // check if we need to create a new dot
-            if (TimeUtils.nanoTime() - lastDotTime > 600000000) {
-                populateDots();
-            }
 
-            Iterator<GameBallValues> iter = gameDot.iterator();
-            while (iter.hasNext()) {
-                GameBallValues entry = iter.next();
-                Rectangle dot = entry.getRectangle();
-
-                gameSpeed = gameutils.updateGameSpeed(score.getScore(),gameSpeed,gameType);
-                int xSpeed = gameutils.calXSpeed(gameSpeed,appHeight,appWidth);
-
-                dot.y = dot.y - gameSpeed * Gdx.graphics.getDeltaTime();
-                if (dot.x < appWidth / 2 - gameDotImage.getWidth() / 2) {
-                    dot.x = dot.x + xSpeed * Gdx.graphics.getDeltaTime();
-                } else if (dot.x > appWidth / 2 - gameDotImage.getWidth() / 2) {
-                    dot.x = dot.x - xSpeed * Gdx.graphics.getDeltaTime();
-                }
-                if (dot.y + 64 < 0) {
-                    iter.remove();
-                }
-                if (dot.overlaps(playerDotRectangle)) {
-                    if (entry.getString().equals(touchImage)) {
-                        score.setScore(score.getScore()+1);
-                        game.getPlayServices().unlockAchievement(score.getScore(),gameType);
-                        if(entry.getString().equals("image2")){
-                            blueballs++;
-                        }
-                        iter.remove();
-                    }
-                    else{
-                        game.setScreen(new com.internetwarz.basketballrush.GameEndScreen(game,score,gameType,blueballs,greenballs));
-                    }
-                }
-            }
-        }
     }
 
     @Override

@@ -9,7 +9,7 @@ public class Assets {
 
     //Image Resources
     Texture ball1,ball2,ball3,ball4,net1,net2,net3,net4,gameName,logo,tutButton,tutButtonClicked,
-            spriteSheetFour,spriteSheetThree,spriteSheetTwo,tutorial;
+            spriteSheetFour,spriteSheetThree,spriteSheetTwo,tutorial , ball_frvr, net_frvr;
     TextureAtlas buttonAtlas;
 
     //Sound Resources
@@ -24,6 +24,10 @@ public class Assets {
         net2 = new Texture(Gdx.files.internal("images/Net2.png"));
         net3 = new Texture(Gdx.files.internal("images/Net3.png"));
         net4 = new Texture(Gdx.files.internal("images/Net4.png"));
+
+        ball_frvr = new Texture(Gdx.files.internal("images/ball_frvr.png"));
+        net_frvr = new Texture(Gdx.files.internal("images/net_frvr.png"));
+
         gameName = new Texture(Gdx.files.internal("images/gameName.png"));
         logo = new Texture(Gdx.files.internal("images/internetwarz.png"));
         tutButton = new Texture(Gdx.files.internal("images/tutButton.png"));
@@ -62,6 +66,12 @@ public class Assets {
         }
         else if(file.equals("net4")){
             return  net4;
+        }
+        else if(file.equals("ball_frvr")){
+            return  ball_frvr;
+        }
+        else if(file.equals("net_frvr")){
+            return  net_frvr;
         }
         else if(file.equals("gameName")){
             return  gameName;
@@ -106,6 +116,8 @@ public class Assets {
         net2.dispose();
         net3.dispose();
         net4.dispose();
+        ball_frvr.dispose();
+        net_frvr.dispose();
         gameName.dispose();
         logo.dispose();
         tutButton.dispose();

@@ -15,7 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.internetwarz.basketballrush.utils.GameDotValues;
+import com.internetwarz.basketballrush.utils.GameBallValues;
 import com.internetwarz.basketballrush.utils.GameUtils;
 import com.internetwarz.basketballrush.utils.Score;
 import com.internetwarz.basketballrush.utils.SimpleDirectionGestureDetector;
@@ -52,7 +52,7 @@ public class TwoBallMode implements Screen,InputProcessor{
     private Texture gameDotImage1;
 
     private Rectangle playerDotRectangle;
-    private Array<GameDotValues> gameDot;
+    private Array<GameBallValues> gameDot;
 
     //storing the time of last dot in nano seconds
     private long lastDotTime;
@@ -128,7 +128,7 @@ public class TwoBallMode implements Screen,InputProcessor{
         //placing the player dot in the middle of the screen
         playerDotRectangle = new Rectangle(appWidth/2 -playerDotImage.getWidth()/2,20,playerDotImage.getWidth(),playerDotImage.getHeight());
 
-        gameDot = new Array<GameDotValues>();
+        gameDot = new Array<GameBallValues>();
 
 
         //animation code initialization
@@ -154,12 +154,12 @@ public class TwoBallMode implements Screen,InputProcessor{
 
         Random rand = new Random();
         int  n = rand.nextInt(2) + 1;
-        GameDotValues g;
+        GameBallValues g;
         if(n==1){
-            g = new GameDotValues(dots,gameDotImage1,"image1");
+            g = new GameBallValues(dots,gameDotImage1,"image1");
         }
         else{
-            g = new GameDotValues(dots,gameDotImage,"image");
+            g = new GameBallValues(dots,gameDotImage,"image");
         }
         gameDot.add(g);
 
@@ -181,9 +181,9 @@ public class TwoBallMode implements Screen,InputProcessor{
 
         layoutScore.setText(game.font,""+score.getStringScore());
         if(touchCounter >= 1) {
-            for(GameDotValues gameDotValues : gameDot){
+            for(GameBallValues gameBallValues : gameDot){
                 game.font.draw(batch,score.getStringScore(),appWidth/2-layoutScore.width/2,90*(appHeight/100));
-                batch.draw(gameDotValues.getTexture(),gameDotValues.getRectangle().x,gameDotValues.getRectangle().y);
+                batch.draw(gameBallValues.getTexture(), gameBallValues.getRectangle().x, gameBallValues.getRectangle().y);
             }
         }
         else{
@@ -199,9 +199,9 @@ public class TwoBallMode implements Screen,InputProcessor{
                 populateDots();
             }
 
-            Iterator<GameDotValues> iter = gameDot.iterator();
+            Iterator<GameBallValues> iter = gameDot.iterator();
             while (iter.hasNext()) {
-                GameDotValues entry = iter.next();
+                GameBallValues entry = iter.next();
                 Rectangle dot = entry.getRectangle();
 
                 //Updating the game speed as the game progresses

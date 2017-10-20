@@ -67,7 +67,7 @@ public class GameModeSelect implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
-                game.setScreen(new TwoBallMode(game));
+                game.setScreen(new FRVR(game));
             }
         });
         stage.addActor(easyButton);

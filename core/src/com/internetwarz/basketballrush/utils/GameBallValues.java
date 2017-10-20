@@ -5,17 +5,17 @@ import com.badlogic.gdx.math.Rectangle;
 
 
 //Bean class to store which ball is of which color
-public class GameDotValues {
+public class GameBallValues {
 
     Rectangle rectangle;
     Texture texture;
     String string;
 
-    public GameDotValues(){
+    public GameBallValues(){
 
     }
 
-    public GameDotValues(Rectangle r, Texture t, String s){
+    public GameBallValues(Rectangle r, Texture t, String s){
         rectangle =r;
         texture =t;
         string = s;

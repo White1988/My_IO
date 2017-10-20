@@ -16,7 +16,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.internetwarz.basketballrush.utils.GameDotValues;
+import com.internetwarz.basketballrush.utils.GameBallValues;
 import com.internetwarz.basketballrush.utils.GameUtils;
 import com.internetwarz.basketballrush.utils.Score;
 import com.internetwarz.basketballrush.utils.SimpleDirectionGestureDetector;
@@ -56,7 +56,7 @@ public class FourBallMode implements Screen,InputProcessor{
     private Texture gameDotImage3;
 
     private Rectangle playerDotRectangle;
-    private Array<GameDotValues> gameDot;
+    private Array<GameBallValues> gameDot;
 
     //storing the time of last dot in nano seconds
     private long lastDotTime;
@@ -138,7 +138,7 @@ public class FourBallMode implements Screen,InputProcessor{
         //placing the player dot in the middle of the screen
         playerDotRectangle = new Rectangle(appWidth/2 -playerDotImage.getWidth()/2,20,playerDotImage.getWidth(),playerDotImage.getHeight());
 
-        gameDot = new Array<GameDotValues>();
+        gameDot = new Array<GameBallValues>();
 
         //animation code initialization
         walkSheet = game.assets.getTexture("four"); // #9
@@ -163,18 +163,18 @@ public class FourBallMode implements Screen,InputProcessor{
 
         Random rand = new Random();
         int  n = rand.nextInt(4) + 1;
-        GameDotValues g;
+        GameBallValues g;
         if(n==1){
-            g = new GameDotValues(dots,gameDotImage1,"image1");
+            g = new GameBallValues(dots,gameDotImage1,"image1");
         }
         else if(n==2){
-            g = new GameDotValues(dots,gameDotImage,"image");
+            g = new GameBallValues(dots,gameDotImage,"image");
         }
         else if(n==3){
-            g = new GameDotValues(dots,gameDotImage2,"image2");
+            g = new GameBallValues(dots,gameDotImage2,"image2");
         }
         else{
-            g = new GameDotValues(dots,gameDotImage3,"image3");
+            g = new GameBallValues(dots,gameDotImage3,"image3");
         }
         gameDot.add(g);
 
@@ -196,9 +196,9 @@ public class FourBallMode implements Screen,InputProcessor{
 
         layoutScore.setText(game.font,""+score.getStringScore());
         if(touchCounter >= 1) {
-            for(GameDotValues gameDotValues : gameDot){
+            for(GameBallValues gameBallValues : gameDot){
                 game.font.draw(batch,score.getStringScore(),appWidth/2-layoutScore.width/2,90*(appHeight/100));
-                batch.draw(gameDotValues.getTexture(),gameDotValues.getRectangle().x,gameDotValues.getRectangle().y);
+                batch.draw(gameBallValues.getTexture(), gameBallValues.getRectangle().x, gameBallValues.getRectangle().y);
             }
         }
         else{
@@ -214,9 +214,9 @@ public class FourBallMode implements Screen,InputProcessor{
                 populateDots();
             }
 
-            Iterator<GameDotValues> iter = gameDot.iterator();
+            Iterator<GameBallValues> iter = gameDot.iterator();
             while (iter.hasNext()) {
-                GameDotValues entry = iter.next();
+                GameBallValues entry = iter.next();
                 Rectangle dot = entry.getRectangle();
 
                 gameSpeed = gameutils.updateGameSpeed(score.getScore(),gameSpeed,gameType);
