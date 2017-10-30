@@ -14,9 +14,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.ChainShape;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.internetwarz.basketballrush.utils.GameUtils;
 import com.internetwarz.basketballrush.utils.Score;
@@ -24,15 +26,18 @@ import com.internetwarz.basketballrush.utils.SimpleDirectionGestureDetector;
 
 public class FRVR implements Screen,InputProcessor{
     final BasketBallRush game;
-    final float appWidth = 768;
-    final float appHeight = 1280;
+    //final float appWidth = 768;
+    //final float appHeight = 1280;
     SpriteBatch batch;
     OrthographicCamera camera;
+
+    Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 
     GlyphLayout layoutScore;
 
     World world;
     Body ballBody;
+    Body groundBody;
 
     //setting values on touch
     private static int gameSpeed;
@@ -52,7 +57,7 @@ public class FRVR implements Screen,InputProcessor{
     {
         this.game = gam;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, appWidth, appHeight);
+        //camera.setToOrtho(false, appWidth, appHeight);
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
         layoutScore = new GlyphLayout();
@@ -112,6 +117,38 @@ public class FRVR implements Screen,InputProcessor{
         //passed in is gravity
         world = new World(new Vector2(0, -98f), true);
 
+
+        initPlayerBall();
+        initGround();
+    }
+
+    private void initGround()
+    {
+
+        BodyDef  bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(0,0);
+
+        groundBody = world.createBody(bodyDef);
+
+        ChainShape groundShape = new ChainShape();
+        groundShape.createChain(new Vector2[] {new Vector2(-500, 0), new Vector2(500, 0)});
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = groundShape;
+        fixtureDef.density = 1f;
+        fixtureDef.restitution = 0.8f;
+
+        Fixture fixture = groundBody.createFixture(fixtureDef);
+
+        groundShape.dispose();
+    }
+
+
+    private void initPlayerBall()
+    {
+
+        // BALL
         // Now create a BodyDefinition.  This defines the physics objects type
         //and position in the simulation
         BodyDef bodyDef = new BodyDef();
@@ -125,27 +162,62 @@ public class FRVR implements Screen,InputProcessor{
         ballBody = world.createBody(bodyDef);
 
         // Now define the dimensions of the physics shape
-        PolygonShape shape = new PolygonShape();
+        CircleShape ballShape = new CircleShape();
+        ballShape.setRadius(ballSprite.getHeight()/2);
         // We are a box, so this makes sense, no?
         // Basically set the physics polygon to a box with the same dimensions
         //as our sprite
-        shape.setAsBox(ballSprite.getWidth()/2, ballSprite.getHeight()/2);
+       // ballShape.setAsBox(ballSprite.getWidth()/2, ballSprite.getHeight()/2);
 
         // FixtureDef is a confusing expression for physical properties
         // Basically this is where you, in addition to defining the shape of the
-       // body
+        // body
         // you also define it's properties like density, restitution and others
         //we will see shortly
         // If you are wondering, density and area are used to calculate over all
         //mass
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
+        fixtureDef.shape = ballShape;
         fixtureDef.density = 1f;
+        fixtureDef.restitution = 0.95f;
+
 
         Fixture fixture = ballBody.createFixture(fixtureDef);
 
         // Shape is the only disposable of the lot, so get rid of it
-        shape.dispose();
+        ballShape.dispose();
+        // BALL-END
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+
+        // On right or left arrow set the velocity at a fixed rate in that
+       //direction
+        if(keycode == Input.Keys.RIGHT)
+            ballBody.setLinearVelocity(1f, 0f);
+        if(keycode == Input.Keys.LEFT)
+            ballBody.setLinearVelocity(-1f,0f);
+
+        if(keycode == Input.Keys.UP)
+            ballBody.applyForceToCenter(0f,10f,true);
+        if(keycode == Input.Keys.DOWN)
+            ballBody.applyForceToCenter(0f, -10f, true);
+
+
+
+        // If user hits spacebar, reset everything back to normal
+        if(keycode == Input.Keys.SPACE) {
+            ballBody.setLinearVelocity(0f, 0f);
+            ballBody.setAngularVelocity(0f);
+
+            ballSprite.setPosition(0f,0f);
+            ballBody.setTransform(0f,0f,0f);
+        }
+
+
+
+        return true;
     }
 
 
@@ -153,33 +225,23 @@ public class FRVR implements Screen,InputProcessor{
     public void render(float delta) {
 
 
-        // Advance the world, by the amount of time that has elapsed since the
-        //last frame
-        // Generally in a real game, dont do this in the render loop, as you are
-        //tying the physics
-        // update rate to the frame rate, and vice versa
         world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-
-        // Now update the spritee position accordingly to it's now updated
-       // Physics body
         ballSprite.setPosition(ballBody.getPosition().x, ballBody.getPosition().y);
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
+        debugRenderer.render(world, camera.combined);
 
-        //Drawing the net image
-        batch.draw(ballSprite, ballSprite.getX(), ballSprite.getY()/*, ballSprite.getWidth(), ballSprite.getHeight()*/);
+
+        /*batch.begin();
+
 
         layoutScore.setText(game.font,""+score.getStringScore());
         if(touchCounter >= 1) {
-            /*for(GameBallValues gameBallValues : gameDot){
-                game.font.draw(batch,score.getStringScore(),appWidth/2-layoutScore.width/2,90*(appHeight/100));
-                batch.draw(gameBallValues.getTexture(), gameBallValues.getRectangle().x, gameBallValues.getRectangle().y);
-            }*/
+
         }
 
-        batch.end();
+        batch.end();*/
 
 
     }
@@ -201,7 +263,9 @@ public class FRVR implements Screen,InputProcessor{
 
     @Override
     public void resize(int width, int height) {
-
+        camera.viewportWidth = width;
+        camera.viewportHeight = height;
+        camera.update();
     }
 
     @Override
@@ -227,10 +291,7 @@ public class FRVR implements Screen,InputProcessor{
         return true;
     }
 
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
+
 
     @Override
     public boolean keyTyped(char character) {
