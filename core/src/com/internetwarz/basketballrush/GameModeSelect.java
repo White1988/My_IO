@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.internetwarz.basketballrush.gamemodes.FRVR;
+import com.internetwarz.basketballrush.gamemodes.FourBallMode;
 
 public class GameModeSelect implements Screen,InputProcessor {
     final BasketBallRush game;
@@ -79,7 +81,7 @@ public class GameModeSelect implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
-                game.setScreen(new ThreeBallMode(game));
+                game.setScreen(new com.internetwarz.basketballrush.gamemodes.ThreeBallMode(game));
             }
         });
         stage.addActor(mediumButton);

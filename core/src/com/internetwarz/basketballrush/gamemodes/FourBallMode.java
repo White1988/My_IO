@@ -1,4 +1,4 @@
-package com.internetwarz.basketballrush;
+package com.internetwarz.basketballrush.gamemodes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -16,6 +16,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.internetwarz.basketballrush.BasketBallRush;
+import com.internetwarz.basketballrush.GameModeSelect;
 import com.internetwarz.basketballrush.utils.GameBallValues;
 import com.internetwarz.basketballrush.utils.GameUtils;
 import com.internetwarz.basketballrush.utils.Score;

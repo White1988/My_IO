@@ -9,11 +9,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.internetwarz.basketballrush.utils.Assets;
 
 public class BasketBallRush extends Game {
-	SpriteBatch batch;
-	BitmapFont font;
-	FreeTypeFontGenerator generator;
+	public SpriteBatch batch;
+	public BitmapFont font;
+	public FreeTypeFontGenerator generator;
     private static PlayServices playServices;
-	Assets assets;
+	public Assets assets;
 
     public BasketBallRush(PlayServices playServices)
     {

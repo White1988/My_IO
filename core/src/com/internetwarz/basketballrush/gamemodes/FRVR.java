@@ -1,4 +1,4 @@
-package com.internetwarz.basketballrush;
+package com.internetwarz.basketballrush.gamemodes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -19,7 +19,10 @@ import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.World;
+import com.internetwarz.basketballrush.BasketBallRush;
+import com.internetwarz.basketballrush.GameModeSelect;
 import com.internetwarz.basketballrush.utils.GameUtils;
 import com.internetwarz.basketballrush.utils.Score;
 import com.internetwarz.basketballrush.utils.SimpleDirectionGestureDetector;
@@ -39,6 +42,8 @@ public class FRVR implements Screen,InputProcessor{
     Body ballBody;
     Body groundBody;
 
+    private int VELOCITY_ITERATIONS = 8;
+    private int POSITION_ITERATIONS = 3;
     //setting values on touch
     private static int gameSpeed;
     private static int touchCounter;
@@ -160,7 +165,9 @@ public class FRVR implements Screen,InputProcessor{
 
         // Create a body in the world using our definition
         ballBody = world.createBody(bodyDef);
-
+        MassData m = new MassData();
+        m.mass = 10000f;
+        ballBody.setMassData(m);
         // Now define the dimensions of the physics shape
         CircleShape ballShape = new CircleShape();
         ballShape.setRadius(ballSprite.getHeight()/2);
@@ -208,7 +215,7 @@ public class FRVR implements Screen,InputProcessor{
 
         // If user hits spacebar, reset everything back to normal
         if(keycode == Input.Keys.SPACE) {
-            ballBody.setLinearVelocity(0f, 0f);
+            ballBody.setLinearVelocity(110f, 110f);
             ballBody.setAngularVelocity(0f);
 
             ballSprite.setPosition(0f,0f);
@@ -225,7 +232,7 @@ public class FRVR implements Screen,InputProcessor{
     public void render(float delta) {
 
 
-        world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+        world.step(Gdx.graphics.getDeltaTime(), VELOCITY_ITERATIONS, POSITION_ITERATIONS);
         ballSprite.setPosition(ballBody.getPosition().x, ballBody.getPosition().y);
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -285,9 +292,21 @@ public class FRVR implements Screen,InputProcessor{
 
     @Override
     public boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.BACK){
-            game.setScreen(new GameModeSelect(game));
-        }
+
+       switch (keycode){
+           case Input.Keys.BACK:
+               game.setScreen(new GameModeSelect(game));
+               break;
+           case Input.Keys.W:
+               ballBody.applyForceToCenter(0,1000, true);
+           case Input.Keys.A:
+               ballBody.applyForceToCenter(-1000,0, true);
+           case Input.Keys.S:
+               ballBody.applyForceToCenter(0,-100, true);
+           case Input.Keys.D:
+               ballBody.applyForceToCenter(1000,0, true);
+       }
+
         return true;
     }
 

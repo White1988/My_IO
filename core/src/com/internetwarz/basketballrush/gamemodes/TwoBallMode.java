@@ -1,4 +1,4 @@
-package com.internetwarz.basketballrush;
+package com.internetwarz.basketballrush.gamemodes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -15,6 +15,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.internetwarz.basketballrush.BasketBallRush;
+import com.internetwarz.basketballrush.GameEndScreen;
+import com.internetwarz.basketballrush.GameModeSelect;
 import com.internetwarz.basketballrush.utils.GameBallValues;
 import com.internetwarz.basketballrush.utils.GameUtils;
 import com.internetwarz.basketballrush.utils.Score;
@@ -23,7 +26,7 @@ import com.internetwarz.basketballrush.utils.SimpleDirectionGestureDetector;
 import java.util.Iterator;
 import java.util.Random;
 
-public class ThreeBallMode implements Screen,InputProcessor{
+public class TwoBallMode implements Screen,InputProcessor{
     final BasketBallRush game;
     final float appWidth = 768;
     final float appHeight = 1280;
@@ -50,7 +53,6 @@ public class ThreeBallMode implements Screen,InputProcessor{
     private Texture playerDotImage;     //Contains net image resource
     private Texture gameDotImage;       //Contains ball 1 resource
     private Texture gameDotImage1;
-    private Texture gameDotImage2;
 
     private Rectangle playerDotRectangle;
     private Array<GameBallValues> gameDot;
@@ -58,9 +60,10 @@ public class ThreeBallMode implements Screen,InputProcessor{
     //storing the time of last dot in nano seconds
     private long lastDotTime;
 
-    //animation code
+
+    //Code to show the tutorial animation
     private static final int        FRAME_COLS = 6;         // #1
-    private static final int        FRAME_ROWS = 6;         // #2
+    private static final int        FRAME_ROWS = 4;         // #2
 
     Animation walkAnimation;          // #3
     Texture walkSheet;              // #4
@@ -69,7 +72,7 @@ public class ThreeBallMode implements Screen,InputProcessor{
 
     float stateTime;                                        // #8
 
-    public ThreeBallMode(final BasketBallRush gam){
+    public TwoBallMode(final BasketBallRush gam){
         this.game = gam;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, appWidth, appHeight);
@@ -77,20 +80,18 @@ public class ThreeBallMode implements Screen,InputProcessor{
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
 
+        layoutScore = new GlyphLayout();
+
         blueballs =0;
         greenballs =0;
-
-        layoutScore = new GlyphLayout();
 
         InputMultiplexer plex = new InputMultiplexer();
         plex.addProcessor(this);
         plex.addProcessor(new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
 
+            //Chainging the ball color according to swipe action of the user.
             @Override
             public void onUp() {
-                touchCounter++;
-                playerDotImage = game.assets.getTexture("net3");
-                touchImage="image2";
             }
 
             @Override
@@ -114,8 +115,8 @@ public class ThreeBallMode implements Screen,InputProcessor{
         }));
         Gdx.input.setInputProcessor(plex);
 
-        gameType="three color mode";
-        gameSpeed = 700;
+        gameType="two color mode";
+        gameSpeed = 600;
         touchCounter =0;
         gameutils = new GameUtils();
         score = new Score(0);
@@ -124,18 +125,17 @@ public class ThreeBallMode implements Screen,InputProcessor{
 
         //loading the images in the variables
         playerDotImage = game.assets.getTexture("net1");
-
         gameDotImage = game.assets.getTexture("ball1");
         gameDotImage1 = game.assets.getTexture("ball2");
-        gameDotImage2 = game.assets.getTexture("ball3");
 
         //placing the player dot in the middle of the screen
         playerDotRectangle = new Rectangle(appWidth/2 -playerDotImage.getWidth()/2,20,playerDotImage.getWidth(),playerDotImage.getHeight());
 
         gameDot = new Array<GameBallValues>();
 
+
         //animation code initialization
-        walkSheet = game.assets.getTexture("three"); // #9
+        walkSheet = game.assets.getTexture("two"); // #9
         TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth()/FRAME_COLS, walkSheet.getHeight()/FRAME_ROWS);              // #10
         walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
         int index = 0;
@@ -156,16 +156,13 @@ public class ThreeBallMode implements Screen,InputProcessor{
         dots.height = gameDotImage.getHeight();
 
         Random rand = new Random();
-        int  n = rand.nextInt(3) + 1;
+        int  n = rand.nextInt(2) + 1;
         GameBallValues g;
         if(n==1){
             g = new GameBallValues(dots,gameDotImage1,"image1");
         }
-        else if(n==2){
-            g = new GameBallValues(dots,gameDotImage,"image");
-        }
         else{
-            g = new GameBallValues(dots,gameDotImage2,"image2");
+            g = new GameBallValues(dots,gameDotImage,"image");
         }
         gameDot.add(g);
 
@@ -180,9 +177,9 @@ public class ThreeBallMode implements Screen,InputProcessor{
         stateTime += Gdx.graphics.getDeltaTime();           // #15
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);  // #16
 
-
         batch.begin();
 
+        //Drawing the net image
         batch.draw(playerDotImage, playerDotRectangle.x, playerDotRectangle.y, playerDotRectangle.width, playerDotRectangle.height);
 
         layoutScore.setText(game.font,""+score.getStringScore());
@@ -201,7 +198,7 @@ public class ThreeBallMode implements Screen,InputProcessor{
 
         if(touchCounter >=1) {
             // check if we need to create a new dot
-            if (TimeUtils.nanoTime() - lastDotTime > 600000000) {
+            if (TimeUtils.nanoTime() - lastDotTime > 700000000) {
                 populateDots();
             }
 
@@ -210,9 +207,13 @@ public class ThreeBallMode implements Screen,InputProcessor{
                 GameBallValues entry = iter.next();
                 Rectangle dot = entry.getRectangle();
 
+                //Updating the game speed as the game progresses
                 gameSpeed = gameutils.updateGameSpeed(score.getScore(),gameSpeed,gameType);
+
+                //Calculating the speed to decrease/increase x coordinate
                 int xSpeed = gameutils.calXSpeed(gameSpeed,appHeight,appWidth);
 
+                //Main Game Logic that moves the balls
                 dot.y = dot.y - gameSpeed * Gdx.graphics.getDeltaTime();
                 if (dot.x < appWidth / 2 - gameDotImage.getWidth() / 2) {
                     dot.x = dot.x + xSpeed * Gdx.graphics.getDeltaTime();
@@ -222,17 +223,16 @@ public class ThreeBallMode implements Screen,InputProcessor{
                 if (dot.y + 64 < 0) {
                     iter.remove();
                 }
+
+                //Condition to check if the ball's color is same as the net's color
                 if (dot.overlaps(playerDotRectangle)) {
                     if (entry.getString().equals(touchImage)) {
                         score.setScore(score.getScore()+1);
                         game.getPlayServices().unlockAchievement(score.getScore(),gameType);
-                        if(entry.getString().equals("image2")){
-                            blueballs++;
-                        }
                         iter.remove();
                     }
                     else{
-                        game.setScreen(new com.internetwarz.basketballrush.GameEndScreen(game,score,gameType,blueballs,greenballs));
+                        game.setScreen(new GameEndScreen(game,score,gameType,blueballs,greenballs));
                     }
                 }
             }

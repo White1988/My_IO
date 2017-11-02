@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.internetwarz.basketballrush.gamemodes.FourBallMode;
+import com.internetwarz.basketballrush.gamemodes.TwoBallMode;
 import com.internetwarz.basketballrush.utils.Score;
 
 public class GameEndScreen implements Screen,InputProcessor {
@@ -103,10 +105,10 @@ public class GameEndScreen implements Screen,InputProcessor {
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
                 if(gameType.equals("two color mode")){
-                    game.setScreen(new TwoBallMode(game));
+                    game.setScreen(new com.internetwarz.basketballrush.gamemodes.TwoBallMode(game));
                 }
                 else if(gameType.equals("three color mode")){
-                    game.setScreen(new ThreeBallMode(game));
+                    game.setScreen(new com.internetwarz.basketballrush.gamemodes.ThreeBallMode(game));
                 }
                 else if(gameType.equals("four color mode")){
                     game.setScreen(new FourBallMode(game));
