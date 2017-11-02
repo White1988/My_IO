@@ -2,6 +2,7 @@ package com.internetwarz.basketballrush.gamemodes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -25,7 +26,6 @@ import com.internetwarz.basketballrush.BasketBallRush;
 import com.internetwarz.basketballrush.GameModeSelect;
 import com.internetwarz.basketballrush.utils.GameUtils;
 import com.internetwarz.basketballrush.utils.Score;
-import com.internetwarz.basketballrush.utils.SimpleDirectionGestureDetector;
 
 public class FRVR implements Screen,InputProcessor{
     final BasketBallRush game;
@@ -33,6 +33,11 @@ public class FRVR implements Screen,InputProcessor{
     //final float appHeight = 1280;
     SpriteBatch batch;
     OrthographicCamera camera;
+    private static int VIEWPORT_SCALE = 25;
+
+
+    // http://box2d.org/2011/12/pixels/
+    private float METERS_TO_PIXELS_RATIO = 50f; // 50 pixels per meter
 
     Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 
@@ -61,41 +66,25 @@ public class FRVR implements Screen,InputProcessor{
     public FRVR(final BasketBallRush gam)
     {
         this.game = gam;
+        float w = (float) Gdx.graphics.getWidth();
+        float h = (float) Gdx.graphics.getHeight();
+
         camera = new OrthographicCamera();
-        //camera.setToOrtho(false, appWidth, appHeight);
+        camera.setToOrtho(false, w/ VIEWPORT_SCALE, h/ VIEWPORT_SCALE);
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
         layoutScore = new GlyphLayout();
 
         InputMultiplexer plex = new InputMultiplexer();
         plex.addProcessor(this);
-        plex.addProcessor(new SimpleDirectionGestureDetector(new SimpleDirectionGestureDetector.DirectionListener() {
-
-            //Chainging the ball color according to swipe action of the user.
+        plex.addProcessor(new InputAdapter() {
             @Override
-            public void onUp() {
+            public boolean scrolled(int amount) {
+                camera.zoom += amount / 25f;
+                camera.update(); // because of zooming
+                return false;
             }
-
-            @Override
-            public void onRight() {
-                touchCounter++;
-                //todo make ball move
-               // targetNet = game.assets.getTexture("net1");
-               // touchImage="image";
-            }
-
-            @Override
-            public void onLeft() {
-                touchCounter++;
-               // targetNet = game.assets.getTexture("net2");
-               // touchImage="image1";
-            }
-
-            @Override
-            public void onDown() {
-
-            }
-        }));
+        });
         Gdx.input.setInputProcessor(plex);
 
         gameSpeed = 600;
@@ -158,35 +147,30 @@ public class FRVR implements Screen,InputProcessor{
         //and position in the simulation
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        // We are going to use 1 to 1 dimensions.  Meaning 1 in physics engine
-        //is 1 pixel
-        // Set our body to the same position as our sprite
-        bodyDef.position.set(ballSprite.getX(), ballSprite.getY());
+
+        bodyDef.position.set(0, 5);
 
         // Create a body in the world using our definition
         ballBody = world.createBody(bodyDef);
         MassData m = new MassData();
-        m.mass = 10000f;
+        //m.mass = 10000f;
         ballBody.setMassData(m);
         // Now define the dimensions of the physics shape
         CircleShape ballShape = new CircleShape();
-        ballShape.setRadius(ballSprite.getHeight()/2);
-        // We are a box, so this makes sense, no?
-        // Basically set the physics polygon to a box with the same dimensions
-        //as our sprite
-       // ballShape.setAsBox(ballSprite.getWidth()/2, ballSprite.getHeight()/2);
+        ballShape.setRadius(ballSprite.getHeight()/(2*METERS_TO_PIXELS_RATIO));
+
 
         // FixtureDef is a confusing expression for physical properties
         // Basically this is where you, in addition to defining the shape of the
         // body
         // you also define it's properties like density, restitution and others
         //we will see shortly
-        // If you are wondering, density and area are used to calculate over all
-        //mass
+        // If you are wondering, density and area are used to calculate overall mass
+
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = ballShape;
         fixtureDef.density = 1f;
-        fixtureDef.restitution = 0.95f;
+        fixtureDef.restitution = 0.75f;
 
 
         Fixture fixture = ballBody.createFixture(fixtureDef);
@@ -228,10 +212,18 @@ public class FRVR implements Screen,InputProcessor{
     }
 
 
+    private void   logs()
+    {
+        System.out.println("delta time = " + Gdx.graphics.getDeltaTime() * 1000);
+        System.out.println("zoom = " + camera.zoom);
+        System.out.println("ballBody pos = " + ballBody.getPosition());
+        System.out.println("ballBody velocity = " + ballBody.getLinearVelocity());
+    }
+
     @Override
     public void render(float delta) {
 
-
+        logs();
         world.step(Gdx.graphics.getDeltaTime(), VELOCITY_ITERATIONS, POSITION_ITERATIONS);
         ballSprite.setPosition(ballBody.getPosition().x, ballBody.getPosition().y);
 
@@ -270,8 +262,8 @@ public class FRVR implements Screen,InputProcessor{
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width;
-        camera.viewportHeight = height;
+        camera.viewportWidth = width/ VIEWPORT_SCALE;
+        camera.viewportHeight = height/ VIEWPORT_SCALE;
         camera.update();
     }
 
@@ -307,7 +299,7 @@ public class FRVR implements Screen,InputProcessor{
                ballBody.applyForceToCenter(1000,0, true);
        }
 
-        return true;
+        return false;
     }
 
 
