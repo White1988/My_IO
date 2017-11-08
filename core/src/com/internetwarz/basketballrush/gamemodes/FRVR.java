@@ -6,12 +6,16 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -22,8 +26,11 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.internetwarz.basketballrush.BasketBallRush;
 import com.internetwarz.basketballrush.GameModeSelect;
+import com.internetwarz.basketballrush.input.swipe.SwipeHandler;
+import com.internetwarz.basketballrush.input.swipe.mesh.SwipeTriStrip;
 import com.internetwarz.basketballrush.utils.GameUtils;
 import com.internetwarz.basketballrush.utils.Score;
 
@@ -57,6 +64,11 @@ public class FRVR implements Screen,InputProcessor{
     private GameUtils gameutils;
 
 
+    private SwipeHandler swiper;
+    SwipeTriStrip tris;
+    ShapeRenderer shapes;
+    Texture swipeTexture;
+
     //setting variables to store two different color balls and the net
     private Texture targetNet;     //Contains net image resource
     private Texture playerBallTexture;       // Contains ball texture
@@ -71,12 +83,26 @@ public class FRVR implements Screen,InputProcessor{
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w/ VIEWPORT_SCALE, h/ VIEWPORT_SCALE);
+        //camera.setToOrtho(false, w, h);
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
         layoutScore = new GlyphLayout();
 
+        swiper = new SwipeHandler(3);
+        //swiper.initialDistance
+        //we will use a texture for the smooth edge, and also for stroke effects
+        swipeTexture = new Texture("data/gradient.png");
+        swipeTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
+        //the triangle strip renderer
+        tris = new SwipeTriStrip();
+        tris.thickness = 30;
+        shapes = new ShapeRenderer();
+
+
         InputMultiplexer plex = new InputMultiplexer();
         plex.addProcessor(this);
+        plex.addProcessor(swiper);
         plex.addProcessor(new InputAdapter() {
             @Override
             public boolean scrolled(int amount) {
@@ -180,36 +206,6 @@ public class FRVR implements Screen,InputProcessor{
         // BALL-END
     }
 
-    @Override
-    public boolean keyUp(int keycode) {
-
-        // On right or left arrow set the velocity at a fixed rate in that
-       //direction
-        if(keycode == Input.Keys.RIGHT)
-            ballBody.setLinearVelocity(1f, 0f);
-        if(keycode == Input.Keys.LEFT)
-            ballBody.setLinearVelocity(-1f,0f);
-
-        if(keycode == Input.Keys.UP)
-            ballBody.applyForceToCenter(0f,10f,true);
-        if(keycode == Input.Keys.DOWN)
-            ballBody.applyForceToCenter(0f, -10f, true);
-
-
-
-        // If user hits spacebar, reset everything back to normal
-        if(keycode == Input.Keys.SPACE) {
-            ballBody.setLinearVelocity(110f, 110f);
-            ballBody.setAngularVelocity(0f);
-
-            ballSprite.setPosition(0f,0f);
-            ballBody.setTransform(0f,0f,0f);
-        }
-
-
-
-        return true;
-    }
 
 
     private void   logs()
@@ -227,9 +223,23 @@ public class FRVR implements Screen,InputProcessor{
         world.step(Gdx.graphics.getDeltaTime(), VELOCITY_ITERATIONS, POSITION_ITERATIONS);
         ballSprite.setPosition(ballBody.getPosition().x, ballBody.getPosition().y);
 
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         debugRenderer.render(world, camera.combined);
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        swipeTexture.bind();
+
+        //generate the triangle strip from our path
+        tris.update(swiper.path());
+        //the vertex color for tinting, i.e. for opacity
+        tris.color = Color.WHITE;
+        //render the triangles to the screen
+        tris.draw(camera);
+
+        //uncomment to see debug lines
+        drawSwipeDebug();
 
 
         /*batch.begin();
@@ -243,6 +253,52 @@ public class FRVR implements Screen,InputProcessor{
         batch.end();*/
 
 
+    }
+
+    //optional debug drawing..
+    void drawSwipeDebug() {
+        Array<Vector2> input = swiper.input();
+
+        //draw the raw input
+        shapes.begin(ShapeType.Line);
+        shapes.setColor(Color.GRAY);
+        for (int i=0; i<input.size-1; i++) {
+            Vector2 p = input.get(i);
+            Vector2 p2 = input.get(i+1);
+            shapes.line(p.x, p.y, p2.x, p2.y);
+        }
+        shapes.end();
+
+        //draw the smoothed and simplified path
+        shapes.begin(ShapeType.Line);
+        shapes.setColor(Color.RED);
+        Array<Vector2> out = swiper.path();
+        for (int i=0; i<out.size-1; i++) {
+            Vector2 p = out.get(i);
+            Vector2 p2 = out.get(i+1);
+            shapes.line(p.x, p.y, p2.x, p2.y);
+        }
+        shapes.end();
+
+
+        //render our perpendiculars
+        shapes.begin(ShapeType.Line);
+        Vector2 perp = new Vector2();
+
+        for (int i=1; i<input.size-1; i++) {
+            Vector2 p = input.get(i);
+            Vector2 p2 = input.get(i+1);
+
+            shapes.setColor(Color.LIGHT_GRAY);
+            perp.set(p).sub(p2).nor();
+            perp.set(perp.y, -perp.x);
+            perp.scl(10f);
+            shapes.line(p.x, p.y, p.x+perp.x, p.y+perp.y);
+            perp.scl(-1f);
+            shapes.setColor(Color.BLUE);
+            shapes.line(p.x, p.y, p.x+perp.x, p.y+perp.y);
+        }
+        shapes.end();
     }
 
     @Override
@@ -265,6 +321,7 @@ public class FRVR implements Screen,InputProcessor{
         camera.viewportWidth = width/ VIEWPORT_SCALE;
         camera.viewportHeight = height/ VIEWPORT_SCALE;
         camera.update();
+        //camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     @Override
@@ -303,6 +360,36 @@ public class FRVR implements Screen,InputProcessor{
     }
 
 
+    @Override
+    public boolean keyUp(int keycode) {
+
+        // On right or left arrow set the velocity at a fixed rate in that
+        //direction
+        if(keycode == Input.Keys.RIGHT)
+            ballBody.setLinearVelocity(1f, 0f);
+        if(keycode == Input.Keys.LEFT)
+            ballBody.setLinearVelocity(-1f,0f);
+
+        if(keycode == Input.Keys.UP)
+            ballBody.applyForceToCenter(0f,10f,true);
+        if(keycode == Input.Keys.DOWN)
+            ballBody.applyForceToCenter(0f, -10f, true);
+
+
+
+        // If user hits spacebar, reset everything back to normal
+        if(keycode == Input.Keys.SPACE) {
+            ballBody.setLinearVelocity(110f, 110f);
+            ballBody.setAngularVelocity(0f);
+
+            ballSprite.setPosition(0f,0f);
+            ballBody.setTransform(0f,0f,0f);
+        }
+
+
+
+        return true;
+    }
 
     @Override
     public boolean keyTyped(char character) {

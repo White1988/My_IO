@@ -27,11 +27,11 @@ public class SwiperImproved implements ApplicationListener {
 	SpriteBatch batch;
 	
 	SwipeHandler swipe;
-	
+	SwipeTriStrip tris;
 	Texture tex;
 	ShapeRenderer shapes;
 	
-	SwipeTriStrip tris;
+
 	
 	@Override
 	public void create() {
@@ -39,7 +39,7 @@ public class SwiperImproved implements ApplicationListener {
 		tris = new SwipeTriStrip();
 		
 		//a swipe handler with max # of input points to be kept alive
-		swipe = new SwipeHandler(10);
+		swipe = new SwipeHandler(3);
 		
 		//minimum distance between two points
 		swipe.minDistance = 10;
@@ -94,7 +94,7 @@ public class SwiperImproved implements ApplicationListener {
 		tris.draw(cam);
 		
 		//uncomment to see debug lines
-		//drawDebug();
+		drawDebug();
 	}
 	
 	//optional debug drawing..

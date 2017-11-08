@@ -69,7 +69,7 @@ public class SwipeHandler extends InputAdapter {
 		inputPoints.insert(lastPoint);
 		
 		resolve();
-		return true;
+		return false;
 	}
 	
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
@@ -103,6 +103,6 @@ public class SwipeHandler extends InputAdapter {
 		
 		//simplify our new line
 		resolve();
-		return true;
+		return false;
 	}
 }
