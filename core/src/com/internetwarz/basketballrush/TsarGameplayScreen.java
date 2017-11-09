@@ -4,6 +4,8 @@ package com.internetwarz.basketballrush;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -37,6 +39,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
         layoutScore = new GlyphLayout();
+        shapeRenderer = new ShapeRenderer();
 
 
     }
@@ -117,6 +120,22 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
     @Override
     public void render(float delta) {
+
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        for (int i = 0 ; i < 9; i ++){
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.identity();
+            // todo (Nikita) find out how to rotate
+            // line so we will have circle divided by sectors
+            shapeRenderer.rotate(0, 0, 1, 20*i);
+
+            shapeRenderer.line(50,50, 100, 100);
+            shapeRenderer.end();
+        }
 
     }
 
