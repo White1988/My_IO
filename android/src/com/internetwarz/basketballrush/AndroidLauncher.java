@@ -18,7 +18,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        initialize(new BasketBallRush(this), config);
+        initialize(new Tsar(this), config);
 
         gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
         gameHelper.enableDebugLog(true);

@@ -15,7 +15,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class HowToPlay implements Screen,InputProcessor {
 
-    final BasketBallRush game;
+    final Tsar game;
     final float appWidth = 768;
     final float appHeight = 1280;
     SpriteBatch batch;
@@ -26,7 +26,7 @@ public class HowToPlay implements Screen,InputProcessor {
     Texture tutorial,playButton;
     Rectangle playRectangle;
 
-    public HowToPlay(final BasketBallRush gam){
+    public HowToPlay(final Tsar gam){
         this.game=gam;
         Gdx.input.setInputProcessor(this);
         Gdx.input.setCatchBackKey(true);

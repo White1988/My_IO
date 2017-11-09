@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class SplashScreen implements Screen {
-    final BasketBallRush game;
+    final Tsar game;
     final float appWidth = 768;
     final float appHeight = 1280;
     SpriteBatch batch;
@@ -17,7 +17,7 @@ public class SplashScreen implements Screen {
     Texture splashImage;
     long startTime;
 
-    public SplashScreen(final BasketBallRush gam){
+    public SplashScreen(final Tsar gam){
         this.game = gam;
         startTime = TimeUtils.millis();
         camera = new OrthographicCamera();

@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.internetwarz.basketballrush.utils.Score;
 
 public class GameEndScreen implements Screen,InputProcessor {
-    final BasketBallRush game;
+    final Tsar game;
     Score score;
     final float appWidth = 768;
     final float appHeight = 1280;
@@ -42,7 +42,7 @@ public class GameEndScreen implements Screen,InputProcessor {
     private TextureAtlas buttonAtlas;
     private ImageButton playButton,leaderboardButton,achievementsButton,homeButton;
 
-    public GameEndScreen(final BasketBallRush gam, Score scor, String gt,int bb,int gb){
+    public GameEndScreen(final Tsar gam, Score scor, String gt, int bb, int gb){
         this.game=gam;
         this.score = scor;
         camera = new OrthographicCamera();

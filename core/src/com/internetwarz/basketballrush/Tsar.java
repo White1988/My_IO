@@ -8,14 +8,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.internetwarz.basketballrush.utils.Assets;
 
-public class BasketBallRush extends Game {
+public class Tsar extends Game {
 	public SpriteBatch batch;
 	public BitmapFont font;
 	public FreeTypeFontGenerator generator;
     private static PlayServices playServices;
 	public Assets assets;
 
-    public BasketBallRush(PlayServices playServices)
+    public Tsar(PlayServices playServices)
     {
         this.playServices = playServices;
     }

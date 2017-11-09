@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class MainMenuScreen implements Screen,InputProcessor {
-    final BasketBallRush game;
+    final Tsar game;
     final float appWidth = 768;
     final float appHeight = 1280;
     SpriteBatch batch;
@@ -34,7 +34,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
     private Texture gameName;
     private ImageButton playButton,leaderboardButton,achievementsButton,soundButton,rateButton,info;
 
-    public MainMenuScreen(final BasketBallRush gam){
+    public MainMenuScreen(final Tsar gam){
         this.game=gam;
         game.getPlayServices().signIn();
         camera = new OrthographicCamera();
