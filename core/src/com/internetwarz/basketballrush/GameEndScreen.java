@@ -1,7 +1,6 @@
 package com.internetwarz.basketballrush;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
@@ -18,8 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.internetwarz.basketballrush.gamemodes.FourBallMode;
-import com.internetwarz.basketballrush.gamemodes.TwoBallMode;
 import com.internetwarz.basketballrush.utils.Score;
 
 public class GameEndScreen implements Screen,InputProcessor {
@@ -84,8 +81,7 @@ public class GameEndScreen implements Screen,InputProcessor {
         prefs.flush();
 
         game.getPlayServices().gamesPlayedAchievements(gameType,prefs.getInteger(gameType+" played",0));
-        game.getPlayServices().blueBallsCounter(blueballs);
-        game.getPlayServices().greenBallsCounter(greenballs);
+
 
         layoutGameOver = new GlyphLayout();
         layoutGameOver.setText(game.font,"Game Over");
@@ -102,20 +98,7 @@ public class GameEndScreen implements Screen,InputProcessor {
         playButton.setPosition(appWidth/2-playButton.getWidth()/2,appHeight/2-playButton.getHeight()/2);
         playButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
-                if(prefs.getBoolean("soundOn",true))
-                    clickSound.play();
-                if(gameType.equals("two color mode")){
-                    game.setScreen(new com.internetwarz.basketballrush.gamemodes.TwoBallMode(game));
-                }
-                else if(gameType.equals("three color mode")){
-                    game.setScreen(new com.internetwarz.basketballrush.gamemodes.ThreeBallMode(game));
-                }
-                else if(gameType.equals("four color mode")){
-                    game.setScreen(new FourBallMode(game));
-                }
-                else{
-                    game.setScreen(new TwoBallMode(game));
-                }
+
             }
         });
         stage.addActor(playButton);
@@ -222,10 +205,7 @@ public class GameEndScreen implements Screen,InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.BACK){
-            game.setScreen(new GameModeSelect(game));
-        }
-        return true;
+        return false;
     }
 
     @Override

@@ -32,16 +32,6 @@ public class PlayServicesStub implements PlayServices {
     }
 
     @Override
-    public void blueBallsCounter(int blueballs) {
-
-    }
-
-    @Override
-    public void greenBallsCounter(int greenballs) {
-
-    }
-
-    @Override
     public void submitScore(int highScore, String gameType) {
 
     }

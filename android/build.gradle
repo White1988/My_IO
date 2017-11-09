@@ -93,4 +93,5 @@ idea {
 }
 dependencies {
     compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }

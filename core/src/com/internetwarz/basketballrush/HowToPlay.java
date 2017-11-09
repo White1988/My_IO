@@ -79,7 +79,7 @@ public class HowToPlay implements Screen,InputProcessor {
             if(prefs.getBoolean("soundOn",true))
                 clickSound.play();
             playButton = game.assets.getTexture("tutButton");
-            game.setScreen(new GameModeSelect(game));
+            //game.setScreen();
         }
         else{
             playButton = game.assets.getTexture("tutButton");

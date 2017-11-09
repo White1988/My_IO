@@ -82,29 +82,10 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 
     @Override
     public void rateGame() {
-        String str = "https://play.google.com/store/apps/details?id=com.internetwarz.basketballrush";
+        String str = "https://play.google.com/store/apps/details?id=com.internetwarz.basketballrush";//TODO: New ID
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(str)));
     }
 
-    @Override
-    public void blueBallsCounter(int blueBalls){
-        if(isSignedIn() && blueBalls>0){
-            Games.Achievements.increment(gameHelper.getApiClient(),
-                    getString(R.string.achievement_basket_1000_blue_balls),blueBalls);
-            Games.Achievements.increment(gameHelper.getApiClient(),
-                    getString(R.string.achievement_basket_2000_blue_balls),blueBalls);
-        }
-    }
-
-    @Override
-    public void greenBallsCounter(int greenBalls){
-        if(isSignedIn() && greenBalls>0){
-            Games.Achievements.increment(gameHelper.getApiClient(),
-                    getString(R.string.achievement_basket_500_green_balls),greenBalls);
-            Games.Achievements.increment(gameHelper.getApiClient(),
-                    getString(R.string.achievement_basket_1000_green_balls),greenBalls);
-        }
-    }
 
     @Override
     public void gamesPlayedAchievements(String gameType,int score){

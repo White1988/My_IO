@@ -61,12 +61,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
         playButton.setPosition(appWidth/2-playButton.getWidth()/2,appHeight/2-playButton.getHeight()/2);
         playButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
-                if(prefs.getBoolean("soundOn",true))
-                    clickSound.play();
-                if(prefs.getBoolean("first",true))
-                    game.setScreen(new HowToPlay(game));
-                else
-                    game.setScreen(new GameModeSelect(game));
+
             }
         });
         stage.addActor(playButton);
