@@ -7,12 +7,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
@@ -33,12 +34,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
    // http://www.coding-daddy.xyz/node/23
     ShapeRenderer shapeRenderer;
 
-    //Line
-    Texture lineTexture;
-    Sprite lineSprite;
-
     //actual circle to check collisions with
-    Circle circle;
+    Circle playerCircle;
     // todo  how to determine is screen touch coordinates within certain shape?
     // todo  find out is there any clickable stuff like buttons
     // todo  fill in touched sector with color
@@ -53,17 +50,13 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH/ VIEWPORT_SCALE, HEIGTH/ VIEWPORT_SCALE);
 
-        circle = new Circle(WIDTH/2, HEIGTH/2, RADIUS);
+        playerCircle = new Circle(WIDTH/2, HEIGTH/2, RADIUS);
 
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
         layoutScore = new GlyphLayout();
-        shapeRenderer = new ShapeRenderer();
+        shapeRenderer = new ShapeRenderer(15000); //increase smoothness of circle
 
-        //Line init
-        lineTexture = new Texture(Gdx.files.internal("images/line_txtr.png"));
-        lineSprite = new Sprite(lineTexture);
-        lineSprite.setSize(1, RADIUS);
 
         Gdx.input.setInputProcessor(this);
 
@@ -106,7 +99,47 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         System.out.println("worldX " +coord.x);
         System.out.println("worldY " +coord.y);
 
+       if(Intersector.overlaps(playerCircle, new Rectangle(coord.x, coord.y, 1,1)))
+       {
+           System.out.println("Overlaps!");
+           Vector2 yAxis = new Vector2(0,1);
+           Vector2 vector1 = new Vector2(coord.x - playerCircle.x,coord.y - playerCircle.y);
+           //double angle = Math. atan2(yAxis.y, yAxis.x) - Math. atan2(vector1.y, vector1.x);
+           System.out.println("angle " + vector1.angle());
+
+           System.out.println("sector for 2 is " + getCircleSector(2, vector1.angle()));
+           System.out.println("sector for 3 is " + getCircleSector(3, vector1.angle()));
+           System.out.println("sector for 4 is " + getCircleSector(4, vector1.angle()));
+           System.out.println("sector for 5 is " + getCircleSector(5, vector1.angle()));
+           System.out.println("sector for 6 is " + getCircleSector(6, vector1.angle()));
+           System.out.println("sector for 7 is " + getCircleSector(7, vector1.angle()));
+
+
+
+           //vector1.angle()
+       }
+
+
+
+
         return false;
+    }
+
+
+
+
+    private int getCircleSector(int sectorNumbers, float angle)
+    {
+        // angle which passed is related to x-axis, need to convert it first
+        angle -= 90f;
+
+        if(angle < 0) angle+= 90;
+
+        float deegreesPerSector = 360/sectorNumbers;
+
+
+
+        return (int) (angle / deegreesPerSector)  + 1;
     }
 
     @Override
@@ -141,10 +174,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        //Drawing lines
-        int count = 9;
-        drawLines(count);
-
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.WHITE);
@@ -165,37 +196,16 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
     }
 
-    //Drawing sectors
-    private void drawLines(int count) {
-        float angle = 360.0f / count;
-        batch.begin();
-        batch.draw(lineSprite,
-                (Gdx.graphics.getWidth() - lineSprite.getWidth()) / 2.0f, (Gdx.graphics.getHeight() - lineSprite.getHeight()) / 2.0f + lineSprite.getHeight()/2.0f,
-                lineSprite.getWidth()/2.0f, lineSprite.getHeight()/2.0f,
-                lineSprite.getWidth(), lineSprite.getHeight(),
-                1f, 1f,0, true);
-        batch.end();
-        for (int i = 0; i < count; i++) {
-            batch.begin();
-            batch.draw(lineSprite,
-                    (Gdx.graphics.getWidth() - lineSprite.getWidth()) / 2.0f, (Gdx.graphics.getHeight() - lineSprite.getHeight()) / 2.0f + lineSprite.getHeight()/2.0f,
-                    0, 0,
-                    lineSprite.getWidth(), lineSprite.getHeight(),
-                    1f, 1f,-i * angle, true);
-            batch.end();
-        }
-    }
-
     @Override
     public void resize(int width, int height) {
         WIDTH=width;
         HEIGTH = height;
 
-        circle = new Circle(WIDTH/2, HEIGTH/2, RADIUS);
+        playerCircle = new Circle(WIDTH/2, HEIGTH/2, RADIUS);
 
 
-        camera.viewportWidth = width / VIEWPORT_SCALE;
-        camera.viewportHeight = height / VIEWPORT_SCALE;
+       // camera.viewportWidth = width / VIEWPORT_SCALE;
+       // camera.viewportHeight = height / VIEWPORT_SCALE;
         camera.update();
     }
 
@@ -216,8 +226,6 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
     @Override
     public void dispose() {
-        batch.dispose();
-        lineTexture.dispose();
 
     }
 }
