@@ -11,8 +11,8 @@ public class DesktopLauncher {
 
 		config.title = "MyGame";
 		config.useGL30   = false;
-		config.width = 480;
-		config.height = 320;
+		config.width = 800;
+		config.height = 600;
 		new LwjglApplication(new Tsar(new PlayServicesStub()), config);
 	}
 }
