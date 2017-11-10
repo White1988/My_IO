@@ -7,7 +7,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
@@ -30,6 +32,10 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
    // http://www.coding-daddy.xyz/node/23
     ShapeRenderer shapeRenderer;
+
+    //Line
+    Texture lineTexture;
+    Sprite lineSprite;
 
     //actual circle to check collisions with
     Circle circle;
@@ -54,6 +60,10 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         layoutScore = new GlyphLayout();
         shapeRenderer = new ShapeRenderer();
 
+        //Line init
+        lineTexture = new Texture(Gdx.files.internal("images/line_txtr.png"));
+        lineSprite = new Sprite(lineTexture);
+        lineSprite.setSize(1, RADIUS);
 
         Gdx.input.setInputProcessor(this);
 
@@ -131,6 +141,11 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
+        //Drawing lines
+        int count = 9;
+        drawLines(count);
+
+
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.WHITE);
         shapeRenderer.circle(WIDTH/2,HEIGTH/2,RADIUS);
@@ -148,6 +163,27 @@ public class TsarGameplayScreen implements Screen,InputProcessor
             shapeRenderer.end();
         }*/
 
+    }
+
+    //Drawing sectors
+    private void drawLines(int count) {
+        float angle = 360.0f / count;
+        batch.begin();
+        batch.draw(lineSprite,
+                (Gdx.graphics.getWidth() - lineSprite.getWidth()) / 2.0f, (Gdx.graphics.getHeight() - lineSprite.getHeight()) / 2.0f + lineSprite.getHeight()/2.0f,
+                lineSprite.getWidth()/2.0f, lineSprite.getHeight()/2.0f,
+                lineSprite.getWidth(), lineSprite.getHeight(),
+                1f, 1f,0, true);
+        batch.end();
+        for (int i = 0; i < count; i++) {
+            batch.begin();
+            batch.draw(lineSprite,
+                    (Gdx.graphics.getWidth() - lineSprite.getWidth()) / 2.0f, (Gdx.graphics.getHeight() - lineSprite.getHeight()) / 2.0f + lineSprite.getHeight()/2.0f,
+                    0, 0,
+                    lineSprite.getWidth(), lineSprite.getHeight(),
+                    1f, 1f,-i * angle, true);
+            batch.end();
+        }
     }
 
     @Override
@@ -180,6 +216,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
     @Override
     public void dispose() {
+        batch.dispose();
+        lineTexture.dispose();
 
     }
 }
