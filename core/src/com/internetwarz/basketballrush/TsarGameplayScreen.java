@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 public class TsarGameplayScreen implements Screen,InputProcessor
@@ -17,24 +19,35 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     private Tsar game;
     SpriteBatch batch;
     OrthographicCamera camera;
-    private static int VIEWPORT_SCALE = 25;
+    private static int VIEWPORT_SCALE = 1;
     Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 
     GlyphLayout layoutScore;
 
+    private float WIDTH;
+    private float HEIGTH;
+    private float RADIUS = 100;
+
    // http://www.coding-daddy.xyz/node/23
     ShapeRenderer shapeRenderer;
+
+    //actual circle to check collisions with
+    Circle circle;
+    // todo  how to determine is screen touch coordinates within certain shape?
+    // todo  find out is there any clickable stuff like buttons
+    // todo  fill in touched sector with color
 
 
     public TsarGameplayScreen(Tsar game) {
         this.game = game;
 
-        float w = (float) Gdx.graphics.getWidth();
-        float h = (float) Gdx.graphics.getHeight();
+        WIDTH = (float) Gdx.graphics.getWidth();
+        HEIGTH  = (float) Gdx.graphics.getHeight();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, w/ VIEWPORT_SCALE, h/ VIEWPORT_SCALE);
+        camera.setToOrtho(false, WIDTH/ VIEWPORT_SCALE, HEIGTH/ VIEWPORT_SCALE);
 
+        circle = new Circle(WIDTH/2, HEIGTH/2, RADIUS);
 
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
@@ -42,25 +55,9 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         shapeRenderer = new ShapeRenderer();
 
 
+        Gdx.input.setInputProcessor(this);
+
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -90,6 +87,15 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+        System.out.println("screenX " +screenX);
+        System.out.println("screenY " +screenY);
+
+        Vector3 coord =  camera.unproject(new Vector3(screenX, screenY, 0));
+
+        System.out.println("worldX " +coord.x);
+        System.out.println("worldY " +coord.y);
+
         return false;
     }
 
@@ -125,7 +131,12 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        for (int i = 0 ; i < 9; i ++){
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.WHITE);
+        shapeRenderer.circle(WIDTH/2,HEIGTH/2,RADIUS);
+        shapeRenderer.end();
+
+        /*for (int i = 0 ; i < 9; i ++){
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             shapeRenderer.setColor(Color.WHITE);
             shapeRenderer.identity();
@@ -135,13 +146,21 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
             shapeRenderer.line(50,50, 100, 100);
             shapeRenderer.end();
-        }
+        }*/
 
     }
 
     @Override
     public void resize(int width, int height) {
+        WIDTH=width;
+        HEIGTH = height;
 
+        circle = new Circle(WIDTH/2, HEIGTH/2, RADIUS);
+
+
+        camera.viewportWidth = width / VIEWPORT_SCALE;
+        camera.viewportHeight = height / VIEWPORT_SCALE;
+        camera.update();
     }
 
     @Override

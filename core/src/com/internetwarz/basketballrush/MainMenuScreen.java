@@ -61,7 +61,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
         playButton.setPosition(appWidth/2-playButton.getWidth()/2,appHeight/2-playButton.getHeight()/2);
         playButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
-
+              game. setScreen(new TsarGameplayScreen(game));
             }
         });
         stage.addActor(playButton);
