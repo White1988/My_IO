@@ -1,6 +1,7 @@
-package com.internetwarz.basketballrush;
+package com.internetwarz.basketballrush.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
@@ -17,122 +18,91 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.internetwarz.basketballrush.utils.Score;
+import com.internetwarz.basketballrush.MainMenuScreen;
+import com.internetwarz.basketballrush.Tsar;
+import com.internetwarz.basketballrush.TsarGameplayScreen;
 
-public class GameEndScreen implements Screen,InputProcessor {
+public class GameModeSelect implements Screen,InputProcessor {
     final Tsar game;
-    Score score;
     final float appWidth = 768;
     final float appHeight = 1280;
     SpriteBatch batch;
     OrthographicCamera camera;
     Sound clickSound;
     Preferences prefs;
-
-    private String gameType;
-    private String scoreString;
-    private String highScoreString;
-
-    GlyphLayout layoutGameOver,layoutYourScore,layoutHighScore;
+    GlyphLayout gameMode;
 
     private Stage stage;
     private Skin buttonSkin;
     private TextureAtlas buttonAtlas;
-    private ImageButton playButton,leaderboardButton,achievementsButton,homeButton;
+    private ImageButton easyButton,mediumButton,hardButton;
 
-    public GameEndScreen(final Tsar gam, Score scor, String gt){
+    //Number of attempts
+    private int easy = 3;
+    private int medium = 2;
+    private int hard = 1;
+
+    public GameModeSelect(final Tsar gam){
         this.game=gam;
-        this.score = scor;
+
+        //Setting up the camera and graphic resources
         camera = new OrthographicCamera();
         camera.setToOrtho(false, appWidth, appHeight);
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
-        buttonAtlas = new TextureAtlas("buttons.pack");
+        buttonAtlas = game.assets.getButtonAtlas();
         buttonSkin = new Skin();
         buttonSkin.addRegions(buttonAtlas);
         stage = new Stage(new FitViewport(appWidth,appHeight));
         stage.clear();
+
         InputMultiplexer plex = new InputMultiplexer();
         plex.addProcessor(stage);
         plex.addProcessor(this);
+
         Gdx.input.setInputProcessor(plex);
+        Gdx.input.setCatchBackKey(true);
+
         prefs = Gdx.app.getPreferences("My Preferences");
-        clickSound = Gdx.audio.newSound(Gdx.files.internal("sounds/clickSound.mp3"));
+        clickSound = game.assets.getSound();
+        gameMode = new GlyphLayout();
+        gameMode.setText(game.font,"Select Game Mode");
 
-        scoreString = "Score : "+score.getStringScore();
-        gameType = gt;
-
-        //setting score preferences
-        if(score.getScore()>prefs.getInteger(gameType,0)){
-            prefs.putInteger(gameType,score.getScore());
-        }
-        prefs.flush();
-        highScoreString = "Best : "+prefs.getInteger(gameType,0);
-        game.getPlayServices().submitScore(score.getScore(),gameType);
-
-        //setting games Played preferences
-        prefs.putInteger(gameType+" played",prefs.getInteger(gameType+" played",0)+1);
-
-        prefs.flush();
-
-        game.getPlayServices().gamesPlayedAchievements(gameType,prefs.getInteger(gameType+" played",0));
-
-
-        layoutGameOver = new GlyphLayout();
-        layoutGameOver.setText(game.font,"Game Over");
-
-        layoutYourScore = new GlyphLayout();
-        layoutYourScore.setText(game.font,scoreString);
-
-        layoutHighScore = new GlyphLayout();
-        layoutHighScore.setText(game.font,highScoreString);
-
-
-        //Play Button resources
-        playButton = new ImageButton(buttonSkin.getDrawable("play"),buttonSkin.getDrawable("playClicked"));
-        playButton.setPosition(appWidth/2-playButton.getWidth()/2,appHeight/2-playButton.getHeight()/2);
-        playButton.addListener(new ClickListener(){
-            public void clicked(InputEvent event, float x, float y){
-
-            }
-        });
-        stage.addActor(playButton);
-
-        //Leaderboard Button resources
-        leaderboardButton = new ImageButton(buttonSkin.getDrawable("leaderboard"),buttonSkin.getDrawable("leaderboardClicked"));
-        leaderboardButton.setPosition(widthPercent(30)-leaderboardButton.getWidth()/2,heightPercent(35));
-        leaderboardButton.addListener(new ClickListener(){
+        //Easy Button resources
+        easyButton = new ImageButton(buttonSkin.getDrawable("easy"),buttonSkin.getDrawable("easyClicked"));
+        easyButton.setPosition(appWidth/2-easyButton.getWidth()/2,heightPercent(60));
+        easyButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
-                game.getPlayServices().showScore();
+                game.setScreen(new TsarGameplayScreen(game, easy));
             }
         });
-        stage.addActor(leaderboardButton);
+        stage.addActor(easyButton);
 
-        //Achievements Button resources
-        achievementsButton = new ImageButton(buttonSkin.getDrawable("achievements"),buttonSkin.getDrawable("achievementsClicked"));
-        achievementsButton.setPosition(widthPercent(70)-achievementsButton.getWidth()/2,heightPercent(35));
-        achievementsButton.addListener(new ClickListener(){
+        //Medium Button resources
+        mediumButton = new ImageButton(buttonSkin.getDrawable("medium"),buttonSkin.getDrawable("mediumClicked"));
+        mediumButton.setPosition(appWidth/2-mediumButton.getWidth()/2,appHeight/2);
+        mediumButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
-                game.getPlayServices().showAchievement();
+                game.setScreen(new TsarGameplayScreen(game, medium));
             }
         });
-        stage.addActor(achievementsButton);
+        stage.addActor(mediumButton);
 
-        //Home Button resources
-        homeButton = new ImageButton(buttonSkin.getDrawable("home"),buttonSkin.getDrawable("homeClicked"));
-        homeButton.setPosition(appWidth/2-homeButton.getWidth()/2, heightPercent(25));
-        homeButton.addListener(new ClickListener(){
+        //Hard Button resources
+        hardButton = new ImageButton(buttonSkin.getDrawable("hard"),buttonSkin.getDrawable("hardClicked"));
+        hardButton.setPosition(appWidth/2-hardButton.getWidth()/2,heightPercent(40));
+        hardButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
-                game.setScreen(new MainMenuScreen(game));
+                game.setScreen(new TsarGameplayScreen(game, hard));
             }
         });
-        stage.addActor(homeButton);
+        stage.addActor(hardButton);
     }
 
     @Override
@@ -146,9 +116,7 @@ public class GameEndScreen implements Screen,InputProcessor {
         batch.end();
 
         batch.begin();
-        game.font.draw(batch,"GAME OVER",appWidth/2-layoutGameOver.width/2,heightPercent(80));
-        game.font.draw(batch,scoreString,appWidth/2-layoutYourScore.width/2,heightPercent(70));
-        game.font.draw(batch,highScoreString,appWidth/2-layoutHighScore.width/2,heightPercent(60));
+        game.font.draw(batch,"Select Game Mode",appWidth/2-gameMode.width/2,heightPercent(80));
         batch.end();
     }
 
@@ -157,7 +125,6 @@ public class GameEndScreen implements Screen,InputProcessor {
         batch.dispose();
         stage.dispose();
         buttonSkin.dispose();
-        buttonAtlas.dispose();
     }
 
     @Override
@@ -200,7 +167,10 @@ public class GameEndScreen implements Screen,InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        return false;
+        if(keycode == Input.Keys.BACK){
+            game.setScreen(new MainMenuScreen(game));
+        }
+        return true;
     }
 
     @Override

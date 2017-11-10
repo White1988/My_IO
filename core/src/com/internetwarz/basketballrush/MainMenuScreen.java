@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.internetwarz.basketballrush.utils.GameModeSelect;
 
 public class MainMenuScreen implements Screen,InputProcessor {
     final Tsar game;
@@ -33,6 +34,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
     private TextureAtlas buttonAtlas;
     private Texture gameName;
     private ImageButton playButton,leaderboardButton,achievementsButton,soundButton,rateButton,info;
+
 
     public MainMenuScreen(final Tsar gam){
         this.game=gam;
@@ -61,7 +63,10 @@ public class MainMenuScreen implements Screen,InputProcessor {
         playButton.setPosition(appWidth/2-playButton.getWidth()/2,appHeight/2-playButton.getHeight()/2);
         playButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
-              game. setScreen(new TsarGameplayScreen(game));
+                if(prefs.getBoolean("first",true))
+                    game.setScreen(new HowToPlay(game));
+                else
+                    game.setScreen(new GameModeSelect(game));
             }
         });
         stage.addActor(playButton);

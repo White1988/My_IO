@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.internetwarz.basketballrush.utils.Score;
 
 public class TsarGameplayScreen implements Screen,InputProcessor
 {
@@ -28,6 +29,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 
     GlyphLayout layoutScore;
+    GlyphLayout layoutTries;
 
     private float WIDTH;
     private float HEIGTH;
@@ -46,9 +48,20 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     // todo  find out is there any clickable stuff like buttons
     // todo  fill in touched sector with color
 
+    private int numAttempts;
+    private int curNumAttempts;
+    private int numSectors = 2;
+    private boolean isGuessed = true;
+    private int randomSector;
+    private Score score;
+    private int points = 1;
 
-    public TsarGameplayScreen(Tsar game) {
+
+    public TsarGameplayScreen(Tsar game, int numAttempts) {
         this.game = game;
+        this.numAttempts = numAttempts;
+        curNumAttempts = numAttempts;
+        score = new Score(0);
 
         WIDTH = (float) Gdx.graphics.getWidth();
         HEIGTH  = (float) Gdx.graphics.getHeight();
@@ -61,6 +74,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
         layoutScore = new GlyphLayout();
+        layoutTries = new GlyphLayout();
         shapeRenderer = new ShapeRenderer(15000); //increase smoothness of circle
 
         //Line init
@@ -69,18 +83,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         lineSprite.setSize(1, RADIUS);
 
         Gdx.input.setInputProcessor(this);
-
     }
-
-
-
-
-
-
-
-
-
-
 
 
     @Override
@@ -111,23 +114,48 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
        if(Intersector.overlaps(playerCircle, new Rectangle(coord.x, coord.y, 1,1)))
        {
+           if(isGuessed) {
+               randomSector = (int)(Math.random()*(numSectors)+1);
+               isGuessed = false;
+           }
+
            System.out.println("Overlaps!");
-           Vector2 yAxis = new Vector2(0,1);
            Vector2 vector1 = new Vector2(coord.y - playerCircle.y, coord.x - playerCircle.x);
+           int pickedSector = getCircleSector(numSectors, vector1.angle());
            //double angle = Math. atan2(yAxis.y, yAxis.x) - Math. atan2(vector1.y, vector1.x);
            System.out.println("angle " + vector1.angle());
+           System.out.println("sector for " + numSectors + " is " + pickedSector);
+           System.out.println("Score: " + score.getScore());
+           if(randomSector == pickedSector) {
+               System.out.println("WON");
+               curNumAttempts = numAttempts;
+               isGuessed = true;
+               score.setScore(score.getScore() + points);
+           }
+           else {
+               System.out.println("LOSE");
+               curNumAttempts--;
+               isGuessed = false;
+           }
 
-           System.out.println("sector for 2 is " + getCircleSector(2, vector1.angle()));
+           if(curNumAttempts == 0) {
+               String gameType;
+               if(numSectors == 1)
+                   gameType = "Easy";
+               else if(numSectors == 2)
+                   gameType = "Medium";
+               else
+                   gameType = "Hard";
+               game.setScreen(new GameEndScreen(game, score, gameType));
+           }
+           /*System.out.println("sector for 2 is " + getCircleSector(2, vector1.angle()));
            System.out.println("sector for 3 is " + getCircleSector(3, vector1.angle()));
            System.out.println("sector for 4 is " + getCircleSector(4, vector1.angle()));
            System.out.println("sector for 5 is " + getCircleSector(5, vector1.angle()));
            System.out.println("sector for 6 is " + getCircleSector(6, vector1.angle()));
            System.out.println("sector for 7 is " + getCircleSector(7, vector1.angle()));
            System.out.println("sector for 8 is " + getCircleSector(8, vector1.angle()));
-           System.out.println("sector for 9 is " + getCircleSector(9, vector1.angle()));
-
-
-
+           System.out.println("sector for 9 is " + getCircleSector(9, vector1.angle()));*/
            //vector1.angle()
        }
 
@@ -183,13 +211,19 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         batch.setProjectionMatrix(camera.combined);
 
         //Drawing lines
-        int count = 9;
-        drawLines(count);
+        drawLines(numSectors);
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.WHITE);
+        shapeRenderer.setColor(Color.RED);
         shapeRenderer.circle(WIDTH/2,HEIGTH/2,RADIUS);
         shapeRenderer.end();
+
+        layoutScore.setText(game.font, "Score: " + score.getStringScore());
+        layoutTries.setText(game.font, "Tries left: " + curNumAttempts);
+        batch.begin();
+        game.font.draw(batch,"Score: " + score.getStringScore(),WIDTH-layoutScore.width - 4, HEIGTH - layoutScore.height);
+        game.font.draw(batch,"Tries left: " + curNumAttempts,4 , HEIGTH - layoutTries.height);
+        batch.end();
 
         /*for (int i = 0 ; i < 9; i ++){
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);

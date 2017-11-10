@@ -18,7 +18,7 @@ public class Assets {
 
         gameName = new Texture(Gdx.files.internal("images/gameName.png"));
         logo = new Texture(Gdx.files.internal("images/internetwarz.png"));
-        line = new Texture(Gdx.files.internal("images/line_txtr"));
+        line = new Texture(Gdx.files.internal("images/line_txtr.png"));
 
 
         buttonAtlas = new TextureAtlas(Gdx.files.internal("buttons.pack"));
