@@ -123,6 +123,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
            System.out.println("sector for 5 is " + getCircleSector(5, vector1.angle()));
            System.out.println("sector for 6 is " + getCircleSector(6, vector1.angle()));
            System.out.println("sector for 7 is " + getCircleSector(7, vector1.angle()));
+           System.out.println("sector for 8 is " + getCircleSector(8, vector1.angle()));
+           System.out.println("sector for 9 is " + getCircleSector(9, vector1.angle()));
 
 
 
@@ -140,14 +142,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
     private int getCircleSector(int sectorNumbers, float angle)
     {
-        // angle which passed is related to x-axis, need to convert it first
-        angle -= 90f;
-
-        if(angle < 0) angle+= 90;
-
         float deegreesPerSector = 360/sectorNumbers;
-
-
 
         return (int) (angle / deegreesPerSector)  + 1;
     }
@@ -188,7 +183,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         batch.setProjectionMatrix(camera.combined);
 
         //Drawing lines
-        int count = 3;
+        int count = 9;
         drawLines(count);
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
