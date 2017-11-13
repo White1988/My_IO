@@ -30,7 +30,7 @@ public class Tsar extends Game {
 		batch = new SpriteBatch();
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Quicksand-Bold.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parameter.size = 60;
+		parameter.size = 30;
 		parameter.color= Color.BLACK;
 		font=generator.generateFont(parameter);
 
