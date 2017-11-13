@@ -10,6 +10,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -54,6 +55,11 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     Texture lineTexture;
     Sprite lineSprite;
     Image line;
+
+    //Circle
+    Pixmap pixmap;//for circle
+    Texture circle;
+    Image imageCircle;
 
     //actual circle to check collisions with
     Circle playerCircle;
@@ -139,7 +145,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
             }
         });
-       // stage.addActor(easyButton);
+        stage.addActor(easyButton);
 
 
         //Medium Button resources
@@ -151,7 +157,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                     clickSound.play();
             }
         });
-        //stage.addActor(mediumButton);
+        stage.addActor(mediumButton);
 
         //Hard Button resources
 
@@ -162,7 +168,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                     clickSound.play();
             }
         });
-        //stage.addActor(hardButton);
+        stage.addActor(hardButton);
 
         //
 
@@ -184,9 +190,21 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         lineSprite.setSize(1, RADIUS);
 
         line = new Image(lineTexture);
-        line.setSize(1, RADIUS);
+        line.setSize(0.1f, RADIUS);
+        line.setWidth(0.1f);
+
+        pixmap = new Pixmap((int)RADIUS*2 + 1, (int)RADIUS*2 + 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.RED);
+        //pixmap.fillRectangle(0, 0, pixmap.getWidth(), pixmap.getHeight());
+        pixmap.drawCircle((int)RADIUS, (int)RADIUS, (int)RADIUS);
+        circle = new Texture(pixmap);
+        pixmap.dispose();
+        imageCircle = new Image(circle);
+        imageCircle.setPosition(WIDTH/2 - RADIUS, HEIGHT/2 - RADIUS);
+        stage.addActor(imageCircle);
 
 
+        drawLines(numSectors);
 
     }
 
@@ -233,10 +251,12 @@ public class TsarGameplayScreen implements Screen,InputProcessor
            System.out.println("Score: " + score.getScore());
            if(randomSector == pickedSector) {
                System.out.println("WON");
+               stage.getActors().removeRange(stage.getActors().size - numSectors, stage.getActors().size - 1);
                curNumAttempts = numAttempts;
                isGuessed = true;
                score.setScore(score.getScore() + points);
                numSectors++;
+               drawLines(numSectors);
            }
            else {
                System.out.println("LOSE");
@@ -317,12 +337,12 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         batch.setProjectionMatrix(camera.combined);
 
         //Drawing lines
-        drawLines(numSectors);
+        //drawLines(numSectors);
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        /*shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.circle(WIDTH/2, HEIGHT /2,RADIUS);
-        shapeRenderer.end();
+        shapeRenderer.end();*/
 
 
         layoutScore.setText(game.font, "Score: " + score.getStringScore());
@@ -333,19 +353,19 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         batch.end();
 
         //draw buttons
-        batch.begin();
+        /*batch.begin();
         easyButton.draw(batch, 1);
         mediumButton.draw(batch, 1);
         hardButton.draw(batch, 1);
         //textButton.draw(batch, 1);
-        batch.end();
+        batch.end();*/
 
 
-        /*stage.act();
+        stage.act();
         batch.begin();
         stage.draw();
         batch.end();
-        stage.getActors().removeRange(stage.getActors().size - numSectors, stage.getActors().size);*/
+        System.out.println(stage.getActors().size);
 
     }
 
@@ -353,19 +373,19 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     private void drawLines(int count) {
         float angle = 360.0f / count;
         for (int i = 0; i < count; i++) {
-            batch.begin();
+            /*batch.begin();
             batch.draw(lineSprite,
                     (WIDTH - lineSprite.getWidth()) / 2.0f, (HEIGHT - lineSprite.getHeight()) / 2.0f + lineSprite.getHeight()/2.0f,
                     0, 0,
                     lineSprite.getWidth(), lineSprite.getHeight(),
                     1f, 1f,-i * angle, true);
-            batch.end();
+            batch.end();*/
 
-            /*line = new Image(lineTexture);
+            line = new Image(lineTexture);
             line.setPosition((WIDTH - line.getWidth()) / 2.0f, (HEIGHT - lineSprite.getHeight()) / 2.0f + line.getHeight()/2.0f);
-            line.setOrigin(0, 0);
+            line.setOrigin(line.getWidth()/2, 0);
             line.setRotation(-i*angle);
-            stage.addActor(line);*/
+            stage.addActor(line);
         }
     }
 
@@ -383,6 +403,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         //camera.viewportWidth = width / VIEWPORT_SCALE;
         //camera.viewportHeight = height / VIEWPORT_SCALE;
         camera.update();
+        stage.getViewport().update(width,height,false);
     }
 
     @Override
