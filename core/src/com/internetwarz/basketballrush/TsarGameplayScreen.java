@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -60,6 +61,12 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     Pixmap pixmap;//for circle
     Texture circle;
     Image imageCircle;
+
+    //Labels
+    Label scoreLabel;
+    Label.LabelStyle textStyle;
+    Label triesLabel;
+    Label rightWrongLabel;
 
     //actual circle to check collisions with
     Circle playerCircle;
@@ -109,11 +116,6 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         Gdx.input.setInputProcessor(this);
 
 
-        //init stage
-        //stage = new Stage(new FitViewport(WIDTH,HEIGHT));
-       // stage.clear();
-
-
         //Preferences init
         prefs = Gdx.app.getPreferences("My Preferences");
         clickSound = game.assets.getSound();
@@ -134,6 +136,10 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         easyButton = new ImageButton(buttonSkin.getDrawable("easy"),buttonSkin.getDrawable("easyClicked"));
         mediumButton = new ImageButton(buttonSkin.getDrawable("medium"),buttonSkin.getDrawable("mediumClicked"));
         hardButton = new ImageButton(buttonSkin.getDrawable("hard"),buttonSkin.getDrawable("hardClicked"));
+
+        easyButton.setSize(easyButton.getWidth() - 30, easyButton.getHeight() - 30);
+        mediumButton.setSize(mediumButton.getWidth() - 30, mediumButton.getHeight() - 30);
+        hardButton.setSize(hardButton.getWidth() - 30, hardButton.getHeight() - 30);
 
 
         easyButton.setPosition(WIDTH/2 - mediumButton.getWidth()/2 - easyButton.getWidth(), HEIGHT - easyButton.getHeight());
@@ -189,6 +195,31 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         lineSprite = new Sprite(lineTexture);
         lineSprite.setSize(1, RADIUS);
 
+        //Labels init
+        layoutScore.setText(game.font, "Score: " + score.getStringScore());
+        layoutTries.setText(game.font, "Tries left: " + curNumAttempts);
+        textStyle = new Label.LabelStyle();
+        textStyle.font = game.font;
+
+        scoreLabel = new Label("Score: 0", textStyle);
+        scoreLabel.setPosition(WIDTH-layoutScore.width - 4, HEIGHT - layoutScore.height - 4);
+        scoreLabel.setSize(layoutScore.width, layoutScore.height);
+        scoreLabel.setFontScale(1f, 1f);
+
+        triesLabel = new Label("Tries: " + numAttempts, textStyle);
+        triesLabel.setPosition(4 , HEIGHT - layoutTries.height - 4);
+        triesLabel.setSize(layoutTries.width, layoutTries.height);
+
+        rightWrongLabel = new Label("Write!", textStyle);
+        rightWrongLabel.setVisible(false);
+        rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
+        rightWrongLabel.setColor(Color.BLUE);
+
+        stage.addActor(scoreLabel);
+        stage.addActor(triesLabel);
+        stage.addActor(rightWrongLabel);
+
+        //Line init
         line = new Image(lineTexture);
         line.setSize(0.1f, RADIUS);
         line.setWidth(0.1f);
@@ -202,6 +233,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         imageCircle = new Image(circle);
         imageCircle.setPosition(WIDTH/2 - RADIUS, HEIGHT/2 - RADIUS);
         stage.addActor(imageCircle);
+
+
 
 
         drawLines(numSectors);
@@ -255,12 +288,23 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                curNumAttempts = numAttempts;
                isGuessed = true;
                score.setScore(score.getScore() + points);
+               scoreLabel.setText("Score: "  + score.getScore());
+               triesLabel.setText("Tries: " + numAttempts);
+               rightWrongLabel.setText("Write!");
+               rightWrongLabel.setColor(new Color(Color.GREEN));
+               rightWrongLabel.setVisible(true);
+               rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
                numSectors++;
                drawLines(numSectors);
            }
            else {
                System.out.println("LOSE");
                curNumAttempts--;
+               triesLabel.setText("Tries: " + curNumAttempts);
+               rightWrongLabel.setText("Wrong!");
+               rightWrongLabel.setColor(new Color(Color.RED));
+               rightWrongLabel.setVisible(true);
+               rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
                isGuessed = false;
            }
 
@@ -336,51 +380,17 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        //Drawing lines
-        //drawLines(numSectors);
-
-        /*shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.circle(WIDTH/2, HEIGHT /2,RADIUS);
-        shapeRenderer.end();*/
-
-
-        layoutScore.setText(game.font, "Score: " + score.getStringScore());
-        layoutTries.setText(game.font, "Tries left: " + curNumAttempts);
-        batch.begin();
-        game.font.draw(batch,"Score: " + score.getStringScore(),WIDTH-layoutScore.width - 4, HEIGHT - layoutScore.height);
-        game.font.draw(batch,"Tries left: " + curNumAttempts,4 , HEIGHT - layoutTries.height);
-        batch.end();
-
-        //draw buttons
-        /*batch.begin();
-        easyButton.draw(batch, 1);
-        mediumButton.draw(batch, 1);
-        hardButton.draw(batch, 1);
-        //textButton.draw(batch, 1);
-        batch.end();*/
-
 
         stage.act();
         batch.begin();
         stage.draw();
         batch.end();
-        System.out.println(stage.getActors().size);
-
     }
 
     //Drawing sectors
     private void drawLines(int count) {
         float angle = 360.0f / count;
         for (int i = 0; i < count; i++) {
-            /*batch.begin();
-            batch.draw(lineSprite,
-                    (WIDTH - lineSprite.getWidth()) / 2.0f, (HEIGHT - lineSprite.getHeight()) / 2.0f + lineSprite.getHeight()/2.0f,
-                    0, 0,
-                    lineSprite.getWidth(), lineSprite.getHeight(),
-                    1f, 1f,-i * angle, true);
-            batch.end();*/
-
             line = new Image(lineTexture);
             line.setPosition((WIDTH - line.getWidth()) / 2.0f, (HEIGHT - lineSprite.getHeight()) / 2.0f + line.getHeight()/2.0f);
             line.setOrigin(line.getWidth()/2, 0);
@@ -425,5 +435,6 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     public void dispose() {
         batch.dispose();
         lineTexture.dispose();
+        buttonSkin.dispose();
     }
 }
