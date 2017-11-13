@@ -12,10 +12,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
@@ -67,6 +69,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     Label.LabelStyle textStyle;
     Label triesLabel;
     Label rightWrongLabel;
+    Label.LabelStyle rightStyle;
+    Label.LabelStyle wrongStyle;
 
     //actual circle to check collisions with
     Circle playerCircle;
@@ -198,6 +202,16 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         //Labels init
         layoutScore.setText(game.font, "Score: " + score.getStringScore());
         layoutTries.setText(game.font, "Tries left: " + curNumAttempts);
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Quicksand-Bold.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 30;
+        parameter.color= Color.GREEN;
+        BitmapFont font = generator.generateFont(parameter);
+        rightStyle = new Label.LabelStyle(font, Color.GREEN);
+        parameter.color = Color.RED;
+        font = generator.generateFont(parameter);
+        wrongStyle = new Label.LabelStyle(font, Color.RED);
+
         textStyle = new Label.LabelStyle();
         textStyle.font = game.font;
 
@@ -210,10 +224,10 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         triesLabel.setPosition(4 , HEIGHT - layoutTries.height - 4);
         triesLabel.setSize(layoutTries.width, layoutTries.height);
 
-        rightWrongLabel = new Label("Write!", textStyle);
+        rightWrongLabel = new Label("Right!", rightStyle);
+        rightWrongLabel = new Label("Wrong!", wrongStyle);
         rightWrongLabel.setVisible(false);
         rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
-        rightWrongLabel.setColor(Color.BLUE);
 
         stage.addActor(scoreLabel);
         stage.addActor(triesLabel);
@@ -290,8 +304,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                score.setScore(score.getScore() + points);
                scoreLabel.setText("Score: "  + score.getScore());
                triesLabel.setText("Tries: " + numAttempts);
-               rightWrongLabel.setText("Write!");
-               rightWrongLabel.setColor(new Color(Color.GREEN));
+               rightWrongLabel.setText("Right!");
+               rightWrongLabel.setStyle(rightStyle);
                rightWrongLabel.setVisible(true);
                rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
                numSectors++;
@@ -302,7 +316,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                curNumAttempts--;
                triesLabel.setText("Tries: " + curNumAttempts);
                rightWrongLabel.setText("Wrong!");
-               rightWrongLabel.setColor(new Color(Color.RED));
+               rightWrongLabel.setStyle(wrongStyle);
                rightWrongLabel.setVisible(true);
                rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
                isGuessed = false;
