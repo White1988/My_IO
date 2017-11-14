@@ -39,10 +39,12 @@ public class GameEndScreen implements Screen,InputProcessor {
     private Skin buttonSkin;
     private TextureAtlas buttonAtlas;
     private ImageButton playButton,leaderboardButton,achievementsButton,homeButton;
+    private int numAttempts;
 
-    public GameEndScreen(final Tsar gam, Score scor, String gt){
+    public GameEndScreen(final Tsar gam, Score scor, String gt, final int numAttempts){
         this.game=gam;
         this.score = scor;
+        this.numAttempts = numAttempts;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, appWidth, appHeight);
         batch = new SpriteBatch();
@@ -93,7 +95,7 @@ public class GameEndScreen implements Screen,InputProcessor {
         playButton.setPosition(appWidth/2-playButton.getWidth()/2,appHeight/2-playButton.getHeight()/2);
         playButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
-
+                game.setScreen(new TsarGameplayScreen(game, numAttempts));
             }
         });
         stage.addActor(playButton);

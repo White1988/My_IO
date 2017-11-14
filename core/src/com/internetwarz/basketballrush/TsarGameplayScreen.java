@@ -102,6 +102,14 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     TextButton textButton;
     TextButton.TextButtonStyle textButtonStyle;
 
+    boolean isDrawLines = false;
+
+    //Filling sector
+    private boolean isShow = false;
+    private Color fillColor = new Color();
+    private float degrees = 0;
+    private float startFilling = 0;
+
     public TsarGameplayScreen(Tsar game, final int numAttempts) {
         this.game = game;
         this.numAttempts = numAttempts;
@@ -251,8 +259,6 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         stage.addActor(imageCircle);
 
 
-
-
         drawLines(numSectors);
 
     }
@@ -275,7 +281,6 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
         System.out.println("screenX " +screenX);
         System.out.println("screenY " +screenY);
 
@@ -300,9 +305,12 @@ public class TsarGameplayScreen implements Screen,InputProcessor
            System.out.println("angle " + vector1.angle());
            System.out.println("sector for " + numSectors + " is " + pickedSector);
            System.out.println("Score: " + score.getScore());
+           System.out.println("RIGHT: " + randomSector);
            if(randomSector == pickedSector) {
+               isShow = true;
+               setFillingParametrs(Color.GREEN, pickedSector);
                System.out.println("WON");
-               stage.getActors().removeRange(stage.getActors().size - numSectors, stage.getActors().size - 1);
+               //stage.getActors().removeRange(stage.getActors().size - numSectors, stage.getActors().size - 1 );
                curNumAttempts = numAttempts;
                isGuessed = true;
                score.setScore(score.getScore() + points);
@@ -313,10 +321,12 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                rightWrongLabel.setVisible(true);
                //rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
                rightWrongLabel.setPosition(imageCircle.getX() + imageCircle.getWidth()/2 - rightWrongLabel.getWidth()/2 + 8, imageCircle.getY() - rightWrongLabel.getHeight() - 4);
-               numSectors++;
-               drawLines(numSectors);
+               //numSectors++;
+               isDrawLines = true;
            }
            else {
+               isShow = true;
+               setFillingParametrs(Color.RED, pickedSector);
                System.out.println("LOSE");
                curNumAttempts--;
                triesLabel.setText("Tries: " + curNumAttempts);
@@ -336,7 +346,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                    gameType = "Medium";
                else
                    gameType = "Hard";
-               game.setScreen(new GameEndScreen(game, score, gameType));
+               game.setScreen(new GameEndScreen(game, score, gameType, numAttempts));
            }
            /*System.out.println("sector for 2 is " + getCircleSector(2, vector1.angle()));
            System.out.println("sector for 3 is " + getCircleSector(3, vector1.angle()));
@@ -355,7 +365,14 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         return false;
     }
 
+    private void setFillingParametrs(Color color, int pickedSector) {
+        isShow = true;
+        fillColor = color;
+        float angle = 360.0f / numSectors;
+        startFilling = pickedSector * angle - 90;
+        degrees = angle;
 
+    }
 
 
     private int getCircleSector(int sectorNumbers, float angle)
@@ -367,16 +384,25 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        isShow = false;
+        if(isDrawLines) {
+            stage.getActors().removeRange(stage.getActors().size - numSectors, stage.getActors().size - 1 );
+            numSectors++;
+            drawLines(numSectors);
+            isDrawLines = false;
+        }
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+
         return false;
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
+
         return false;
     }
 
@@ -400,6 +426,12 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
+        if(isShow) {
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(fillColor);
+            shapeRenderer.arc(imageCircle.getX() + imageCircle.getWidth() / 2, imageCircle.getY() + imageCircle.getHeight() / 2, RADIUS + 0.2f, -startFilling, degrees);
+            shapeRenderer.end();
+        }
 
         stage.act();
         batch.begin();
