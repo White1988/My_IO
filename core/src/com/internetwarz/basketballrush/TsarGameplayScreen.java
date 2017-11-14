@@ -61,8 +61,9 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
     //Circle
     Pixmap pixmap;//for circle
-    Texture circle;
+    Texture circleTexture;
     Image imageCircle;
+
 
     //Labels
     Label scoreLabel;
@@ -74,6 +75,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
     //actual circle to check collisions with
     Circle playerCircle;
+    Texture playerCircleTexture;
     // todo  how to determine is screen touch coordinates within certain shape?
     // todo  find out is there any clickable stuff like buttons
     // todo  fill in touched sector with color
@@ -117,7 +119,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         plex.addProcessor(this);
 
         Gdx.input.setInputProcessor(plex);
-        Gdx.input.setInputProcessor(this);
+        //Gdx.input.setInputProcessor(this);
 
 
         //Preferences init
@@ -242,9 +244,9 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         pixmap.setColor(Color.RED);
         //pixmap.fillRectangle(0, 0, pixmap.getWidth(), pixmap.getHeight());
         pixmap.drawCircle((int)RADIUS, (int)RADIUS, (int)RADIUS);
-        circle = new Texture(pixmap);
+        circleTexture = new Texture(pixmap);
         pixmap.dispose();
-        imageCircle = new Image(circle);
+        imageCircle = new Image(circleTexture);
         imageCircle.setPosition(WIDTH/2 - RADIUS, HEIGHT/2 - RADIUS);
         stage.addActor(imageCircle);
 
@@ -282,6 +284,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         System.out.println("worldX " +coord.x);
         System.out.println("worldY " +coord.y);
 
+        playerCircle = new Circle(imageCircle.getX() + imageCircle.getWidth()/2, imageCircle.getY() + imageCircle.getHeight()/2, imageCircle.getHeight()/2);
+
        if(Intersector.overlaps(playerCircle, new Rectangle(coord.x, coord.y, 1,1)))
        {
            if(isGuessed) {
@@ -307,7 +311,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                rightWrongLabel.setText("Right!");
                rightWrongLabel.setStyle(rightStyle);
                rightWrongLabel.setVisible(true);
-               rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
+               //rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
+               rightWrongLabel.setPosition(imageCircle.getX() + imageCircle.getWidth()/2 - rightWrongLabel.getWidth()/2 + 8, imageCircle.getY() - rightWrongLabel.getHeight() - 4);
                numSectors++;
                drawLines(numSectors);
            }
@@ -318,7 +323,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                rightWrongLabel.setText("Wrong!");
                rightWrongLabel.setStyle(wrongStyle);
                rightWrongLabel.setVisible(true);
-               rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
+               //rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
+               rightWrongLabel.setPosition(imageCircle.getX() + imageCircle.getWidth()/2 - rightWrongLabel.getWidth()/2, imageCircle.getY() - rightWrongLabel.getHeight() - 4);
                isGuessed = false;
            }
 
@@ -406,7 +412,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         float angle = 360.0f / count;
         for (int i = 0; i < count; i++) {
             line = new Image(lineTexture);
-            line.setPosition((WIDTH - line.getWidth()) / 2.0f, (HEIGHT - lineSprite.getHeight()) / 2.0f + line.getHeight()/2.0f);
+            //line.setPosition((WIDTH - line.getWidth()) / 2.0f, (HEIGHT - lineSprite.getHeight()) / 2.0f + line.getHeight()/2.0f);
+            line.setPosition(imageCircle.getX() + imageCircle.getWidth()/2, imageCircle.getY() + imageCircle.getHeight()/2);
             line.setOrigin(line.getWidth()/2, 0);
             line.setRotation(-i*angle);
             stage.addActor(line);
