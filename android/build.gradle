@@ -15,7 +15,7 @@ android {
         instrumentTest.setRoot('tests')
     }
     defaultConfig {
-        applicationId "com.internetwarz.basketballrush"
+        applicationId "com.di.devs.tsar"
         minSdkVersion 9
         targetSdkVersion 25
         multiDexEnabled true

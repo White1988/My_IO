@@ -25,7 +25,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.8 (1)" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="core" exported="" />
     <orderEntry type="library" exported="" name="gdx-backend-lwjgl-1.9.3" level="project" />
@@ -48,9 +48,5 @@
     <orderEntry type="library" exported="" name="jinput-platform-2.0.5-natives-linux" level="project" />
     <orderEntry type="library" exported="" name="jinput-platform-2.0.5-natives-windows" level="project" />
     <orderEntry type="library" exported="" name="jinput-platform-2.0.5-natives-osx" level="project" />
-    <orderEntry type="library" exported="" name="desktop2.desktop2-1.0" level="project" />
-    <orderEntry type="library" exported="" name="desktop2.desktop2-1.0" level="project" />
-    <orderEntry type="library" exported="" name="desktop2.desktop2-1.0" level="project" />
-    <orderEntry type="library" exported="" name="desktop2.desktop2-1.0" level="project" />
   </component>
 </module>
