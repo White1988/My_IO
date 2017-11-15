@@ -27,6 +27,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -208,12 +209,18 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         easyButton.setPosition(widthPercent(5), HEIGHT - easyButton.getHeight() - 10);
         easyButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
-                if(prefs.getBoolean("soundOn",true))
-                    clickSound.play();
-                System.out.println("easy clicked!");
-                mediumButton.setChecked(false);
-                hardButton.setChecked(false);
+                if(!isGameBegan) {
+                    if (prefs.getBoolean("soundOn", true))
+                        clickSound.play();
+                    System.out.println("easy clicked!");
+                    mediumButton.setChecked(false);
+                    hardButton.setChecked(false);
+                }
+                else {
+                    restartGame(3);
+                }
             }
+
         });
         stage.addActor(easyButton);
 
@@ -222,10 +229,15 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         mediumButton.setPosition(widthPercent(5) + easyButton.getWidth(), HEIGHT - mediumButton.getHeight() - 10);
         mediumButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
-                if(prefs.getBoolean("soundOn",true))
-                    clickSound.play();
-                easyButton.setChecked(false);
-                hardButton.setChecked(false);
+                if(!isGameBegan) {
+                    if (prefs.getBoolean("soundOn", true))
+                        clickSound.play();
+                    easyButton.setChecked(false);
+                    hardButton.setChecked(false);
+                }
+                else {
+                   restartGame(2);
+                }
             }
         });
         stage.addActor(mediumButton);
@@ -235,10 +247,15 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         hardButton.setPosition(mediumButton.getX() + mediumButton.getWidth(), HEIGHT - hardButton.getHeight() - 10);
         hardButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
-                if(prefs.getBoolean("soundOn",true))
-                    clickSound.play();
-                mediumButton.setChecked(false);
-                easyButton.setChecked(false);
+                if(!isGameBegan) {
+                    if (prefs.getBoolean("soundOn", true))
+                        clickSound.play();
+                    mediumButton.setChecked(false);
+                    easyButton.setChecked(false);
+                }
+                else {
+                    restartGame(1);
+                }
             }
         });
         stage.addActor(hardButton);
@@ -249,6 +266,24 @@ public class TsarGameplayScreen implements Screen,InputProcessor
             mediumButton.setChecked(true);
         else if(numAttempts == 1)
             hardButton.setChecked(true);
+    }
+
+    private void restartGame(final int numAttempts) {
+        Dialog restartConfirmDialog = new Dialog("Restart dialog", new Skin(Gdx.files.internal("skins/uiskin.json")));
+        TextButton.TextButtonStyle textButtonStyle1 = textButtonStyle;
+        textButtonStyle1.down = buttonSkin.getDrawable("Button checked");
+        textButtonStyle1.checked = null;
+        TextButton yes = new TextButton("Yes", textButtonStyle1);
+        yes.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new TsarGameplayScreen(game, numAttempts));
+            }
+        });
+        TextButton no = new TextButton("No", textButtonStyle1);
+        restartConfirmDialog.text("Do you really want to restart the game?");
+        restartConfirmDialog.button(yes);
+        restartConfirmDialog.button(no);
+        restartConfirmDialog.show(stage);
     }
 
     private void labelsInit() {
