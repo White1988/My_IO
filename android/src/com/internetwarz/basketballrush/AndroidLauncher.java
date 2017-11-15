@@ -25,6 +25,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         GameHelper.GameHelperListener gameHelperListener = new GameHelper.GameHelperListener() {
             @Override
             public void onSignInFailed() {
+                Gdx.app.log("MainActivity", "Log in failed: " + gameHelper.getSignInError() + "."); ;
             }
 
             @Override
@@ -82,7 +83,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 
     @Override
     public void rateGame() {
-        String str = "https://play.google.com/store/apps/details?id=com.internetwarz.basketballrush";//TODO: New ID
+        String str = "https://play.google.com/store/apps/details?id=com.di.devs.tsar";
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(str)));
     }
 

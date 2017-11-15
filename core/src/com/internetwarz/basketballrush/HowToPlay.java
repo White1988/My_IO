@@ -44,6 +44,7 @@ public class HowToPlay implements Screen,InputProcessor {
         playButton = game.assets.getTexture("tutButton");
         playRectangle = new Rectangle(appWidth/2-playButton.getWidth()/2,0,playButton.getWidth(),playButton.getHeight());
 */
+        prefs = Gdx.app.getPreferences("My Preferences");
         prefs.putBoolean("first",false);
         prefs.flush();
     }
