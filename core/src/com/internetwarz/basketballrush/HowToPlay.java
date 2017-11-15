@@ -27,8 +27,8 @@ public class HowToPlay implements Screen,InputProcessor {
     Rectangle playRectangle;
 
     public HowToPlay(final Tsar gam){
-        this.game=gam;
-        Gdx.input.setInputProcessor(this);
+       this.game=gam;
+        /*Gdx.input.setInputProcessor(this);
         Gdx.input.setCatchBackKey(true);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, appWidth, appHeight);
@@ -43,7 +43,7 @@ public class HowToPlay implements Screen,InputProcessor {
         tutorial = game.assets.getTexture("tutorial");
         playButton = game.assets.getTexture("tutButton");
         playRectangle = new Rectangle(appWidth/2-playButton.getWidth()/2,0,playButton.getWidth(),playButton.getHeight());
-
+*/
         prefs.putBoolean("first",false);
         prefs.flush();
     }
