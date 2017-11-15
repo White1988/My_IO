@@ -89,7 +89,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 
     @Override
     public void gamesPlayedAchievements(String gameType,int score){
-        if(isSignedIn()){
+        /*if(isSignedIn()){
             if(gameType.equals("two color mode")){
                 Games.Achievements.increment(gameHelper.getApiClient(),
                         getString(R.string.achievement_play_25_games_easy_mode),1);
@@ -108,12 +108,12 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                 Games.Achievements.increment(gameHelper.getApiClient(),
                         getString(R.string.achievement_play_200_games_hard_mode),1);
             }
-        }
+        }*/
     }
 
     @Override
     public void unlockAchievement(int score, String gameType) {
-        if (isSignedIn()) {
+       /* if (isSignedIn()) {
             if (gameType.equals("two color mode")) {
                 if (score == 25) {
                     Games.Achievements.unlock(gameHelper.getApiClient(),
@@ -151,7 +151,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                             getString(R.string.achievement_score_100_in_hard));
                 }
             }
-        }
+        }*/
     }
 
     @Override
