@@ -281,7 +281,10 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         restartConfirmDialog.text("Do you really want to restart the game?");
         restartConfirmDialog.button(yes);
         restartConfirmDialog.button(no);
+
         restartConfirmDialog.show(stage);
+        restartConfirmDialog.setSize(widthPercent(40),heightPercent(30));
+        restartConfirmDialog.setPosition(WIDTH/2 - restartConfirmDialog.getWidth()/2, HEIGHT/2 - restartConfirmDialog.getHeight()/2);
     }
 
     private void labelsInit() {

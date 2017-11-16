@@ -28,7 +28,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  * Created by dell on 16.11.2017.
  */
 
-public class StatisticsScreen implements Screen,InputProcessor {
+public class HallOfFameScreen implements Screen, InputProcessor{
     Tsar game;
 
     private int WIDTH;
@@ -51,7 +51,7 @@ public class StatisticsScreen implements Screen,InputProcessor {
     //Labels
     Label titleLable;
 
-    public StatisticsScreen(Tsar game) {
+    public HallOfFameScreen(Tsar game) {
         this.game = game;
         WIDTH = Gdx.graphics.getWidth();
         HEIGHT = Gdx.graphics.getHeight();
@@ -170,7 +170,7 @@ public class StatisticsScreen implements Screen,InputProcessor {
         parameter.color= Color.GREEN;
         BitmapFont font = generator.generateFont(parameter);
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
-        titleLable = new Label("Statistics (player)", labelStyle);
+        titleLable = new Label("Hall of fame", labelStyle);
         titleLable.setPosition(WIDTH/2 - titleLable.getWidth()/2, easyButton.getY() - heightPercent(10));
 
         stage.addActor(titleLable);

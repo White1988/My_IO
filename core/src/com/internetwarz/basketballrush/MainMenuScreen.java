@@ -115,6 +115,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
+                game.setScreen(new HallOfFameScreen(game));
 
             }
         });
@@ -127,6 +128,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
+                game.setScreen(new RulesScreen(game));
             }
         });
         stage.addActor(rulesButton);
