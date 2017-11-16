@@ -76,9 +76,6 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
     //actual circle to check collisions with
     Circle playerCircle;
-    // todo  how to determine is screen touch coordinates within certain shape?
-    // todo  find out is there any clickable stuff like buttons
-    // todo  fill in touched sector with color
 
     //Game parameters
     public int numAttempts;
@@ -143,9 +140,10 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
         playerCircle = new Circle(WIDTH/2, HEIGHT /2, RADIUS);
 
-
-
         shapeRenderer = new ShapeRenderer(15000); //increase smoothness of circle
+
+        batch = new SpriteBatch();
+        batch.setProjectionMatrix(camera.combined);
 
         labelsInit();
 
@@ -287,8 +285,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     }
 
     private void labelsInit() {
-        batch = new SpriteBatch();
-        batch.setProjectionMatrix(camera.combined);
+
         layoutScore = new GlyphLayout();
         layoutTries = new GlyphLayout();
 
