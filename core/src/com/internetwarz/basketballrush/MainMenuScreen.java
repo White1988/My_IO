@@ -22,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import static com.internetwarz.basketballrush.Constants.EASY_MODE;
+
 public class MainMenuScreen implements Screen,InputProcessor {
     final Tsar game;
     final float appWidth;
@@ -90,7 +92,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
                 if(prefs.getBoolean("first",true))
                     game.setScreen(new HowToPlay(game));
                 else
-                    game.setScreen(new TsarGameplayScreen(game, 3));
+                    game.setScreen(new TsarGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE)));
 
             }
         });

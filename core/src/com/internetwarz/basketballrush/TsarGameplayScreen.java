@@ -36,6 +36,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.internetwarz.basketballrush.utils.Score;
 
+import static com.internetwarz.basketballrush.Constants.EASY_MODE;
+import static com.internetwarz.basketballrush.Constants.HARD_MODE;
+import static com.internetwarz.basketballrush.Constants.MEDIUM_MODE;
+
 public class TsarGameplayScreen implements Screen,InputProcessor
 {
     private Tsar game;
@@ -215,7 +219,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                     hardButton.setChecked(false);
                 }
                 else {
-                    restartGame(3);
+                    restartGame(Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE));
                 }
             }
 
@@ -234,7 +238,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                     hardButton.setChecked(false);
                 }
                 else {
-                   restartGame(2);
+                   restartGame(Constants.ATTEMPTS_IN_GAMEMODE.get(Constants.MEDIUM_MODE));
                 }
             }
         });
@@ -252,7 +256,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                     easyButton.setChecked(false);
                 }
                 else {
-                    restartGame(1);
+                    restartGame(Constants.ATTEMPTS_IN_GAMEMODE.get(Constants.HARD_MODE));
                 }
             }
         });
@@ -410,22 +414,14 @@ public class TsarGameplayScreen implements Screen,InputProcessor
            if(curNumAttempts == 0) {
                String gameType;
                if(numSectors == 1)
-                   gameType = "Easy";
+                   gameType = EASY_MODE;
                else if(numSectors == 2)
-                   gameType = "Medium";
+                   gameType = MEDIUM_MODE;
                else
-                   gameType = "Hard";
+                   gameType = HARD_MODE;
                game.setScreen(new GameEndScreen(game, score, gameType, numAttempts));
            }
-           /*System.out.println("sector for 2 is " + getCircleSector(2, vector1.angle()));
-           System.out.println("sector for 3 is " + getCircleSector(3, vector1.angle()));
-           System.out.println("sector for 4 is " + getCircleSector(4, vector1.angle()));
-           System.out.println("sector for 5 is " + getCircleSector(5, vector1.angle()));
-           System.out.println("sector for 6 is " + getCircleSector(6, vector1.angle()));
-           System.out.println("sector for 7 is " + getCircleSector(7, vector1.angle()));
-           System.out.println("sector for 8 is " + getCircleSector(8, vector1.angle()));
-           System.out.println("sector for 9 is " + getCircleSector(9, vector1.angle()));*/
-           //vector1.angle()
+
        }
 
 

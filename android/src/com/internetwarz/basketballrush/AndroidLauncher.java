@@ -157,8 +157,9 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 
     @Override
     public void submitScore(int highScore, String gameType) {
+        Gdx.app.log("MainActivity", "submitScore: " + highScore + "."); ;
         if (isSignedIn()) {
-            if (gameType.equals("two color mode")) {
+            if (gameType.equals(Cons)) {
                 Games.Leaderboards.submitScore(gameHelper.getApiClient(),
                         getString(R.string.leaderboard_easy), highScore);
             } else if (gameType.equals("three color mode")) {
@@ -173,11 +174,11 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 
     @Override
     public void showAchievement() {
-        if (isSignedIn()) {
+       /* if (isSignedIn()) { no achievements
             startActivityForResult(Games.Achievements.getAchievementsIntent(gameHelper.getApiClient()), requestCode);
         } else {
             signIn();
-        }
+        }*/
     }
 
     @Override
