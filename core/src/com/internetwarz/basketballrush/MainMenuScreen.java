@@ -140,6 +140,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
+                game.setScreen(new SettingsScreen(game));
             }
         });
         stage.addActor(settingsButton);
