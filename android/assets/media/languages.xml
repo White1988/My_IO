@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<languages>
+
+<language name="en_UK" >
+
+    <string key="hall_of_fame" value="Hall of fame" />
+    <string key="statistics" value="Statistics" />
+    <string key="play" value="Play" />
+    <string key="game_over" value="Game over" />
+    <string key="score" value="Score" />
+    <string key="result" value="Result" />
+</language>
+
+
+<language name="Ru" >
+
+    <string key="hall_of_fame" value="Зал славы" />
+    <string key="statistics" value="Статистика" />
+    <string key="play" value="Играть" />
+    <string key="game_over" value="Конец игры" />
+    <string key="score" value="Очки" />
+    <string key="result" value="Результат" />
+</language>
+</languages>

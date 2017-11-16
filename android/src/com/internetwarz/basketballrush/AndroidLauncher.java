@@ -159,13 +159,13 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     public void submitScore(int highScore, String gameType) {
         Gdx.app.log("MainActivity", "submitScore: " + highScore + "."); ;
         if (isSignedIn()) {
-            if (gameType.equals(Cons)) {
+            if (gameType.equals(Constants.EASY_MODE)) {
                 Games.Leaderboards.submitScore(gameHelper.getApiClient(),
                         getString(R.string.leaderboard_easy), highScore);
-            } else if (gameType.equals("three color mode")) {
+            } else if (gameType.equals(Constants.MEDIUM_MODE)) {
                 Games.Leaderboards.submitScore(gameHelper.getApiClient(),
                         getString(R.string.leaderboard_medium), highScore);
-            } else if (gameType.equals("four color mode")) {
+            } else if (gameType.equals(Constants.HARD_MODE)) {
                 Games.Leaderboards.submitScore(gameHelper.getApiClient(),
                         getString(R.string.leaderboard_hard), highScore);
             }

@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.internetwarz.basketballrush.utils.LanguagesManager;
 
 import static com.internetwarz.basketballrush.Constants.EASY_MODE;
 
@@ -80,7 +81,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
 
 
-        playButton = new TextButton("Play", textButtonStyle);
+        playButton = new TextButton(LanguagesManager.getInstance().getString("play"), textButtonStyle);
         //playButton.setSize(widthPercent(33), heightPercent(10));
         playButton.setWidth(widthPercent(38));
         playButton.setPosition(appWidth/2 - playButton.getWidth()/2, heightPercent(10)*7);
@@ -88,17 +89,17 @@ public class MainMenuScreen implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
-                System.out.println("Play clicked!");
-                if(prefs.getBoolean("first",true))
-                    game.setScreen(new HowToPlay(game));
-                else
+                //System.out.println("Play clicked!");
+               /* if(prefs.getBoolean("first",true)) could be annoying for player
+                    game.setScreen(new RulesScreen(game));
+                else*/
                     game.setScreen(new TsarGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE)));
 
             }
         });
         stage.addActor(playButton);
 
-        statisticButton = new TextButton("Statistic", textButtonStyle);
+        statisticButton = new TextButton(LanguagesManager.getInstance().getString("statistics"), textButtonStyle);
         statisticButton.setWidth(widthPercent(38));
         statisticButton.setPosition(playButton.getX(), playButton.getY() - heightPercent(10));
         statisticButton.addListener(new ClickListener(){
@@ -110,7 +111,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
         });
         stage.addActor(statisticButton);
 
-        hallButton = new TextButton("Hall of Fame", textButtonStyle);
+        hallButton = new TextButton(LanguagesManager.getInstance().getString("hall_of_fame"), textButtonStyle);
         hallButton.setWidth(widthPercent(38));
         hallButton.setPosition(playButton.getX(), statisticButton.getY() - heightPercent(10));
         hallButton.addListener(new ClickListener(){

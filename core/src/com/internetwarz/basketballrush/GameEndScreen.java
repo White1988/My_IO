@@ -112,7 +112,7 @@ public class GameEndScreen implements Screen,InputProcessor {
         });
         stage.addActor(leaderboardButton);
 
-        //Achievements Button resources
+       /* //Achievements Button resources
         achievementsButton = new ImageButton(buttonSkin.getDrawable("achievements"),buttonSkin.getDrawable("achievementsClicked"));
         achievementsButton.setPosition(widthPercent(70)-achievementsButton.getWidth()/2,heightPercent(35));
         achievementsButton.addListener(new ClickListener(){
@@ -122,11 +122,11 @@ public class GameEndScreen implements Screen,InputProcessor {
                 game.getPlayServices().showAchievement();
             }
         });
-        stage.addActor(achievementsButton);
+        stage.addActor(achievementsButton);*/
 
         //Home Button resources
         homeButton = new ImageButton(buttonSkin.getDrawable("home"),buttonSkin.getDrawable("homeClicked"));
-        homeButton.setPosition(appWidth/2-homeButton.getWidth()/2, heightPercent(25));
+        homeButton.setPosition(appWidth/2-homeButton.getWidth()/2, heightPercent(35));
         homeButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))

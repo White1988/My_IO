@@ -18,9 +18,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.internetwarz.basketballrush.Constants;
 import com.internetwarz.basketballrush.MainMenuScreen;
 import com.internetwarz.basketballrush.Tsar;
 import com.internetwarz.basketballrush.TsarGameplayScreen;
+
+import static com.internetwarz.basketballrush.Constants.EASY_MODE;
+import static com.internetwarz.basketballrush.Constants.HARD_MODE;
+import static com.internetwarz.basketballrush.Constants.MEDIUM_MODE;
 
 public class GameModeSelect implements Screen,InputProcessor {
     final Tsar game;
@@ -38,9 +43,9 @@ public class GameModeSelect implements Screen,InputProcessor {
     private ImageButton easyButton,mediumButton,hardButton;
 
     //Number of attempts
-    private int easy = 3;
-    private int medium = 2;
-    private int hard = 1;
+    private int easy = Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE);
+    private int medium  = Constants.ATTEMPTS_IN_GAMEMODE.get(MEDIUM_MODE);
+    private int hard  = Constants.ATTEMPTS_IN_GAMEMODE.get(HARD_MODE);
 
     public GameModeSelect(final Tsar gam){
         this.game=gam;
