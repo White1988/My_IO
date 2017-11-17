@@ -220,7 +220,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                     hardButton.setChecked(false);
                 }
                 else {
-                    restartGame(Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE));
+                    game.setScreen(new TsarGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE)));
+                    //restartGame(Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE));
                 }
             }
 
@@ -239,7 +240,9 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                     hardButton.setChecked(false);
                 }
                 else {
-                   restartGame(Constants.ATTEMPTS_IN_GAMEMODE.get(Constants.MEDIUM_MODE));
+                   //restartGame(Constants.ATTEMPTS_IN_GAMEMODE.get(Constants.MEDIUM_MODE));
+                    game.setScreen(new TsarGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(MEDIUM_MODE)));
+
                 }
             }
         });
@@ -257,7 +260,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                     easyButton.setChecked(false);
                 }
                 else {
-                    restartGame(Constants.ATTEMPTS_IN_GAMEMODE.get(Constants.HARD_MODE));
+                    //restartGame(Constants.ATTEMPTS_IN_GAMEMODE.get(Constants.HARD_MODE));
+                    game.setScreen(new TsarGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(HARD_MODE)));
                 }
             }
         });
@@ -407,7 +411,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                rightWrongLabel.setStyle(rightStyle);
                rightWrongLabel.setVisible(true);
                //rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
-               rightWrongLabel.setPosition(imageCircle.getX() + imageCircle.getWidth()/2 - rightWrongLabel.getWidth()/2 + 8, imageCircle.getY() - rightWrongLabel.getHeight() - 4);
+               rightWrongLabel.setPosition(imageCircle.getX() + imageCircle.getWidth()/2 - rightWrongLabel.getPrefWidth()/2 + 8, imageCircle.getY() - rightWrongLabel.getHeight() - 4);
                //numSectors++;
                isDrawLines = true;
            }

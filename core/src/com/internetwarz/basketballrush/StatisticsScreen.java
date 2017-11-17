@@ -25,6 +25,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
 
+import java.util.ArrayList;
+
 /**
  * Created by dell on 16.11.2017.
  */
@@ -51,6 +53,12 @@ public class StatisticsScreen implements Screen,InputProcessor {
 
     //Labels
     Label titleLable;
+    private ArrayList<ArrayList<Label>> rows = new ArrayList<ArrayList<Label>>();
+    private Label.LabelStyle styleTitle;
+    private int amountLines;
+    private Label titleLvl;
+    private Label titleGames;
+
 
     public StatisticsScreen(Tsar game) {
         this.game = game;
@@ -80,6 +88,76 @@ public class StatisticsScreen implements Screen,InputProcessor {
 
         buttonsInit();
         labelsInit();
+        tableInit();
+    }
+
+    private void tableInit() {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = (int) (30);
+        parameter.color= Color.BLACK;
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+        BitmapFont font = generator.generateFont(parameter);
+
+        styleTitle = new Label.LabelStyle();
+        styleTitle.font = font;
+        styleTitle.background = buttonSkin.getDrawable("Button");
+        titleLvl = new Label("Level", styleTitle);
+        titleLvl.setPosition(widthPercent(10), titleLable.getY() - titleLable.getHeight() - heightPercent(10));
+        titleLvl.setWidth(WIDTH/2 - widthPercent(10));
+        titleLvl.setHeight((titleLable.getY() - titleLable.getHeight() - heightPercent(10))/6);
+        titleLvl.setAlignment((int) (titleLvl.getWidth()/2));
+        titleLvl.setDebug(true);
+        stage.addActor(titleLvl);
+
+        titleGames = new Label("Games", styleTitle);
+        titleGames.setPosition(titleLvl.getX() + titleLvl.getWidth(), titleLvl.getY());
+        titleGames.setWidth(WIDTH/2 - widthPercent(10));
+        titleGames.setHeight(titleLvl.getHeight());
+        titleGames.setAlignment((int) (titleGames.getWidth()/2));
+        titleGames.setDebug(true);
+        stage.addActor(titleGames);
+        amountLines = 6;
+
+        for (int i = amountLines-1; i > 0; i--) {
+            addLineToTable(i, 10);
+        }
+
+
+    }
+
+    private void addLineToTable(int level, int countGames ) {
+        ArrayList<Label> row = new ArrayList<Label>();
+        Label levelLabel = new Label("Level" + level, styleTitle);
+        Label gamesLabel = new Label("Games" + countGames, styleTitle);
+        row.add(levelLabel);
+        row.add(gamesLabel);
+        rows.add(row);
+        if(rows.size() == 1) {
+            levelLabel.setPosition(titleLvl.getX(), titleLvl.getY() - titleLvl.getHeight());
+            gamesLabel.setPosition(titleGames.getX(), titleGames.getY() - titleGames.getHeight());
+        }
+        else {
+            Label prevLevel = rows.get(rows.size()-2).get(0);
+            Label prevGame = rows.get(rows.size()-2).get(1);
+            levelLabel.setPosition(prevLevel.getX(), prevLevel.getY() - prevLevel.getHeight());
+            System.out.println("Prev label: " + prevLevel);
+            gamesLabel.setPosition(prevGame.getX(), prevGame.getY() - prevGame.getHeight());
+        }
+        levelLabel.setWidth(WIDTH/2 - widthPercent(10));
+        levelLabel.setHeight(titleLvl.getHeight());
+        levelLabel.setAlignment((int) (titleGames.getWidth()/2));
+        //levelLabel.setDebug(true);
+
+        gamesLabel.setWidth(WIDTH/2 - widthPercent(10));
+        gamesLabel.setHeight(titleGames.getHeight());
+        gamesLabel.setAlignment((int) (titleGames.getWidth()/2));
+        //gamesLabel.setDebug(true);
+
+        stage.addActor(levelLabel);
+        stage.addActor(gamesLabel);
+
+
     }
 
     private void buttonsInit() {
@@ -167,7 +245,7 @@ public class StatisticsScreen implements Screen,InputProcessor {
         //Labels init
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 30;
+        parameter.size = (int) (30);
         parameter.color= Color.GREEN;
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);

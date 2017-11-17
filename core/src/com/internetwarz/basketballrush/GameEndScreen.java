@@ -6,15 +6,20 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
@@ -22,6 +27,7 @@ import com.internetwarz.basketballrush.utils.Score;
 
 public class GameEndScreen implements Screen,InputProcessor {
     final Tsar game;
+    private final TextButton.TextButtonStyle textButtonStyle;
     Score score;
     final float appWidth = 768;
     final float appHeight = 1280;
@@ -39,10 +45,18 @@ public class GameEndScreen implements Screen,InputProcessor {
     private Stage stage;
     private Skin buttonSkin;
     private TextureAtlas buttonAtlas;
-    private ImageButton playButton,leaderboardButton,achievementsButton,homeButton;
+    private TextButton playButton,leaderboardButton,achievementsButton,homeButton;
     private int numAttempts;
+    private BitmapFont font;
 
     public GameEndScreen(final Tsar gam, Score scor, String gt, final int numAttempts){
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = (int) (40 * 2.5);
+        parameter.color = Color.BLACK;
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+        font = generator.generateFont(parameter);
+
         this.game=gam;
         this.score = scor;
         this.numAttempts = numAttempts;
@@ -50,9 +64,37 @@ public class GameEndScreen implements Screen,InputProcessor {
         camera.setToOrtho(false, appWidth, appHeight);
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
+
+        Pixmap rect = new Pixmap(40,20,Pixmap.Format.RGBA8888);
+        rect.setColor(Color.LIGHT_GRAY);
+        rect.fillRectangle(0, 0, 40, 20);
+        Texture buttonChecked = new Texture(rect);
+        rect.setColor(Color.DARK_GRAY);
+        rect.drawRectangle(0,0,40,20);
+        buttonChecked.draw(rect, 0, 0);
+        rect.dispose();
+
+        //Simple button texture
+        Pixmap rect2 = new Pixmap(40,20,Pixmap.Format.RGBA8888);
+        rect2.setColor(Color.DARK_GRAY);
+        rect2.drawRectangle(0,0,40,20);
+        Texture button = new Texture(rect2);
+        rect2.dispose();
+
         buttonAtlas = new TextureAtlas("buttons.pack");
+        buttonAtlas.addRegion("Button", button, 0, 0, 40, 20);
+        buttonAtlas.addRegion("Button checked", buttonChecked, 0, 0, 40, 20);
         buttonSkin = new Skin();
         buttonSkin.addRegions(buttonAtlas);
+        buttonSkin = new Skin();
+        buttonSkin.addRegions(buttonAtlas);
+
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+        textButtonStyle.up = buttonSkin.getDrawable("Button");
+        textButtonStyle.down = buttonSkin.getDrawable("Button checked");
+
+
         stage = new Stage(new FitViewport(appWidth,appHeight));
         stage.clear();
         InputMultiplexer plex = new InputMultiplexer();
@@ -82,17 +124,19 @@ public class GameEndScreen implements Screen,InputProcessor {
 
 
         layoutGameOver = new GlyphLayout();
-        layoutGameOver.setText(game.font,LanguagesManager.getInstance().getString("gameOver"));
+        layoutGameOver.setText(font,LanguagesManager.getInstance().getString("gameOver"));
 
         layoutYourScore = new GlyphLayout();
-        layoutYourScore.setText(game.font,scoreString);
+        layoutYourScore.setText(font,scoreString);
 
         layoutHighScore = new GlyphLayout();
-        layoutHighScore.setText(game.font,highScoreString);
+        layoutHighScore.setText(font,highScoreString);
+
+
 
 
         //Play Button resources
-        playButton = new ImageButton(buttonSkin.getDrawable("play"),buttonSkin.getDrawable("playClicked"));
+        playButton = new TextButton("Play again",textButtonStyle);
         playButton.setPosition(appWidth/2-playButton.getWidth()/2,appHeight/2-playButton.getHeight()/2);
         playButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
@@ -102,7 +146,7 @@ public class GameEndScreen implements Screen,InputProcessor {
         stage.addActor(playButton);
 
         //Leaderboard Button resources
-        leaderboardButton = new ImageButton(buttonSkin.getDrawable("leaderboard"),buttonSkin.getDrawable("leaderboardClicked"));
+        leaderboardButton = new TextButton("Leaderboard",textButtonStyle);
         leaderboardButton.setPosition(widthPercent(30)-leaderboardButton.getWidth()/2,heightPercent(35));
         leaderboardButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
@@ -111,7 +155,7 @@ public class GameEndScreen implements Screen,InputProcessor {
                 game.getPlayServices().showScore();
             }
         });
-        stage.addActor(leaderboardButton);
+        //stage.addActor(leaderboardButton);
 
        /* //Achievements Button resources
         achievementsButton = new ImageButton(buttonSkin.getDrawable("achievements"),buttonSkin.getDrawable("achievementsClicked"));
@@ -126,7 +170,7 @@ public class GameEndScreen implements Screen,InputProcessor {
         stage.addActor(achievementsButton);*/
 
         //Home Button resources
-        homeButton = new ImageButton(buttonSkin.getDrawable("home"),buttonSkin.getDrawable("homeClicked"));
+        homeButton = new TextButton("Exit", textButtonStyle);
         homeButton.setPosition(appWidth/2-homeButton.getWidth()/2, heightPercent(35));
         homeButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
@@ -136,6 +180,12 @@ public class GameEndScreen implements Screen,InputProcessor {
             }
         });
         stage.addActor(homeButton);
+
+
+    }
+
+    private void buttonsInit() {
+
     }
 
     @Override
@@ -149,9 +199,9 @@ public class GameEndScreen implements Screen,InputProcessor {
         batch.end();
 
         batch.begin();
-        game.font.draw(batch,LanguagesManager.getInstance().getString("gameOver"),appWidth/2-layoutGameOver.width/2,heightPercent(80));
-        game.font.draw(batch,scoreString,appWidth/2-layoutYourScore.width/2,heightPercent(70));
-        game.font.draw(batch,highScoreString,appWidth/2-layoutHighScore.width/2,heightPercent(60));
+        font.draw(batch,LanguagesManager.getInstance().getString("gameOver"),appWidth/2-layoutGameOver.width/2,heightPercent(80));
+        font.draw(batch,scoreString,appWidth/2-layoutYourScore.width/2,heightPercent(70));
+        font.draw(batch,highScoreString,appWidth/2-layoutHighScore.width/2,heightPercent(60));
         batch.end();
     }
 
