@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.internetwarz.basketballrush.utils.LanguagesManager;
 
 /**
  * Created by dell on 16.11.2017.
@@ -79,14 +80,15 @@ public class RulesScreen implements Screen, InputProcessor {
         //table.setDebug(true);
         table.top();
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Quicksand-Bold.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 30;
         parameter.color= Color.BLACK;
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
 
-        titleLable = new Label("Rules", labelStyle);
+        titleLable = new Label(LanguagesManager.getInstance().getString("rules"), labelStyle);
         titleLable.setWrap(true);
         table.add(titleLable)
                 .expandX()
@@ -100,13 +102,12 @@ public class RulesScreen implements Screen, InputProcessor {
         parameter.size = 20;
         font = generator.generateFont(parameter);
         labelStyle = new Label.LabelStyle(font, Color.BLACK);
-        String text = "The standard Lorem Ipsum passage, used since the 1500s\"Lorem  ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat.\n" +
+        /*String text = "The standard Lorem Ipsum passage, used since the 1500s\"Lorem  ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat.\n" +
                 "\n" +
                 "Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est laborum.\"  ";
-
-        //String text = "Hello";
+*/
+        String text = LanguagesManager.getInstance().getString("rulesText");
         textLabel= new Label(text, labelStyle);
-        //textLabel.setDebug(true);
         textLabel.setWrap(true);
         textLabel.setWidth(WIDTH - widthPercent(20));
         table.row();

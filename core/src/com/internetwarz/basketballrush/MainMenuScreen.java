@@ -124,7 +124,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
         });
         stage.addActor(hallButton);
 
-        rulesButton = new TextButton("Rules", textButtonStyle);
+        rulesButton = new TextButton(LanguagesManager.getInstance().getString("rules"), textButtonStyle);
         rulesButton.setWidth(widthPercent(38));
         rulesButton.setPosition(playButton.getX(), hallButton.getY() - heightPercent(10));
         rulesButton.addListener(new ClickListener(){
@@ -136,7 +136,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
         });
         stage.addActor(rulesButton);
 
-        settingsButton = new TextButton("Settings", textButtonStyle);
+        settingsButton = new TextButton(LanguagesManager.getInstance().getString("settings"), textButtonStyle);
         settingsButton.setWidth(widthPercent(38));
         settingsButton.setPosition(playButton.getX(), rulesButton.getY() - heightPercent(10));
         settingsButton.addListener(new ClickListener(){

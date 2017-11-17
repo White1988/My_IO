@@ -26,8 +26,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.internetwarz.basketballrush.utils.LanguagesManager;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by dell on 16.11.2017.
@@ -61,7 +63,7 @@ public class SettingsScreen implements Screen, InputProcessor {
     Label signOutLabel;
 
     //Select box
-    ArrayList<String> languages;
+    HashMap<String, String> languages2;
     SelectBox languagesSB;
 
     public SettingsScreen(Tsar game) {
@@ -98,10 +100,11 @@ public class SettingsScreen implements Screen, InputProcessor {
 
     private void buttonInit() {
         //Font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Quicksand-Bold.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 23;
         parameter.color= Color.BLACK;
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
 
         //Button checked texture
@@ -135,7 +138,7 @@ public class SettingsScreen implements Screen, InputProcessor {
         textButtonStyle.down = buttonSkin.getDrawable("Button down");
         //textButtonStyle.checked = buttonSkin.getDrawable("Button checked");
 
-        signOut = new TextButton("Sign out", textButtonStyle);
+        signOut = new TextButton(LanguagesManager.getInstance().getString("signOut"), textButtonStyle);
         signOut.setSize(widthPercent(30), heightPercent(8));
         signOut.setPosition(WIDTH/2 - signOut.getWidth()/2, HEIGHT/2);
         signOut.addListener(new ClickListener(){
@@ -150,30 +153,50 @@ public class SettingsScreen implements Screen, InputProcessor {
 
         //Add label
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
-        signOutLabel = new Label("Sign out", labelStyle);
+        signOutLabel = new Label(LanguagesManager.getInstance().getString("signOut"), labelStyle);
         signOutLabel.setPosition(WIDTH/2 - signOutLabel.getWidth()/2, signOut.getY() + signOut.getHeight()/2 + signOutLabel.getHeight() + heightPercent(1));
         stage.addActor(signOutLabel);
 
     }
 
     private void languagesInit() {
-        languages = new ArrayList<String>();
-        languages.add("Russian");
-        languages.add("English");
-        languages.add("Hebrew");
+        languages2 = new HashMap<String, String>();
+        languages2.put("Ru", "Russian");
+        languages2.put("en_UK", "English");
     }
 
     private void selectBoxInit() {
+        String curLanguage = "";
+        for(Map.Entry entry: languages2.entrySet()) {
+            if(entry.getKey().equals(prefs.getString("Language"))){
+                curLanguage = entry.getValue().toString();
+                System.out.println("Language: " + curLanguage);
+                break;
+            }
+        }
+        System.out.println("Language: " + curLanguage);
         skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
         languagesSB = new SelectBox(skin);
         languagesSB.setWidth(widthPercent(30));
-        languagesSB.setItems(languages.toArray());
+        languagesSB.setItems(languages2.values().toArray());
         languagesSB.setPosition(WIDTH/2 - languagesSB.getWidth()/2, langLabel.getY() - languagesSB.getHeight() - heightPercent(1));
-        languagesSB.setSelected("Russian");
+        languagesSB.setSelected(curLanguage);
         languagesSB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println(languagesSB.getSelected());
+                clickSound.play();
+                System.out.println((languagesSB.getSelected()));
+
+                for(Map.Entry entry : languages2.entrySet()) {
+                    if(entry.getValue() == languagesSB.getSelected()) {
+                        System.out.println(entry.getKey());
+                        if(LanguagesManager.getInstance().loadLanguage(entry.getKey().toString())) {
+                            prefs.putString("Language", entry.getKey().toString());
+                            prefs.flush();
+                            break;
+                        }
+                    }
+                }
             }
         });
         stage.addActor(languagesSB);
@@ -183,13 +206,15 @@ public class SettingsScreen implements Screen, InputProcessor {
     private void labelsInit() {
 
         //Labels init
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Quicksand-Bold.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 30;
-        parameter.color= Color.GREEN;
+        parameter.size = 23;
+        parameter.color= Color.BLACK;
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
+
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
-        titleLable = new Label("Settings", labelStyle);
+        titleLable = new Label(LanguagesManager.getInstance().getString("settings"), labelStyle);
         titleLable.setPosition(WIDTH/2 - titleLable.getWidth()/2, HEIGHT - titleLable.getHeight() - heightPercent(2));
         stage.addActor(titleLable);
 
@@ -197,7 +222,7 @@ public class SettingsScreen implements Screen, InputProcessor {
         parameter.color= Color.GREEN;
         font = generator.generateFont(parameter);
         labelStyle = new Label.LabelStyle(font, Color.BLACK);
-        langLabel = new Label("Language", labelStyle);
+        langLabel = new Label(LanguagesManager.getInstance().getString("language"), labelStyle);
         langLabel.setPosition(WIDTH/2 - langLabel.getPrefWidth()/2, titleLable.getY() - heightPercent(10));
         stage.addActor(langLabel);
     }

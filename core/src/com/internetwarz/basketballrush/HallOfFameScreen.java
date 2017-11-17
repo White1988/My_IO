@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.internetwarz.basketballrush.utils.LanguagesManager;
 
 /**
  * Created by dell on 16.11.2017.
@@ -113,7 +114,7 @@ public class HallOfFameScreen implements Screen, InputProcessor{
         //textButtonStyle.down = buttonSkin.getDrawable("Simple button");
         textButtonStyle.checked = buttonSkin.getDrawable("Button checked");
 
-        easyButton = new TextButton("Easy", textButtonStyle);
+        easyButton = new TextButton(LanguagesManager.getInstance().getString("easy"), textButtonStyle);
         easyButton.setSize(widthPercent(30), heightPercent(10));
         easyButton.setPosition(widthPercent(5), HEIGHT - easyButton.getHeight() - 10);
         easyButton.addListener(new ClickListener(){
@@ -129,7 +130,7 @@ public class HallOfFameScreen implements Screen, InputProcessor{
         });
         stage.addActor(easyButton);
 
-        mediumButton = new TextButton("Medium", textButtonStyle);
+        mediumButton = new TextButton(LanguagesManager.getInstance().getString("medium"), textButtonStyle);
         mediumButton.setSize(widthPercent(30), heightPercent(10));
         mediumButton.setPosition(widthPercent(5) + easyButton.getWidth(), HEIGHT - mediumButton.getHeight() - 10);
         mediumButton.addListener(new ClickListener(){
@@ -143,7 +144,7 @@ public class HallOfFameScreen implements Screen, InputProcessor{
         });
         stage.addActor(mediumButton);
 
-        hardButton = new TextButton("Hard", textButtonStyle);
+        hardButton = new TextButton(LanguagesManager.getInstance().getString("hard"), textButtonStyle);
         hardButton.setSize(widthPercent(30), heightPercent(10));
         hardButton.setPosition(mediumButton.getX() + mediumButton.getWidth(), HEIGHT - hardButton.getHeight() - 10);
         hardButton.addListener(new ClickListener(){
@@ -164,13 +165,14 @@ public class HallOfFameScreen implements Screen, InputProcessor{
     private void labelsInit() {
 
         //Labels init
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Quicksand-Bold.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 30;
         parameter.color= Color.GREEN;
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
-        titleLable = new Label("Hall of fame", labelStyle);
+        titleLable = new Label(LanguagesManager.getInstance().getString("hallOfFame"), labelStyle);
         titleLable.setPosition(WIDTH/2 - titleLable.getWidth()/2, easyButton.getY() - heightPercent(10));
 
         stage.addActor(titleLable);

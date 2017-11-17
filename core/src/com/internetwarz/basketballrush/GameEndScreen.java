@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.internetwarz.basketballrush.utils.LanguagesManager;
 import com.internetwarz.basketballrush.utils.Score;
 
 public class GameEndScreen implements Screen,InputProcessor {
@@ -61,7 +62,7 @@ public class GameEndScreen implements Screen,InputProcessor {
         prefs = Gdx.app.getPreferences("My Preferences");
         clickSound = Gdx.audio.newSound(Gdx.files.internal("sounds/clickSound.mp3"));
 
-        scoreString = "Score : "+score.getStringScore();
+        scoreString = LanguagesManager.getInstance().getString("level") + " : "+score.getStringScore();
         gameType = gt;
 
         //setting score preferences
@@ -69,7 +70,7 @@ public class GameEndScreen implements Screen,InputProcessor {
             prefs.putInteger(gameType,score.getScore());
         }
         prefs.flush();
-        highScoreString = "Best : "+prefs.getInteger(gameType,0);
+        highScoreString = LanguagesManager.getInstance().getString("best") + " : "+prefs.getInteger(gameType,0);
         game.getPlayServices().submitScore(score.getScore(),gameType);
 
         //setting games Played preferences
@@ -81,7 +82,7 @@ public class GameEndScreen implements Screen,InputProcessor {
 
 
         layoutGameOver = new GlyphLayout();
-        layoutGameOver.setText(game.font,"Game Over");
+        layoutGameOver.setText(game.font,LanguagesManager.getInstance().getString("gameOver"));
 
         layoutYourScore = new GlyphLayout();
         layoutYourScore.setText(game.font,scoreString);
@@ -148,7 +149,7 @@ public class GameEndScreen implements Screen,InputProcessor {
         batch.end();
 
         batch.begin();
-        game.font.draw(batch,"GAME OVER",appWidth/2-layoutGameOver.width/2,heightPercent(80));
+        game.font.draw(batch,LanguagesManager.getInstance().getString("gameOver"),appWidth/2-layoutGameOver.width/2,heightPercent(80));
         game.font.draw(batch,scoreString,appWidth/2-layoutYourScore.width/2,heightPercent(70));
         game.font.draw(batch,highScoreString,appWidth/2-layoutHighScore.width/2,heightPercent(60));
         batch.end();

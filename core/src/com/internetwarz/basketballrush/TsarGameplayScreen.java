@@ -34,6 +34,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.internetwarz.basketballrush.utils.LanguagesManager;
 import com.internetwarz.basketballrush.utils.Score;
 
 import static com.internetwarz.basketballrush.Constants.EASY_MODE;
@@ -117,7 +118,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         this.game = game;
         this.numAttempts = numAttempts;
         curNumAttempts = numAttempts;
-        score = new Score(0);
+        score = new Score(1);
 
         WIDTH = (float) Gdx.graphics.getWidth();
         HEIGHT = (float) Gdx.graphics.getHeight();
@@ -206,7 +207,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         //textButtonStyle.down = buttonSkin.getDrawable("Simple button");
         textButtonStyle.checked = buttonSkin.getDrawable("Button checked");
 
-        easyButton = new TextButton("Easy", textButtonStyle);
+        easyButton = new TextButton(LanguagesManager.getInstance().getString("easy"), textButtonStyle);
         easyButton.setSize(widthPercent(30), heightPercent(10));
         easyButton.setPosition(widthPercent(5), HEIGHT - easyButton.getHeight() - 10);
         easyButton.addListener(new ClickListener(){
@@ -226,7 +227,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         });
         stage.addActor(easyButton);
 
-        mediumButton = new TextButton("Medium", textButtonStyle);
+        mediumButton = new TextButton(LanguagesManager.getInstance().getString("medium"), textButtonStyle);
         mediumButton.setSize(widthPercent(30), heightPercent(10));
         mediumButton.setPosition(widthPercent(5) + easyButton.getWidth(), HEIGHT - mediumButton.getHeight() - 10);
         mediumButton.addListener(new ClickListener(){
@@ -244,7 +245,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         });
         stage.addActor(mediumButton);
 
-        hardButton = new TextButton("Hard", textButtonStyle);
+        hardButton = new TextButton(LanguagesManager.getInstance().getString("hard"), textButtonStyle);
         hardButton.setSize(widthPercent(30), heightPercent(10));
         hardButton.setPosition(mediumButton.getX() + mediumButton.getWidth(), HEIGHT - hardButton.getHeight() - 10);
         hardButton.addListener(new ClickListener(){
@@ -271,18 +272,30 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     }
 
     private void restartGame(final int numAttempts) {
-        Dialog restartConfirmDialog = new Dialog("Restart dialog", new Skin(Gdx.files.internal("skins/uiskin.json")));
+        //Generate font
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 15;
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+        BitmapFont font = generator.generateFont(parameter);
+        Label.LabelStyle textStyle = new Label.LabelStyle(font, Color.WHITE);
+
+        Dialog restartConfirmDialog = new Dialog("Restart", new Skin(Gdx.files.internal("skins/uiskin.json")));
         TextButton.TextButtonStyle textButtonStyle1 = textButtonStyle;
         textButtonStyle1.down = buttonSkin.getDrawable("Button checked");
         textButtonStyle1.checked = null;
-        TextButton yes = new TextButton("Yes", textButtonStyle1);
+        TextButton yes = new TextButton(LanguagesManager.getInstance().getString("yes"), textButtonStyle1);
         yes.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new TsarGameplayScreen(game, numAttempts));
             }
         });
-        TextButton no = new TextButton("No", textButtonStyle1);
-        restartConfirmDialog.text("Do you really want to restart the game?");
+        TextButton no = new TextButton(LanguagesManager.getInstance().getString("no"), textButtonStyle1);
+
+
+
+
+        restartConfirmDialog.text(LanguagesManager.getInstance().getString("restartText"), textStyle);
         restartConfirmDialog.button(yes);
         restartConfirmDialog.button(no);
 
@@ -297,10 +310,11 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         layoutTries = new GlyphLayout();
 
         //Labels init
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Quicksand-Bold.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 30;
         parameter.color= Color.GREEN;
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
         rightStyle = new Label.LabelStyle(font, Color.GREEN);
         parameter.color = Color.RED;
@@ -313,20 +327,20 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         textStyle = new Label.LabelStyle();
         textStyle.font = font;
 
-        layoutScore.setText(font, "Score: " + score.getStringScore());
-        layoutTries.setText(font, "Tries : " + curNumAttempts);
+        layoutScore.setText(font, LanguagesManager.getInstance().getString("level") + ": " + score.getStringScore());
+        layoutTries.setText(font, LanguagesManager.getInstance().getString("tries") + ": " + curNumAttempts);
 
-        scoreLabel = new Label("Score: 0", textStyle);
+        scoreLabel = new Label(LanguagesManager.getInstance().getString("level") + ": 0", textStyle);
         scoreLabel.setPosition(widthPercent(5), easyButton.getY() - layoutScore.height - widthPercent(5));
         scoreLabel.setSize(layoutScore.width, layoutScore.height);
         scoreLabel.setFontScale(1f, 1f);
 
-        triesLabel = new Label("Tries: " + numAttempts, textStyle);
+        triesLabel = new Label(LanguagesManager.getInstance().getString("tries") + ": " + numAttempts, textStyle);
         triesLabel.setPosition(WIDTH - layoutTries.width - widthPercent(5), hardButton.getY() - layoutTries.height - widthPercent(5));
         triesLabel.setSize(layoutTries.width, layoutTries.height);
 
-        rightWrongLabel = new Label("Right!", rightStyle);
-        rightWrongLabel = new Label("Wrong!", wrongStyle);
+        rightWrongLabel = new Label(LanguagesManager.getInstance().getString("right"), rightStyle);
+        rightWrongLabel = new Label(LanguagesManager.getInstance().getString("wrong"), wrongStyle);
         rightWrongLabel.setVisible(false);
         rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
 
@@ -387,9 +401,9 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                curNumAttempts = numAttempts;
                isGuessed = true;
                score.setScore(score.getScore() + points);
-               scoreLabel.setText("Score: "  + score.getScore());
-               triesLabel.setText("Tries: " + numAttempts);
-               rightWrongLabel.setText("Right!");
+               scoreLabel.setText(LanguagesManager.getInstance().getString("level") + ": "  + score.getScore());
+               triesLabel.setText(LanguagesManager.getInstance().getString("tries") + ": " + numAttempts);
+               rightWrongLabel.setText(LanguagesManager.getInstance().getString("right"));
                rightWrongLabel.setStyle(rightStyle);
                rightWrongLabel.setVisible(true);
                //rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
@@ -402,8 +416,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                setFillingParametrs(Color.RED, pickedSector);
                System.out.println("LOSE");
                curNumAttempts--;
-               triesLabel.setText("Tries: " + curNumAttempts);
-               rightWrongLabel.setText("Wrong!");
+               triesLabel.setText(LanguagesManager.getInstance().getString("tries") + ": " + curNumAttempts);
+               rightWrongLabel.setText(LanguagesManager.getInstance().getString("wrong"));
                rightWrongLabel.setStyle(wrongStyle);
                rightWrongLabel.setVisible(true);
                //rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
@@ -491,8 +505,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                 curNumAttempts = numAttempts = 2;
             else if (hardButton.isChecked())
                 curNumAttempts = numAttempts = 1;
-            scoreLabel.setText("Score: " + score.getScore());
-            triesLabel.setText("Tries: " + numAttempts);
+            scoreLabel.setText(LanguagesManager.getInstance().getString("level") + ": " + score.getScore());
+            triesLabel.setText(LanguagesManager.getInstance().getString("tries") + ": " + numAttempts);
         }
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -547,8 +561,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
         playerCircle = new Circle(WIDTH/2, HEIGHT /2, RADIUS);
         batch.begin();
-        game.font.draw(batch,"Score: " + score.getStringScore(),WIDTH-layoutScore.width - 4, HEIGHT - layoutScore.height);
-        game.font.draw(batch,"Tries left: " + curNumAttempts,4 , HEIGHT - layoutTries.height);
+        game.font.draw(batch,LanguagesManager.getInstance().getString("level") + ": " + score.getStringScore(),WIDTH-layoutScore.width - 4, HEIGHT - layoutScore.height);
+        game.font.draw(batch,LanguagesManager.getInstance().getString("tries") + ": " + curNumAttempts,4 , HEIGHT - layoutTries.height);
         batch.end();
 
         //camera.viewportWidth = width / VIEWPORT_SCALE;

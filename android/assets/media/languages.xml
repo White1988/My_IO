@@ -9,6 +9,27 @@
     <string key="game_over" value="Game over" />
     <string key="score" value="Score" />
     <string key="result" value="Result" />
+    <string key="settings" value="Settings" />
+    <string key="easy" value="Easy" />
+    <string key="medium" value="Medium" />
+    <string key="hard" value="Hard" />
+    <string key="level" value="Level" />
+    <string key="tries" value="Tries" />
+    <string key="right" value="Right!" />
+    <string key="wrong" value="Wrong!" />
+    <string key="restart" value="Restart" />
+    <string key="yes" value="Yes" />
+    <string key="no" value="No" />
+    <string key="restartText" value="Do you really want to restart the game?" />
+    <string key="best" value="Best" />
+    <string key="gameOver" value="Game Over!" />
+    <string key="statisticsPlayer" value="Statistics (player)" />
+    <string key="hallOfFame" value="Hall of fame" />
+    <string key="rules" value="Rules" />
+    <string key="rulesText" value="Text..." />
+    <string key="signOut" value="Sign out" />
+    <string key="language" value="Language" />
+
 </language>
 
 
@@ -20,5 +41,27 @@
     <string key="game_over" value="Конец игры" />
     <string key="score" value="Очки" />
     <string key="result" value="Результат" />
+    <string key="settings" value="Настройки" />
+    <string key="rules" value="Правила" />
+    <string key="easy" value="Легкий" />
+    <string key="medium" value="Средний" />
+    <string key="hard" value="Тяжелый" />
+    <string key="level" value="Уровень" />
+    <string key="tries" value="Попытки" />
+    <string key="right" value="Правильно!" />
+    <string key="wrong" value="Неверно!" />
+    <string key="restart" value="Рестарт" />
+    <string key="yes" value="Да" />
+    <string key="no" value="Нет" />
+    <string key="restartText" value="Вы действительно хотите начать игру сначала?" />
+    <string key="best" value="Лучший" />
+    <string key="gameOver" value="Конц игры!" />
+    <string key="statisticsPlayer" value="Статистика (игрока)" />
+    <string key="hallOfFame" value="Зал славы" />
+    <string key="rules" value="Правила" />
+    <string key="rulesText" value="Содержание..." />
+    <string key="signOut" value="Выйти" />
+    <string key="language" value="Язык" />
+
 </language>
 </languages>

@@ -1,6 +1,7 @@
 package com.internetwarz.basketballrush.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
 
@@ -12,19 +13,24 @@ public class LanguagesManager {
     private static LanguagesManager _instance = null;
 
     private static final String LANGUAGES_FILE = "media/languages.xml";
-    private static final String DEFAULT_LANGUAGE = "en_UK";
+    private static final String DEFAULT_LANGUAGE = "Ru";
+    private final Preferences prefs;
 
     //private HashMap<String, HashMap<String, String>> _strings = null;
     private HashMap<String, String> _language = null;
     private String _languageName = null;
 
     private LanguagesManager() {
+        prefs = Gdx.app.getPreferences("My Preferences");
+        _languageName = prefs.getString("Language");
+        System.out.println("Loaded: " + _languageName);
         // Create language map
         _language = new HashMap<String, String>();
 
 
 
         if (!loadLanguage(_languageName)) {
+            System.out.println("Wasn't loaded");
             loadLanguage(DEFAULT_LANGUAGE);
             _languageName = DEFAULT_LANGUAGE;
         }
