@@ -22,8 +22,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
+
+import java.util.ArrayList;
 
 /**
  * Created by dell on 16.11.2017.
@@ -50,7 +53,14 @@ public class HallOfFameScreen implements Screen, InputProcessor{
     TextButton easyButton, mediumButton, hardButton;
 
     //Labels
-    Label titleLable;
+    private Label titleLable;
+    private Label.LabelStyle labelStyle;
+    private Label.LabelStyle styleTitle;
+    private Label titleLvl;
+    private Label titlePlayer;
+    private int amountLines;
+    private ArrayList<ArrayList<Label>> rows = new ArrayList<ArrayList<Label>>();
+    private Label titleDate;
 
     public HallOfFameScreen(Tsar game) {
         this.game = game;
@@ -80,6 +90,98 @@ public class HallOfFameScreen implements Screen, InputProcessor{
 
         buttonsInit();
         labelsInit();
+        tableInit();
+    }
+
+    private void tableInit() {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 20;
+        parameter.color= Color.BLACK;
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+        BitmapFont font = generator.generateFont(parameter);
+
+        styleTitle = new Label.LabelStyle();
+        styleTitle.font = font;
+        styleTitle.background = buttonSkin.getDrawable("Button");
+        titleLvl = new Label("Level", styleTitle);
+        titleLvl.setPosition(widthPercent(10), titleLable.getY() - titleLable.getHeight() - heightPercent(10));
+        titleLvl.setWidth(WIDTH/2 - widthPercent(10 + 20));
+        titleLvl.setHeight((titleLable.getY() - titleLable.getHeight() - heightPercent(10))/6);
+        titleLvl.setAlignment(Align.center);
+        titleLvl.setDebug(true);
+        stage.addActor(titleLvl);
+
+        titlePlayer = new Label("Player", styleTitle);
+        titlePlayer.setPosition(titleLvl.getX() + titleLvl.getWidth(), titleLvl.getY());
+        titlePlayer.setWidth(WIDTH/2 - widthPercent(20));
+        titlePlayer.setHeight(titleLvl.getHeight());
+        titlePlayer.setAlignment(Align.center);
+        titlePlayer.setEllipsis(false);
+        titlePlayer.setDebug(true);
+        stage.addActor(titlePlayer);
+
+        titleDate = new Label("Date", styleTitle);
+        titleDate.setPosition(titlePlayer.getX() + titlePlayer.getWidth(), titlePlayer.getY());
+        titleDate.setWidth(WIDTH/2 - widthPercent(20));
+        titleDate.setHeight(titleLvl.getHeight());
+        titleDate.setAlignment(Align.center);
+        titleDate.setDebug(true);
+        stage.addActor(titleDate);
+
+
+        amountLines = 6;
+
+        for (int i = amountLines-1; i > 0; i--) {
+            addLineToTable(i, 10, "01.02.1998");
+        }
+
+
+    }
+
+    private void addLineToTable(int level, int countGames, String date ) {
+        ArrayList<Label> row = new ArrayList<Label>();
+        Label levelLabel = new Label("Level" + level, styleTitle);
+        Label playersLabel = new Label("Games" + countGames, styleTitle);
+        Label dateLabel = new Label("Date" + date, styleTitle);
+        row.add(levelLabel);
+        row.add(playersLabel);
+        row.add(dateLabel);
+        rows.add(row);
+        if(rows.size() == 1) {
+            levelLabel.setPosition(titleLvl.getX(), titleLvl.getY() - titleLvl.getHeight());
+            playersLabel.setPosition(titlePlayer.getX(), titlePlayer.getY() - titlePlayer.getHeight());
+            dateLabel.setPosition(titleDate.getX(), titleDate.getY() - titleDate.getHeight());
+        }
+        else {
+            Label prevLevel = rows.get(rows.size()-2).get(0);
+            Label prevPlayer = rows.get(rows.size()-2).get(1);
+            Label prevDate = rows.get(rows.size()-2).get(2);
+
+            levelLabel.setPosition(prevLevel.getX(), prevLevel.getY() - prevLevel.getHeight());
+            playersLabel.setPosition(prevPlayer.getX(), prevPlayer.getY() - prevPlayer.getHeight());
+            dateLabel.setPosition(prevDate.getX(), prevDate.getY() - prevDate.getHeight());
+        }
+        levelLabel.setWidth(titleLvl.getWidth());
+        levelLabel.setHeight(titleLvl.getHeight());
+        levelLabel.setAlignment(Align.center);
+        levelLabel.setDebug(true);
+
+        playersLabel.setWidth(titlePlayer.getWidth());
+        playersLabel.setHeight(titlePlayer.getHeight());
+        playersLabel.setAlignment(Align.center);
+        playersLabel.setDebug(true);
+
+        dateLabel.setWidth(titleDate.getWidth());
+        dateLabel.setHeight(titleDate.getHeight());
+        dateLabel.setAlignment(Align.center);
+        dateLabel.setDebug(true);
+
+        stage.addActor(levelLabel);
+        stage.addActor(playersLabel);
+        stage.addActor(dateLabel);
+
+
     }
 
     private void buttonsInit() {
@@ -171,7 +273,7 @@ public class HallOfFameScreen implements Screen, InputProcessor{
         parameter.color= Color.GREEN;
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
+        labelStyle = new Label.LabelStyle(font, Color.BLACK);
         titleLable = new Label(LanguagesManager.getInstance().getString("hallOfFame"), labelStyle);
         titleLable.setPosition(WIDTH/2 - titleLable.getWidth()/2, easyButton.getY() - heightPercent(10));
 
