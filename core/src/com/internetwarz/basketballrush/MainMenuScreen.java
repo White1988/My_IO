@@ -60,7 +60,6 @@ public class MainMenuScreen implements Screen,InputProcessor {
         //Add text xIntuition and it's background
         Texture topImageTexture = new Texture("skins/topImage.png");
         Image topImage = new Image(topImageTexture);
-        topImage.setDebug(true);
         topImage.setSize(appWidth + widthPercent(20), appHeight/8 + heightPercent(5));
         topImage.setPosition(0 - widthPercent(10), appHeight - appHeight/8);
         stage.addActor(topImage);

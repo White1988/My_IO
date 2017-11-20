@@ -44,6 +44,8 @@ import static com.internetwarz.basketballrush.Constants.MEDIUM_MODE;
 
 public class TsarGameplayScreen implements Screen,InputProcessor
 {
+    private Image topImage;
+    private Image topTextImage;
     private Tsar game;
     private boolean isGameBegan = false;
     SpriteBatch batch;
@@ -114,6 +116,10 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     private Color fillColor = new Color();
     private float degrees = 0;
     private float startFilling = 0;
+    private Texture background;
+    private BitmapFont font;
+    private Image curLevelImage;
+    private Image curAttemptsImage;
 
     public TsarGameplayScreen(Tsar game, final int numAttempts) {
         this.game = game;
@@ -123,7 +129,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
         WIDTH = (float) Gdx.graphics.getWidth();
         HEIGHT = (float) Gdx.graphics.getHeight();
-        RADIUS = heightPercent(30);
+        RADIUS = (WIDTH-WIDTH/10*2)/2;
 
         stage = new Stage(new FitViewport(WIDTH, HEIGHT));
         stage.clear();
@@ -134,10 +140,26 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
         Gdx.input.setInputProcessor(plex);
 
+        //font init
+        fontInit();
+
 
         //Preferences init
         prefs = Gdx.app.getPreferences("My Preferences");
         clickSound = game.assets.getSound();
+
+        //Add text xIntuition and it's background
+        Texture topImageTexture = new Texture("skins/topImage.png");
+        topImage = new Image(topImageTexture);
+        topImage.setSize(WIDTH + widthPercent(20), HEIGHT/8 + heightPercent(7));
+        topImage.setPosition(0 - widthPercent(10), HEIGHT - HEIGHT/8);
+        stage.addActor(topImage);
+
+        Texture topText = new Texture("skins/topText.png");
+        topTextImage = new Image(topText);
+        topTextImage.setSize(WIDTH - (WIDTH/10)*2, HEIGHT/10 - 10);
+        topTextImage.setPosition(WIDTH/2 - topTextImage.getWidth()/2, topImage.getY() + HEIGHT/8/8);
+        stage.addActor(topTextImage);
 
         buttonsInit();
 
@@ -163,17 +185,29 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         line.setSize(1, RADIUS);
 
         pixmap = new Pixmap((int)RADIUS*2 + 1, (int)RADIUS*2 + 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.valueOf("#7b7b7b"));
-        pixmap.drawCircle((int)RADIUS, (int)RADIUS, (int)RADIUS);
+        pixmap.setColor(Color.valueOf("#abcdff"));
+        pixmap.fillCircle((int)RADIUS, (int)RADIUS, (int)RADIUS);
         circleTexture = new Texture(pixmap);
         pixmap.dispose();
         imageCircle = new Image(circleTexture);
-        imageCircle.setPosition(WIDTH/2 - RADIUS, (HEIGHT - easyButton.getHeight())/2 - RADIUS);
+        imageCircle.setPosition(WIDTH/2 - RADIUS, curLevelImage.getY()/2 - RADIUS);
         stage.addActor(imageCircle);
 
 
         drawLines(numSectors);
 
+    }
+
+    private void fontInit() {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 20;
+        parameter.color= Color.valueOf("#4f6676");
+        //parameter.shadowColor = Color.valueOf("#141a1e");
+        //parameter.shadowOffsetX = -1;
+        //parameter.shadowOffsetY = -2;
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+        font=generator.generateFont(parameter);
     }
 
     private void buttonsInit() {
@@ -194,23 +228,42 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         Texture button = new Texture(rect2);
         rect2.dispose();
 
+        rect = new Pixmap((int)WIDTH, (int)HEIGHT, Pixmap.Format.RGBA8888);
+        rect.setColor(Color.valueOf("#15091e"));
+        rect.fillRectangle(0, 0, (int)WIDTH, (int) HEIGHT);
+        background = new Texture(rect);
+        rect.dispose();
+
 
         //Buttons init
+        Texture buttonTexture = new Texture("skins/buttonPlay.png");
         buttonAtlas = game.assets.getButtonAtlas();
         buttonAtlas.addRegion("Button", button, 0, 0, 40, 20);
         buttonAtlas.addRegion("Button checked", buttonChecked, 0, 0, 40, 20);
+        buttonTexture = new Texture("skins/easyLevel.png");
+        buttonAtlas.addRegion("easyLevel", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/easyLevelClick.png");
+        buttonAtlas.addRegion("easyLevelClick", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/mediumLevel.png");
+        buttonAtlas.addRegion("mediumLevel", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/mediumLevelClick.png");
+        buttonAtlas.addRegion("mediumLevelClick", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/hardLevel.png");
+        buttonAtlas.addRegion("hardLevel", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/hardLevelClick.png");
+        buttonAtlas.addRegion("hardLevelClick", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+
         buttonSkin = new Skin();
         buttonSkin.addRegions(buttonAtlas);
 
         textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = game.font;
-        textButtonStyle.up = buttonSkin.getDrawable("Button");
-        //textButtonStyle.down = buttonSkin.getDrawable("Simple button");
-        textButtonStyle.checked = buttonSkin.getDrawable("Button checked");
+        textButtonStyle.font = font;
+        textButtonStyle.up = buttonSkin.getDrawable("easyLevel");
+        textButtonStyle.checked = buttonSkin.getDrawable("easyLevelClick");
 
         easyButton = new TextButton(LanguagesManager.getInstance().getString("easy"), textButtonStyle);
-        easyButton.setSize(widthPercent(30), heightPercent(10));
-        easyButton.setPosition(widthPercent(5), HEIGHT - easyButton.getHeight() - 10);
+        easyButton.setSize((WIDTH - WIDTH/10*2)/3, heightPercent(7));
+        easyButton.setPosition(WIDTH/10,topImage.getY()  - easyButton.getHeight() - HEIGHT/17);
         easyButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
                 if(!isGameBegan) {
@@ -229,9 +282,14 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         });
         stage.addActor(easyButton);
 
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+        textButtonStyle.up = buttonSkin.getDrawable("mediumLevel");
+        textButtonStyle.checked = buttonSkin.getDrawable("mediumLevelClick");
+
         mediumButton = new TextButton(LanguagesManager.getInstance().getString("medium"), textButtonStyle);
-        mediumButton.setSize(widthPercent(30), heightPercent(10));
-        mediumButton.setPosition(widthPercent(5) + easyButton.getWidth(), HEIGHT - mediumButton.getHeight() - 10);
+        mediumButton.setSize(easyButton.getWidth(), heightPercent(7));
+        mediumButton.setPosition(easyButton.getX() + easyButton.getWidth(), topImage.getY()  - easyButton.getHeight() - HEIGHT/17);
         mediumButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
                 if(!isGameBegan) {
@@ -249,9 +307,14 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         });
         stage.addActor(mediumButton);
 
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+        textButtonStyle.up = buttonSkin.getDrawable("hardLevel");
+        textButtonStyle.checked = buttonSkin.getDrawable("hardLevelClick");
+
         hardButton = new TextButton(LanguagesManager.getInstance().getString("hard"), textButtonStyle);
-        hardButton.setSize(widthPercent(30), heightPercent(10));
-        hardButton.setPosition(mediumButton.getX() + mediumButton.getWidth(), HEIGHT - hardButton.getHeight() - 10);
+        hardButton.setSize(easyButton.getWidth(), heightPercent(7));
+        hardButton.setPosition(mediumButton.getX() + mediumButton.getWidth(), topImage.getY()  - easyButton.getHeight() - HEIGHT/17);
         hardButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
                 if(!isGameBegan) {
@@ -310,6 +373,17 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     }
 
     private void labelsInit() {
+        Texture labelBackgroundTexture = new Texture("skins/currentLevel.png");
+        curLevelImage = new Image(labelBackgroundTexture);
+        curLevelImage.setSize(WIDTH/10 * 4 - WIDTH/20, HEIGHT/17);
+        curLevelImage.setPosition(WIDTH/10, easyButton.getY() - easyButton.getHeight() - HEIGHT/18);
+        stage.addActor(curLevelImage);
+
+        labelBackgroundTexture = new Texture("skins/currentLevel.png");
+        curAttemptsImage = new Image(labelBackgroundTexture);
+        curAttemptsImage.setSize(WIDTH/10 * 4 - WIDTH/20, HEIGHT/17);
+        curAttemptsImage.setPosition(WIDTH - curAttemptsImage.getWidth() - WIDTH/10, curLevelImage.getY());
+        stage.addActor(curAttemptsImage);
 
         layoutScore = new GlyphLayout();
         layoutTries = new GlyphLayout();
@@ -326,8 +400,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         font = generator.generateFont(parameter);
         wrongStyle = new Label.LabelStyle(font, Color.RED);
 
-        parameter.size = 30;
-        parameter.color = Color.BLACK;
+        parameter.size = 18;
+        parameter.color = Color.valueOf("#bed5f6");
         font = generator.generateFont(parameter);
         textStyle = new Label.LabelStyle();
         textStyle.font = font;
@@ -336,12 +410,13 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         layoutTries.setText(font, LanguagesManager.getInstance().getString("tries") + ": " + curNumAttempts);
 
         scoreLabel = new Label(LanguagesManager.getInstance().getString("level") + ": 0", textStyle);
-        scoreLabel.setPosition(widthPercent(5), easyButton.getY() - layoutScore.height - widthPercent(5));
+        scoreLabel.setPosition(curLevelImage.getX() + WIDTH/40, curLevelImage.getY() + curLevelImage.getHeight()/3);
         scoreLabel.setSize(layoutScore.width, layoutScore.height);
         scoreLabel.setFontScale(1f, 1f);
 
+
         triesLabel = new Label(LanguagesManager.getInstance().getString("tries") + ": " + numAttempts, textStyle);
-        triesLabel.setPosition(WIDTH - layoutTries.width - widthPercent(5), hardButton.getY() - layoutTries.height - widthPercent(5));
+        triesLabel.setPosition(curAttemptsImage.getX() + WIDTH/40, scoreLabel.getY());
         triesLabel.setSize(layoutTries.width, layoutTries.height);
 
         rightWrongLabel = new Label(LanguagesManager.getInstance().getString("right"), rightStyle);
@@ -450,7 +525,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
     private void gameOver(Tsar game, Score score, String gameType, int numAttempts) {
         isGameBegan = false;
-        rightWrongLabel.setText("Game over!");
+        rightWrongLabel.setText(LanguagesManager.getInstance().getString("gameOver"));
         rightWrongLabel.setX(WIDTH/2 - rightWrongLabel.getPrefWidth()/2);
         saveScore(score, gameType);
 
@@ -548,6 +623,14 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
+        stage.act();
+        batch.begin();
+        stage.getBatch().begin();
+        stage.getBatch().draw(background, 0, 0);//drawing background
+        stage.getBatch().end();
+        stage.draw();
+        batch.end();
+
         if(isShow) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(fillColor);
@@ -555,10 +638,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
             shapeRenderer.end();
         }
 
-        stage.act();
-        batch.begin();
-        stage.draw();
-        batch.end();
+
     }
 
     //Drawing sectors

@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -36,6 +37,8 @@ import java.util.Map;
  */
 
 public class SettingsScreen implements Screen, InputProcessor {
+    private Image topTextImage;
+    private Image topImage;
     Tsar game;
 
     private int WIDTH;
@@ -65,6 +68,7 @@ public class SettingsScreen implements Screen, InputProcessor {
     //Select box
     HashMap<String, String> languages2;
     SelectBox languagesSB;
+    private Texture background;
 
     public SettingsScreen(Tsar game) {
         this.game = game;
@@ -92,6 +96,19 @@ public class SettingsScreen implements Screen, InputProcessor {
         prefs = Gdx.app.getPreferences("My Preferences");
         clickSound = game.assets.getSound();
 
+        //Add text xIntuition and it's background
+        Texture topImageTexture = new Texture("skins/topImage.png");
+        topImage = new Image(topImageTexture);
+        topImage.setSize(WIDTH + widthPercent(20), HEIGHT/8 + heightPercent(7));
+        topImage.setPosition(0 - widthPercent(10), HEIGHT - HEIGHT/8);
+        stage.addActor(topImage);
+
+        Texture topText = new Texture("skins/topText.png");
+        topTextImage = new Image(topText);
+        topTextImage.setSize(WIDTH - (WIDTH/10)*2, HEIGHT/10 - 10);
+        topTextImage.setPosition(WIDTH/2 - topTextImage.getWidth()/2, topImage.getY() + HEIGHT/8/8);
+        stage.addActor(topTextImage);
+
         languagesInit();
         labelsInit();
         selectBoxInit();
@@ -103,7 +120,7 @@ public class SettingsScreen implements Screen, InputProcessor {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 23;
-        parameter.color= Color.BLACK;
+        parameter.color= Color.valueOf("#bed5f6");
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
 
@@ -124,22 +141,31 @@ public class SettingsScreen implements Screen, InputProcessor {
         Texture button = new Texture(rect2);
         rect2.dispose();
 
+        //Background init
+        rect = new Pixmap((int)WIDTH, (int)HEIGHT, Pixmap.Format.RGBA8888);
+        rect.setColor(Color.valueOf("#15091e"));
+        rect.fillRectangle(0, 0, (int)WIDTH, (int) HEIGHT);
+        background = new Texture(rect);
+        rect.dispose();
+
 
         //Buttons init
         buttonAtlas = game.assets.getButtonAtlas();
         buttonAtlas.addRegion("Button", button, 0, 0, 40, 20);
         buttonAtlas.addRegion("Button down", buttonDown, 0, 0, 40, 20);
+        Texture buttonTexture = new Texture("skins/currentLevel.png");
+        buttonAtlas.addRegion("signOut", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
         buttonSkin = new Skin();
         buttonSkin.addRegions(buttonAtlas);
 
         textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = font;
-        textButtonStyle.up = buttonSkin.getDrawable("Button");
-        textButtonStyle.down = buttonSkin.getDrawable("Button down");
+        textButtonStyle.up = buttonSkin.getDrawable("signOut");
+
         //textButtonStyle.checked = buttonSkin.getDrawable("Button checked");
 
         signOut = new TextButton(LanguagesManager.getInstance().getString("signOut"), textButtonStyle);
-        signOut.setSize(widthPercent(30), heightPercent(8));
+        signOut.setSize(WIDTH/10 * 4 - WIDTH/20, HEIGHT/17);
         signOut.setPosition(WIDTH/2 - signOut.getWidth()/2, HEIGHT/2);
         signOut.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
@@ -150,13 +176,6 @@ public class SettingsScreen implements Screen, InputProcessor {
 
         });
         stage.addActor(signOut);
-
-        //Add label
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
-        signOutLabel = new Label(LanguagesManager.getInstance().getString("signOut"), labelStyle);
-        signOutLabel.setPosition(WIDTH/2 - signOutLabel.getWidth()/2, signOut.getY() + signOut.getHeight()/2 + signOutLabel.getHeight() + heightPercent(1));
-        stage.addActor(signOutLabel);
-
     }
 
     private void languagesInit() {
@@ -208,22 +227,22 @@ public class SettingsScreen implements Screen, InputProcessor {
         //Labels init
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 23;
-        parameter.color= Color.BLACK;
+        parameter.size = 20;
+        parameter.color= Color.valueOf("#4f6676");
+        //parameter.shadowColor = Color.valueOf("#141a1e");
+        //parameter.shadowOffsetX = -1;
+        //parameter.shadowOffsetY = -2;
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
+        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.valueOf("#4f6676"));
         titleLable = new Label(LanguagesManager.getInstance().getString("settings"), labelStyle);
         titleLable.setPosition(WIDTH/2 - titleLable.getWidth()/2, HEIGHT - titleLable.getHeight() - heightPercent(2));
-        stage.addActor(titleLable);
+        //stage.addActor(titleLable);
 
-        parameter.size = 23;
-        parameter.color= Color.GREEN;
-        font = generator.generateFont(parameter);
-        labelStyle = new Label.LabelStyle(font, Color.BLACK);
+        labelStyle = new Label.LabelStyle(font, Color.valueOf("#bed5f6"));
         langLabel = new Label(LanguagesManager.getInstance().getString("language"), labelStyle);
-        langLabel.setPosition(WIDTH/2 - langLabel.getPrefWidth()/2, titleLable.getY() - heightPercent(10));
+        langLabel.setPosition(WIDTH/2 - langLabel.getPrefWidth()/2, topImage.getY() - heightPercent(10));
         stage.addActor(langLabel);
     }
 
@@ -298,6 +317,9 @@ public class SettingsScreen implements Screen, InputProcessor {
         batch.setProjectionMatrix(camera.combined);
 
         stage.act();
+        stage.getBatch().begin();
+        stage.getBatch().draw(background, 0, 0);//drawing background
+        stage.getBatch().end();
         batch.begin();
         stage.draw();
         batch.end();

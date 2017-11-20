@@ -55,7 +55,7 @@
     <string key="no" value="Нет" />
     <string key="restartText" value="Вы действительно хотите начать игру сначала?" />
     <string key="best" value="Лучший" />
-    <string key="gameOver" value="Конц игры!" />
+    <string key="gameOver" value="Игра окончена!" />
     <string key="statisticsPlayer" value="Статистика (игрока)" />
     <string key="hallOfFame" value="Зал славы" />
     <string key="rules" value="Правила" />
