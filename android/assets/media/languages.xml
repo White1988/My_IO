@@ -43,9 +43,9 @@
     <string key="result" value="Результат" />
     <string key="settings" value="Настройки" />
     <string key="rules" value="Правила" />
-    <string key="easy" value="Легкий" />
-    <string key="medium" value="Средний" />
-    <string key="hard" value="Тяжелый" />
+    <string key="easy" value="Новичок" />
+    <string key="medium" value="Любитель" />
+    <string key="hard" value="Профи" />
     <string key="level" value="Уровень" />
     <string key="tries" value="Попытки" />
     <string key="right" value="Правильно!" />
