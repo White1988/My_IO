@@ -88,9 +88,15 @@ public class HallOfFameScreen implements Screen, InputProcessor{
         prefs = Gdx.app.getPreferences("My Preferences");
         clickSound = game.assets.getSound();
 
+        getData();
+
         buttonsInit();
         labelsInit();
         tableInit();
+    }
+
+    private void getData() {
+        //TODO: add getting data
     }
 
     private void tableInit() {

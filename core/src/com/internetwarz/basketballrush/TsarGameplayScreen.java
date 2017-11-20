@@ -2,6 +2,7 @@ package com.internetwarz.basketballrush;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
@@ -356,6 +357,9 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
     @Override
     public boolean keyDown(int keycode) {
+        if(keycode == Input.Keys.BACKSPACE || keycode == Input.Keys.BACK){
+            game.setScreen(new MainMenuScreen(game));
+        }
         return false;
     }
 
@@ -431,21 +435,45 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
            if(curNumAttempts == 0) {
                String gameType;
-               if(numSectors == 1)
+               if(numAttempts == 1)
                    gameType = EASY_MODE;
-               else if(numSectors == 2)
+               else if(numAttempts == 2)
                    gameType = MEDIUM_MODE;
                else
                    gameType = HARD_MODE;
-               game.setScreen(new GameEndScreen(game, score, gameType, numAttempts));
+               gameOver(game, score, gameType, numAttempts);
            }
 
        }
+       return false;
+    }
 
+    private void gameOver(Tsar game, Score score, String gameType, int numAttempts) {
+        isGameBegan = false;
+        rightWrongLabel.setText("Game over!");
+        rightWrongLabel.setX(WIDTH/2 - rightWrongLabel.getPrefWidth()/2);
+        saveScore(score, gameType);
 
+        //Updating the circle
+        stage.getActors().removeRange(stage.getActors().size - numSectors, stage.getActors().size - 1 );
+        numSectors = 2;
+        isGuessed = true;
+        drawLines(numSectors);
+        isDrawLines = false;
+        this.score = new Score(1);
 
+        if (easyButton.isChecked()) {
+            curNumAttempts = numAttempts = 3;
+        } else if (mediumButton.isChecked())
+            curNumAttempts = numAttempts = 2;
+        else if (hardButton.isChecked())
+            curNumAttempts = numAttempts = 1;
+        scoreLabel.setText(LanguagesManager.getInstance().getString("level") + ": " + this.score.getScore());
+        triesLabel.setText(LanguagesManager.getInstance().getString("tries") + ": " + numAttempts);
+    }
 
-        return false;
+    private void saveScore(Score score, String gameType) {
+        //TODO: add saving data
     }
 
     private void setFillingParametrs(Color color, int pickedSector) {
@@ -502,6 +530,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     @Override
     public void render(float delta) {
 
+        //update data
         if(!isGameBegan) {
             if (easyButton.isChecked()) {
                 curNumAttempts = numAttempts = 3;

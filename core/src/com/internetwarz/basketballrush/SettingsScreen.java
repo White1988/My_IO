@@ -193,7 +193,7 @@ public class SettingsScreen implements Screen, InputProcessor {
                         if(LanguagesManager.getInstance().loadLanguage(entry.getKey().toString())) {
                             prefs.putString("Language", entry.getKey().toString());
                             prefs.flush();
-                            break;
+                            game.setScreen(new SettingsScreen(game));
                         }
                     }
                 }
