@@ -16,10 +16,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
 
@@ -34,22 +36,42 @@ public class MainMenuScreen implements Screen,InputProcessor {
     Sound clickSound;
     Preferences prefs;
 
+    //TODO: font
     private Stage stage;
     private Skin buttonSkin;
     private TextureAtlas buttonAtlas;
-    private Texture gameName;
+    private Texture gameName, background;
     private ImageButton leaderboardButton,achievementsButton,soundButton,rateButton,info;
     private TextButton playButton, statisticButton, hallButton, rulesButton, settingsButton;
 
     public MainMenuScreen(final Tsar gam){
         this.game=gam;
         game.getPlayServices().signIn();
-        appWidth = Gdx.graphics.getWidth();
-        appHeight = Gdx.graphics.getHeight();
+        System.out.println(appWidth = Gdx.graphics.getWidth());
+        System.out.println(appHeight = Gdx.graphics.getHeight());
         camera = new OrthographicCamera();
         camera.setToOrtho(false, appWidth, appHeight);
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
+
+        stage = new Stage(new FitViewport(appWidth,appHeight));
+        stage.clear();
+
+        //Add text xIntuition and it's background
+        Texture topImageTexture = new Texture("skins/topImage.png");
+        Image topImage = new Image(topImageTexture);
+        topImage.setDebug(true);
+        topImage.setSize(appWidth + widthPercent(20), appHeight/8 + heightPercent(5));
+        topImage.setPosition(0 - widthPercent(10), appHeight - appHeight/8);
+        stage.addActor(topImage);
+
+        Texture topText = new Texture("skins/topText.png");
+        Image topTextImage = new Image(topText);
+        topTextImage.setSize(appWidth - (appWidth/10)*2, appHeight/10 - 10);
+        topTextImage.setPosition(appWidth/2 - topTextImage.getWidth()/2, topImage.getY() + appHeight/8/8);
+        stage.addActor(topTextImage);
+
+
 
         buttonAtlas = game.assets.getButtonAtlas();
         Pixmap rect = new Pixmap((int)widthPercent(33),20,Pixmap.Format.RGBA8888);
@@ -60,15 +82,49 @@ public class MainMenuScreen implements Screen,InputProcessor {
         rect.drawRectangle(0,0,(int)widthPercent(33),20);
         buttonChecked.draw(rect, 0, 0);
         rect.dispose();
+
+        Texture buttonTexture = new Texture("skins/buttonPlay.png");
         buttonAtlas.addRegion("Button", buttonChecked, 0, 0, (int)widthPercent(33), 20);
+        buttonAtlas.addRegion("buttonPlay", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/buttonPlayClick.png");
+        buttonAtlas.addRegion("buttonPlayClick", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/buttonStatistics.png");
+        buttonAtlas.addRegion("buttonStatistics", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/buttonStatisticsClick.png");
+        buttonAtlas.addRegion("buttonStatisticsClick", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/buttonHallOfFame.png");
+        buttonAtlas.addRegion("buttonHallOfFame", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/buttonHallOfFameClick.png");
+        buttonAtlas.addRegion("buttonHallOfFameClick", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/buttonRules.png");
+        buttonAtlas.addRegion("buttonRules", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/buttonRulesClick.png");
+        buttonAtlas.addRegion("buttonRulesClick", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/buttonSettings.png");
+        buttonAtlas.addRegion("buttonSettings", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/buttonSettingsClick.png");
+        buttonAtlas.addRegion("buttonSettingsClick", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+
+
+        rect = new Pixmap((int)appWidth, (int)appHeight, Pixmap.Format.RGBA8888);
+        rect.setColor(Color.valueOf("#15091e"));
+        rect.fillRectangle(0, 0, (int)appWidth, (int) appHeight);
+        background = new Texture(rect);
+        rect.dispose();
+
+        Skin playBtnSkin = new Skin();
+        playBtnSkin.add("playButton", buttonTexture);
+
 
         buttonSkin = new Skin();
         buttonSkin.addRegions(buttonAtlas);
+       // buttonSkin.add("buttonPlay", new Image(buttonTexture));
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = game.font;
-        textButtonStyle.up = buttonSkin.getDrawable("Button");
-        stage = new Stage(new FitViewport(appWidth,appHeight));
-        stage.clear();
+        textButtonStyle.up = buttonSkin.getDrawable("buttonPlay");
+        textButtonStyle.down = buttonSkin.getDrawable("buttonPlayClick");
+
+
 
         InputMultiplexer plex = new InputMultiplexer();
         plex.addProcessor(this);
@@ -83,8 +139,8 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
         playButton = new TextButton(LanguagesManager.getInstance().getString("play"), textButtonStyle);
         //playButton.setSize(widthPercent(33), heightPercent(10));
-        playButton.setWidth(widthPercent(38));
-        playButton.setPosition(appWidth/2 - playButton.getWidth()/2, heightPercent(10)*7);
+        playButton.setSize(appWidth - appWidth/10*2, appHeight/9);
+        playButton.setPosition(appWidth/10, topImage.getY() - playButton.getHeight() - appHeight/17);
         playButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
@@ -97,11 +153,19 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
             }
         });
+        //playButton.getLabelCell().padLeft(120);
+        playButton.getLabel().setAlignment(Align.left);
+        playButton.getLabelCell().padLeft(playButton.getWidth()/2 - widthPercent(10));
         stage.addActor(playButton);
 
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = game.font;
+        textButtonStyle.up = buttonSkin.getDrawable("buttonStatistics");
+        textButtonStyle.down = buttonSkin.getDrawable("buttonStatisticsClick");
+
         statisticButton = new TextButton(LanguagesManager.getInstance().getString("statistics"), textButtonStyle);
-        statisticButton.setWidth(widthPercent(38));
-        statisticButton.setPosition(playButton.getX(), playButton.getY() - heightPercent(10));
+        statisticButton.setSize(playButton.getWidth(), playButton.getHeight());
+        statisticButton.setPosition(playButton.getX(), playButton.getY() - playButton.getHeight() - appHeight/22);
         statisticButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
@@ -109,11 +173,18 @@ public class MainMenuScreen implements Screen,InputProcessor {
                 game.setScreen(new StatisticsScreen(game));
             }
         });
+        statisticButton.getLabel().setAlignment(Align.left);
+        statisticButton.getLabelCell().padLeft(playButton.getWidth()/2 - widthPercent(10));
         stage.addActor(statisticButton);
 
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = game.font;
+        textButtonStyle.up = buttonSkin.getDrawable("buttonHallOfFame");
+        textButtonStyle.down = buttonSkin.getDrawable("buttonHallOfFameClick");
+
         hallButton = new TextButton(LanguagesManager.getInstance().getString("hall_of_fame"), textButtonStyle);
-        hallButton.setWidth(widthPercent(38));
-        hallButton.setPosition(playButton.getX(), statisticButton.getY() - heightPercent(10));
+        hallButton.setSize(playButton.getWidth(), playButton.getHeight());
+        hallButton.setPosition(playButton.getX(), statisticButton.getY() - statisticButton.getHeight() - appHeight/22);
         hallButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
@@ -122,11 +193,18 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
             }
         });
+        hallButton.getLabel().setAlignment(Align.left);
+        hallButton.getLabelCell().padLeft(playButton.getWidth()/2 - widthPercent(10));
         stage.addActor(hallButton);
 
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = game.font;
+        textButtonStyle.up = buttonSkin.getDrawable("buttonRules");
+        textButtonStyle.down = buttonSkin.getDrawable("buttonRulesClick");
+
         rulesButton = new TextButton(LanguagesManager.getInstance().getString("rules"), textButtonStyle);
-        rulesButton.setWidth(widthPercent(38));
-        rulesButton.setPosition(playButton.getX(), hallButton.getY() - heightPercent(10));
+        rulesButton.setSize(playButton.getWidth(), playButton.getHeight());
+        rulesButton.setPosition(playButton.getX(), hallButton.getY() - hallButton.getHeight() - appHeight/22);
         rulesButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
@@ -134,11 +212,18 @@ public class MainMenuScreen implements Screen,InputProcessor {
                 game.setScreen(new RulesScreen(game));
             }
         });
+        rulesButton.getLabel().setAlignment(Align.left);
+        rulesButton.getLabelCell().padLeft(playButton.getWidth()/2 - widthPercent(10));
         stage.addActor(rulesButton);
 
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = game.font;
+        textButtonStyle.up = buttonSkin.getDrawable("buttonSettings");
+        textButtonStyle.down = buttonSkin.getDrawable("buttonSettingsClick");
+
         settingsButton = new TextButton(LanguagesManager.getInstance().getString("settings"), textButtonStyle);
-        settingsButton.setWidth(widthPercent(38));
-        settingsButton.setPosition(playButton.getX(), rulesButton.getY() - heightPercent(10));
+        settingsButton.setSize(playButton.getWidth(), playButton.getHeight());
+        settingsButton.setPosition(playButton.getX(), rulesButton.getY() - rulesButton.getHeight() - appHeight/22);
         settingsButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
@@ -146,6 +231,8 @@ public class MainMenuScreen implements Screen,InputProcessor {
                 game.setScreen(new SettingsScreen(game));
             }
         });
+        settingsButton.getLabel().setAlignment(Align.left);
+        settingsButton.getLabelCell().padLeft(playButton.getWidth()/2 - widthPercent(10));
         stage.addActor(settingsButton);
         //Play Button resources
         /*playButton = new ImageButton(buttonSkin.getDrawable("play"),buttonSkin.getDrawable("playClicked"));
@@ -245,6 +332,9 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
         stage.act();
         batch.begin();
+        stage.getBatch().begin();
+        stage.getBatch().draw(background, 0, 0);//drawing background
+        stage.getBatch().end();
         stage.draw();
         batch.end();
 

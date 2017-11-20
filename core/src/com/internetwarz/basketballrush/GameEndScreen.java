@@ -65,6 +65,7 @@ public class GameEndScreen implements Screen,InputProcessor {
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
 
+
         Pixmap rect = new Pixmap(40,20,Pixmap.Format.RGBA8888);
         rect.setColor(Color.LIGHT_GRAY);
         rect.fillRectangle(0, 0, 40, 20);

@@ -30,8 +30,11 @@ public class Tsar extends Game {
 		batch = new SpriteBatch();
 		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parameter.size = 30;
-		parameter.color= Color.BLACK;
+		parameter.size = 25;
+		parameter.color= Color.valueOf("#506878");
+		parameter.shadowColor = Color.valueOf("#141a1e");
+		parameter.shadowOffsetX = -1;
+		parameter.shadowOffsetY = -2;
 		parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
 		font=generator.generateFont(parameter);
 
