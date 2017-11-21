@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="gdx-firebase-android-0.0.4-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/android/build/intermediates/exploded-aar/de.tomgrill.gdxfirebase/gdx-firebase-android/0.0.4-SNAPSHOT/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/android/build/intermediates/exploded-aar/de.tomgrill.gdxfirebase/gdx-firebase-android/0.0.4-SNAPSHOT/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/de.tomgrill.gdxfirebase/gdx-firebase-android/0.0.4-SNAPSHOT/5dddd4ae38c4cfbb596f77ad2e106ce0813fc3c5/gdx-firebase-android-0.0.4-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

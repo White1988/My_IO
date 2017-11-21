@@ -16,7 +16,7 @@ android {
     }
     defaultConfig {
         applicationId "com.di.devs.tsar"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 25
         multiDexEnabled true
     }

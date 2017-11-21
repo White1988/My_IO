@@ -62,6 +62,8 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
+
+        compile "de.tomgrill.gdxfirebase:gdx-firebase-android:0.0.4-SNAPSHOT"
     }
 }
 
@@ -73,6 +75,8 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+
+        compile "de.tomgrill.gdxfirebase:gdx-firebase-core:0.0.4-SNAPSHOT"
     }
 }
 
@@ -91,6 +95,7 @@ project(":desktop2") {
 
         compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
 
+        compile "de.tomgrill.gdxfirebase:gdx-firebase-desktop:0.0.4-SNAPSHOT"
     }
 }
 
