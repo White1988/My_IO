@@ -47,7 +47,7 @@
     <string key="medium" value="Любитель" />
     <string key="hard" value="Профи" />
     <string key="level" value="Уровень" />
-    <string key="tries" value="Попытки" />
+    <string key="tries" value="Попыток" />
     <string key="right" value="Правильно!" />
     <string key="wrong" value="Неверно!" />
     <string key="restart" value="Рестарт" />
@@ -62,6 +62,10 @@
     <string key="rulesText" value="Содержание..." />
     <string key="signOut" value="Выйти" />
     <string key="language" value="Язык" />
+    <string key="countGames" value="Кол-во игр" />
+    <string key="lowcaseLevel" value="уровень" />
+    <string key="player" value="Игрок" />
+    <string key="date" value="Дата" />
 
 </language>
 </languages>

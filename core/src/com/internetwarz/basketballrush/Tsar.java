@@ -28,13 +28,16 @@ public class Tsar extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.size = 25;
 		parameter.color= Color.valueOf("#506878");
+		parameter.borderStraight = false;
+		parameter.borderWidth = 1;
+		parameter.borderColor = Color.valueOf("#e2e3e7");
 		parameter.shadowColor = Color.valueOf("#141a1e");
-		parameter.shadowOffsetX = -1;
-		parameter.shadowOffsetY = -2;
+		//parameter.shadowOffsetX = -1;
+		//parameter.shadowOffsetY = -1;
 		parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
 		font=generator.generateFont(parameter);
 

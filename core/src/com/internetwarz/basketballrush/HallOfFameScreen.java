@@ -116,13 +116,15 @@ public class HallOfFameScreen implements Screen, InputProcessor{
     }
 
     private void fontInit() {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 20;
-        parameter.color= Color.valueOf("#4f6676");
-        //parameter.shadowColor = Color.valueOf("#141a1e");
-        //parameter.shadowOffsetX = -1;
-        //parameter.shadowOffsetY = -2;
+        parameter.size = 14;
+        parameter.color= Color.valueOf("#506878");
+        parameter.borderStraight = false;
+        parameter.borderWidth = 1;
+        parameter.borderColor = Color.valueOf("#e2e3e7");
+        parameter.shadowColor = Color.valueOf("#141a1e");
+
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         font=generator.generateFont(parameter);
     }
@@ -132,9 +134,9 @@ public class HallOfFameScreen implements Screen, InputProcessor{
     }
 
     private void tableInit() {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 20;
+        parameter.size = 17;
         parameter.color= Color.valueOf("#506878");
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
@@ -144,19 +146,22 @@ public class HallOfFameScreen implements Screen, InputProcessor{
         styleTitle.background = buttonSkin.getDrawable("panelTitle");
 
         parameter.color = Color.valueOf("ffffff");
-        parameter.size = 18;
+        parameter.shadowColor = Color.valueOf("#186dbb");
+        parameter.shadowOffsetX = 1;
+        parameter.shadowOffsetY = 1;
+        parameter.size = 16;
         fontLines = generator.generateFont(parameter);
         lineFontStyle = new Label.LabelStyle();
         lineFontStyle.font = fontLines;
 
-        titleLvl = new Label("Level", styleTitle);
+        titleLvl = new Label(LanguagesManager.getInstance().getString("level"), styleTitle);
         titleLvl.setPosition(WIDTH/20, titleLable.getY() - titleLable.getHeight() - heightPercent(10));
         titleLvl.setWidth(WIDTH/2 - WIDTH/20 - widthPercent(20));
         titleLvl.setHeight((titleLable.getY() - titleLable.getHeight() - heightPercent(10))/6);
         titleLvl.setAlignment(Align.center);
         stage.addActor(titleLvl);
 
-        titlePlayer = new Label("Player", styleTitle);
+        titlePlayer = new Label(LanguagesManager.getInstance().getString("player"), styleTitle);
         titlePlayer.setPosition(titleLvl.getX() + titleLvl.getWidth()-1, titleLvl.getY());
         titlePlayer.setWidth(WIDTH/2 - widthPercent(20));
         titlePlayer.setHeight(titleLvl.getHeight());
@@ -164,7 +169,7 @@ public class HallOfFameScreen implements Screen, InputProcessor{
         titlePlayer.setEllipsis(false);
         stage.addActor(titlePlayer);
 
-        titleDate = new Label("Date", styleTitle);
+        titleDate = new Label(LanguagesManager.getInstance().getString("date"), styleTitle);
         titleDate.setPosition(titlePlayer.getX() + titlePlayer.getWidth()-1, titlePlayer.getY());
         titleDate.setWidth(WIDTH/2 - widthPercent(15));
         titleDate.setHeight(titleLvl.getHeight());
@@ -193,7 +198,7 @@ public class HallOfFameScreen implements Screen, InputProcessor{
             lineFontStyle.font = fontLines;
             lineFontStyle.background = buttonSkin.getDrawable("lineDark");
         }
-        Label levelLabel = new Label("Level" + level, lineFontStyle);
+        Label levelLabel = new Label(String.valueOf(level), lineFontStyle);
         Label playersLabel = new Label("Games" + countGames, lineFontStyle);
         Label dateLabel = new Label("Date" + date, lineFontStyle);
         row.add(levelLabel);
@@ -347,13 +352,13 @@ public class HallOfFameScreen implements Screen, InputProcessor{
     private void labelsInit() {
 
         //Labels init
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 30;
-        parameter.color= Color.valueOf("#bed5f6");
+        parameter.size = 24;
+        parameter.color= Color.valueOf("#f4f8fb");
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
-        labelStyle = new Label.LabelStyle(font, Color.valueOf("#bed5f6"));
+        labelStyle = new Label.LabelStyle(font, Color.valueOf("#f4f8fb"));
         titleLable = new Label(LanguagesManager.getInstance().getString("hallOfFame"), labelStyle);
         titleLable.setPosition(WIDTH/2 - titleLable.getWidth()/2, easyButton.getY() - heightPercent(10));
 

@@ -115,13 +115,15 @@ public class StatisticsScreen implements Screen,InputProcessor {
     }
 
     private void fontInit() {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 20;
-        parameter.color= Color.valueOf("#4f6676");
-        //parameter.shadowColor = Color.valueOf("#141a1e");
-        //parameter.shadowOffsetX = -1;
-        //parameter.shadowOffsetY = -2;
+        parameter.size = 14;
+        parameter.color= Color.valueOf("#506878");
+        parameter.borderStraight = false;
+        parameter.borderWidth = 1;
+        parameter.borderColor = Color.valueOf("#e2e3e7");
+        parameter.shadowColor = Color.valueOf("#141a1e");
+
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         font=generator.generateFont(parameter);
     }
@@ -131,9 +133,9 @@ public class StatisticsScreen implements Screen,InputProcessor {
     }
 
     private void tableInit() {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int) (20);
+        parameter.size = 17;
         parameter.color= Color.valueOf("#506878");
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
@@ -143,18 +145,22 @@ public class StatisticsScreen implements Screen,InputProcessor {
         styleTitle.background = buttonSkin.getDrawable("panelTitle");
 
         parameter.color = Color.valueOf("ffffff");
+        parameter.shadowColor = Color.valueOf("#186dbb");
+        parameter.shadowOffsetX = 1;
+        parameter.shadowOffsetY = 1;
+        parameter.size = 16;
         fontLines = generator.generateFont(parameter);
         lineFontStyle = new Label.LabelStyle();
         lineFontStyle.font = fontLines;
 
-        titleLvl = new Label("Level", styleTitle);
+        titleLvl = new Label(LanguagesManager.getInstance().getString("level"), styleTitle);
         titleLvl.setPosition(WIDTH/20, titleLable.getY() - titleLable.getHeight() - heightPercent(10));
         titleLvl.setWidth(WIDTH/2 - WIDTH/20);
         titleLvl.setHeight((titleLable.getY() - titleLable.getHeight() - heightPercent(10))/6);
         titleLvl.setAlignment(Align.center);
         stage.addActor(titleLvl);
 
-        titleGames = new Label("Games", styleTitle);
+        titleGames = new Label(LanguagesManager.getInstance().getString("countGames"), styleTitle);
         titleGames.setPosition(titleLvl.getX() + titleLvl.getWidth() - 1, titleLvl.getY());
         titleGames.setWidth(WIDTH/2 - WIDTH/20);
         titleGames.setHeight(titleLvl.getHeight());
@@ -181,7 +187,7 @@ public class StatisticsScreen implements Screen,InputProcessor {
             lineFontStyle.font = fontLines;
             lineFontStyle.background = buttonSkin.getDrawable("lineDark");
         }
-        Label levelLabel = new Label("Level" + level, lineFontStyle);
+        Label levelLabel = new Label(level + " " + LanguagesManager.getInstance().getString("lowcaseLevel"), lineFontStyle);
         Label gamesLabel = new Label("Games" + countGames, lineFontStyle);
         row.add(levelLabel);
         row.add(gamesLabel);
@@ -329,13 +335,13 @@ public class StatisticsScreen implements Screen,InputProcessor {
     private void labelsInit() {
 
         //Labels init
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = (int) (30);
-        parameter.color= Color.valueOf("#bed5f6");
+        parameter.size = 24;
+        parameter.color= Color.valueOf("#f4f8fb");
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.valueOf("#bed5f6"));
+        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.valueOf("#f4f8fb"));
         titleLable = new Label(LanguagesManager.getInstance().getString("statisticsPlayer"), labelStyle);
         titleLable.setPosition(WIDTH/2 - titleLable.getWidth()/2, easyButton.getY() - heightPercent(10));
 

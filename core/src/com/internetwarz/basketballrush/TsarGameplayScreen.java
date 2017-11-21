@@ -199,13 +199,15 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     }
 
     private void fontInit() {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 20;
-        parameter.color= Color.valueOf("#4f6676");
-        //parameter.shadowColor = Color.valueOf("#141a1e");
-        //parameter.shadowOffsetX = -1;
-        //parameter.shadowOffsetY = -2;
+        parameter.size = 14;
+        parameter.color= Color.valueOf("#506878");
+        parameter.borderStraight = false;
+        parameter.borderWidth = 1;
+        parameter.borderColor = Color.valueOf("#e2e3e7");
+        parameter.shadowColor = Color.valueOf("#141a1e");
+
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         font=generator.generateFont(parameter);
     }
@@ -341,7 +343,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
     private void restartGame(final int numAttempts) {
         //Generate font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 15;
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
@@ -389,7 +391,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         layoutTries = new GlyphLayout();
 
         //Labels init
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 30;
         parameter.color= Color.GREEN;
@@ -402,6 +404,9 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
         parameter.size = 18;
         parameter.color = Color.valueOf("#bed5f6");
+        parameter.shadowColor = Color.valueOf("#202123");
+        parameter.shadowOffsetX = 1;
+        parameter.shadowOffsetY = 1;
         font = generator.generateFont(parameter);
         textStyle = new Label.LabelStyle();
         textStyle.font = font;

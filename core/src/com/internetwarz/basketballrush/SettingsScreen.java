@@ -117,10 +117,13 @@ public class SettingsScreen implements Screen, InputProcessor {
 
     private void buttonInit() {
         //Font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 23;
-        parameter.color= Color.valueOf("#bed5f6");
+        parameter.size = 16;
+        parameter.color = Color.valueOf("#bed5f6");
+        parameter.shadowColor = Color.valueOf("#202123");
+        parameter.shadowOffsetX = 1;
+        parameter.shadowOffsetY = 1;
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
 
@@ -225,22 +228,22 @@ public class SettingsScreen implements Screen, InputProcessor {
     private void labelsInit() {
 
         //Labels init
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 20;
-        parameter.color= Color.valueOf("#4f6676");
+        parameter.color= Color.valueOf("#ffffff");
         //parameter.shadowColor = Color.valueOf("#141a1e");
         //parameter.shadowOffsetX = -1;
         //parameter.shadowOffsetY = -2;
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.valueOf("#4f6676"));
+        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.valueOf("#ffffff"));
         titleLable = new Label(LanguagesManager.getInstance().getString("settings"), labelStyle);
         titleLable.setPosition(WIDTH/2 - titleLable.getWidth()/2, HEIGHT - titleLable.getHeight() - heightPercent(2));
         //stage.addActor(titleLable);
 
-        labelStyle = new Label.LabelStyle(font, Color.valueOf("#bed5f6"));
+        labelStyle = new Label.LabelStyle(font, Color.valueOf("#ffffff"));
         langLabel = new Label(LanguagesManager.getInstance().getString("language"), labelStyle);
         langLabel.setPosition(WIDTH/2 - langLabel.getPrefWidth()/2, topImage.getY() - heightPercent(10));
         stage.addActor(langLabel);
