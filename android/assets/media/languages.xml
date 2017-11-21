@@ -42,7 +42,7 @@
     <string key="score" value="Очки" />
     <string key="result" value="Результат" />
     <string key="settings" value="Настройки" />
-    <string key="rules" value="Правила" />
+    <string key="rules" value="Правила игры" />
     <string key="easy" value="Новичок" />
     <string key="medium" value="Любитель" />
     <string key="hard" value="Профи" />

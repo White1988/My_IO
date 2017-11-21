@@ -136,7 +136,7 @@ public class SettingsScreen implements Screen, InputProcessor {
 
         //Simple button texture
         Pixmap rect2 = new Pixmap(40,20,Pixmap.Format.RGBA8888);
-        rect2.setColor(Color.DARK_GRAY);
+        rect2.setColor(Color.valueOf("#bed5f6"));
         rect2.drawRectangle(0,0,40,20);
         Texture button = new Texture(rect2);
         rect2.dispose();

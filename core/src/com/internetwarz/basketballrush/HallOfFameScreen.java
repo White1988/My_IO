@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -33,6 +34,8 @@ import java.util.ArrayList;
  */
 
 public class HallOfFameScreen implements Screen, InputProcessor{
+    private final Image topImage;
+    private final Image topTextImage;
     Tsar game;
 
     private int WIDTH;
@@ -61,6 +64,10 @@ public class HallOfFameScreen implements Screen, InputProcessor{
     private int amountLines;
     private ArrayList<ArrayList<Label>> rows = new ArrayList<ArrayList<Label>>();
     private Label titleDate;
+    private Texture background;
+    private BitmapFont font;
+    private BitmapFont fontLines;
+    private Label.LabelStyle lineFontStyle;
 
     public HallOfFameScreen(Tsar game) {
         this.game = game;
@@ -88,11 +95,36 @@ public class HallOfFameScreen implements Screen, InputProcessor{
         prefs = Gdx.app.getPreferences("My Preferences");
         clickSound = game.assets.getSound();
 
-        getData();
+        //Add text xIntuition and it's background
+        Texture topImageTexture = new Texture("skins/topImage.png");
+        topImage = new Image(topImageTexture);
+        topImage.setSize(WIDTH + widthPercent(20), HEIGHT/8 + heightPercent(7));
+        topImage.setPosition(0 - widthPercent(10), HEIGHT - HEIGHT/8);
+        stage.addActor(topImage);
 
+        Texture topText = new Texture("skins/topText.png");
+        topTextImage = new Image(topText);
+        topTextImage.setSize(WIDTH - (WIDTH/10)*2, HEIGHT/10 - 10);
+        topTextImage.setPosition(WIDTH/2 - topTextImage.getWidth()/2, topImage.getY() + HEIGHT/8/8);
+        stage.addActor(topTextImage);
+
+        getData();
+        fontInit();
         buttonsInit();
         labelsInit();
         tableInit();
+    }
+
+    private void fontInit() {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 20;
+        parameter.color= Color.valueOf("#4f6676");
+        //parameter.shadowColor = Color.valueOf("#141a1e");
+        //parameter.shadowOffsetX = -1;
+        //parameter.shadowOffsetY = -2;
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+        font=generator.generateFont(parameter);
     }
 
     private void getData() {
@@ -103,36 +135,40 @@ public class HallOfFameScreen implements Screen, InputProcessor{
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 20;
-        parameter.color= Color.BLACK;
+        parameter.color= Color.valueOf("#506878");
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
 
         styleTitle = new Label.LabelStyle();
         styleTitle.font = font;
-        styleTitle.background = buttonSkin.getDrawable("Button");
+        styleTitle.background = buttonSkin.getDrawable("panelTitle");
+
+        parameter.color = Color.valueOf("ffffff");
+        parameter.size = 18;
+        fontLines = generator.generateFont(parameter);
+        lineFontStyle = new Label.LabelStyle();
+        lineFontStyle.font = fontLines;
+
         titleLvl = new Label("Level", styleTitle);
-        titleLvl.setPosition(widthPercent(10), titleLable.getY() - titleLable.getHeight() - heightPercent(10));
-        titleLvl.setWidth(WIDTH/2 - widthPercent(10 + 20));
+        titleLvl.setPosition(WIDTH/20, titleLable.getY() - titleLable.getHeight() - heightPercent(10));
+        titleLvl.setWidth(WIDTH/2 - WIDTH/20 - widthPercent(20));
         titleLvl.setHeight((titleLable.getY() - titleLable.getHeight() - heightPercent(10))/6);
         titleLvl.setAlignment(Align.center);
-        titleLvl.setDebug(true);
         stage.addActor(titleLvl);
 
         titlePlayer = new Label("Player", styleTitle);
-        titlePlayer.setPosition(titleLvl.getX() + titleLvl.getWidth(), titleLvl.getY());
+        titlePlayer.setPosition(titleLvl.getX() + titleLvl.getWidth()-1, titleLvl.getY());
         titlePlayer.setWidth(WIDTH/2 - widthPercent(20));
         titlePlayer.setHeight(titleLvl.getHeight());
         titlePlayer.setAlignment(Align.center);
         titlePlayer.setEllipsis(false);
-        titlePlayer.setDebug(true);
         stage.addActor(titlePlayer);
 
         titleDate = new Label("Date", styleTitle);
-        titleDate.setPosition(titlePlayer.getX() + titlePlayer.getWidth(), titlePlayer.getY());
-        titleDate.setWidth(WIDTH/2 - widthPercent(20));
+        titleDate.setPosition(titlePlayer.getX() + titlePlayer.getWidth()-1, titlePlayer.getY());
+        titleDate.setWidth(WIDTH/2 - widthPercent(15));
         titleDate.setHeight(titleLvl.getHeight());
         titleDate.setAlignment(Align.center);
-        titleDate.setDebug(true);
         stage.addActor(titleDate);
 
 
@@ -147,15 +183,25 @@ public class HallOfFameScreen implements Screen, InputProcessor{
 
     private void addLineToTable(int level, int countGames, String date ) {
         ArrayList<Label> row = new ArrayList<Label>();
-        Label levelLabel = new Label("Level" + level, styleTitle);
-        Label playersLabel = new Label("Games" + countGames, styleTitle);
-        Label dateLabel = new Label("Date" + date, styleTitle);
+        if(level%2 == 0) {
+            lineFontStyle = new Label.LabelStyle();
+            lineFontStyle.font = fontLines;
+            lineFontStyle.background = buttonSkin.getDrawable("line");
+        }
+        else {
+            lineFontStyle = new Label.LabelStyle();
+            lineFontStyle.font = fontLines;
+            lineFontStyle.background = buttonSkin.getDrawable("lineDark");
+        }
+        Label levelLabel = new Label("Level" + level, lineFontStyle);
+        Label playersLabel = new Label("Games" + countGames, lineFontStyle);
+        Label dateLabel = new Label("Date" + date, lineFontStyle);
         row.add(levelLabel);
         row.add(playersLabel);
         row.add(dateLabel);
         rows.add(row);
         if(rows.size() == 1) {
-            levelLabel.setPosition(titleLvl.getX(), titleLvl.getY() - titleLvl.getHeight());
+            levelLabel.setPosition(titleLvl.getX() + 1, titleLvl.getY() - titleLvl.getHeight());
             playersLabel.setPosition(titlePlayer.getX(), titlePlayer.getY() - titlePlayer.getHeight());
             dateLabel.setPosition(titleDate.getX(), titleDate.getY() - titleDate.getHeight());
         }
@@ -171,17 +217,14 @@ public class HallOfFameScreen implements Screen, InputProcessor{
         levelLabel.setWidth(titleLvl.getWidth());
         levelLabel.setHeight(titleLvl.getHeight());
         levelLabel.setAlignment(Align.center);
-        levelLabel.setDebug(true);
 
         playersLabel.setWidth(titlePlayer.getWidth());
         playersLabel.setHeight(titlePlayer.getHeight());
         playersLabel.setAlignment(Align.center);
-        playersLabel.setDebug(true);
 
-        dateLabel.setWidth(titleDate.getWidth());
+        dateLabel.setWidth(titleDate.getWidth()-1);
         dateLabel.setHeight(titleDate.getHeight());
         dateLabel.setAlignment(Align.center);
-        dateLabel.setDebug(true);
 
         stage.addActor(levelLabel);
         stage.addActor(playersLabel);
@@ -208,23 +251,48 @@ public class HallOfFameScreen implements Screen, InputProcessor{
         Texture button = new Texture(rect2);
         rect2.dispose();
 
+        rect = new Pixmap((int)WIDTH, (int)HEIGHT, Pixmap.Format.RGBA8888);
+        rect.setColor(Color.valueOf("#15091e"));
+        rect.fillRectangle(0, 0, (int)WIDTH, (int) HEIGHT);
+        background = new Texture(rect);
+        rect.dispose();
+
 
         //Buttons init
+        Texture buttonTexture = new Texture("skins/buttonPlay.png");
         buttonAtlas = game.assets.getButtonAtlas();
         buttonAtlas.addRegion("Button", button, 0, 0, 40, 20);
         buttonAtlas.addRegion("Button checked", buttonChecked, 0, 0, 40, 20);
+        buttonTexture = new Texture("skins/easyLevel.png");
+        buttonAtlas.addRegion("easyLevel", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/easyLevelClick.png");
+        buttonAtlas.addRegion("easyLevelClick", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/mediumLevel.png");
+        buttonAtlas.addRegion("mediumLevel", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/mediumLevelClick.png");
+        buttonAtlas.addRegion("mediumLevelClick", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/hardLevel.png");
+        buttonAtlas.addRegion("hardLevel", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/hardLevelClick.png");
+        buttonAtlas.addRegion("hardLevelClick", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        Texture labelTexture = new Texture("skins/panelTitle.png");
+        buttonAtlas.addRegion("panelTitle", labelTexture, 30, 10, labelTexture.getWidth()-30, labelTexture.getHeight()-30);
+        labelTexture = new Texture("skins/line.png");
+        buttonAtlas.addRegion("line", labelTexture, 20, 5, labelTexture.getWidth()-20, labelTexture.getHeight()-10);
+        labelTexture = new Texture("skins/lineDark.png");
+        buttonAtlas.addRegion("lineDark", labelTexture, 20, 5, labelTexture.getWidth()-20, labelTexture.getHeight()-10);
+
         buttonSkin = new Skin();
         buttonSkin.addRegions(buttonAtlas);
 
         textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = game.font;
-        textButtonStyle.up = buttonSkin.getDrawable("Button");
-        //textButtonStyle.down = buttonSkin.getDrawable("Simple button");
-        textButtonStyle.checked = buttonSkin.getDrawable("Button checked");
+        textButtonStyle.font = font;
+        textButtonStyle.up = buttonSkin.getDrawable("easyLevel");
+        textButtonStyle.checked = buttonSkin.getDrawable("easyLevelClick");
 
         easyButton = new TextButton(LanguagesManager.getInstance().getString("easy"), textButtonStyle);
-        easyButton.setSize(widthPercent(30), heightPercent(10));
-        easyButton.setPosition(widthPercent(5), HEIGHT - easyButton.getHeight() - 10);
+        easyButton.setSize((WIDTH - WIDTH/10*2)/3, heightPercent(7));
+        easyButton.setPosition(WIDTH/10,topImage.getY()  - easyButton.getHeight() - HEIGHT/17);
         easyButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
                 if (prefs.getBoolean("soundOn", true))
@@ -232,37 +300,43 @@ public class HallOfFameScreen implements Screen, InputProcessor{
                 System.out.println("easy clicked!");
                 mediumButton.setChecked(false);
                 hardButton.setChecked(false);
-
             }
 
         });
         stage.addActor(easyButton);
 
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+        textButtonStyle.up = buttonSkin.getDrawable("mediumLevel");
+        textButtonStyle.checked = buttonSkin.getDrawable("mediumLevelClick");
+
         mediumButton = new TextButton(LanguagesManager.getInstance().getString("medium"), textButtonStyle);
-        mediumButton.setSize(widthPercent(30), heightPercent(10));
-        mediumButton.setPosition(widthPercent(5) + easyButton.getWidth(), HEIGHT - mediumButton.getHeight() - 10);
+        mediumButton.setSize(easyButton.getWidth(), heightPercent(7));
+        mediumButton.setPosition(easyButton.getX() + easyButton.getWidth(), topImage.getY()  - easyButton.getHeight() - HEIGHT/17);
         mediumButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
                 if (prefs.getBoolean("soundOn", true))
                     clickSound.play();
                 easyButton.setChecked(false);
                 hardButton.setChecked(false);
-
             }
         });
         stage.addActor(mediumButton);
 
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+        textButtonStyle.up = buttonSkin.getDrawable("hardLevel");
+        textButtonStyle.checked = buttonSkin.getDrawable("hardLevelClick");
+
         hardButton = new TextButton(LanguagesManager.getInstance().getString("hard"), textButtonStyle);
-        hardButton.setSize(widthPercent(30), heightPercent(10));
-        hardButton.setPosition(mediumButton.getX() + mediumButton.getWidth(), HEIGHT - hardButton.getHeight() - 10);
+        hardButton.setSize(easyButton.getWidth(), heightPercent(7));
+        hardButton.setPosition(mediumButton.getX() + mediumButton.getWidth(), topImage.getY()  - easyButton.getHeight() - HEIGHT/17);
         hardButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
                 if (prefs.getBoolean("soundOn", true))
                     clickSound.play();
                 mediumButton.setChecked(false);
                 easyButton.setChecked(false);
-
-
             }
         });
         stage.addActor(hardButton);
@@ -276,10 +350,10 @@ public class HallOfFameScreen implements Screen, InputProcessor{
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 30;
-        parameter.color= Color.GREEN;
+        parameter.color= Color.valueOf("#bed5f6");
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
-        labelStyle = new Label.LabelStyle(font, Color.BLACK);
+        labelStyle = new Label.LabelStyle(font, Color.valueOf("#bed5f6"));
         titleLable = new Label(LanguagesManager.getInstance().getString("hallOfFame"), labelStyle);
         titleLable.setPosition(WIDTH/2 - titleLable.getWidth()/2, easyButton.getY() - heightPercent(10));
 
@@ -357,6 +431,9 @@ public class HallOfFameScreen implements Screen, InputProcessor{
         batch.setProjectionMatrix(camera.combined);
 
         stage.act();
+        stage.getBatch().begin();
+        stage.getBatch().draw(background, 0, 0);//drawing background
+        stage.getBatch().end();
         batch.begin();
         stage.draw();
         batch.end();

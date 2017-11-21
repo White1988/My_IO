@@ -10,10 +10,13 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -24,6 +27,8 @@ import com.internetwarz.basketballrush.utils.LanguagesManager;
  */
 
 public class RulesScreen implements Screen, InputProcessor {
+    private final Image topImage;
+    private final Image topTextImage;
     Tsar game;
 
     private int WIDTH;
@@ -41,6 +46,7 @@ public class RulesScreen implements Screen, InputProcessor {
     //Labels
     Label titleLable;
     Label textLabel;
+    private Texture background;
 
     public RulesScreen(Tsar game) {
         this.game = game;
@@ -68,6 +74,25 @@ public class RulesScreen implements Screen, InputProcessor {
         prefs = Gdx.app.getPreferences("My Preferences");
         clickSound = game.assets.getSound();
 
+        //Background init
+        Pixmap rect = new Pixmap((int) WIDTH, (int) HEIGHT, Pixmap.Format.RGBA8888);
+        rect.setColor(Color.valueOf("#15091e"));
+        rect.fillRectangle(0, 0, (int)WIDTH, (int) HEIGHT);
+        background = new Texture(rect);
+
+        //Add text xIntuition and it's background
+        Texture topImageTexture = new Texture("skins/topImage.png");
+        topImage = new Image(topImageTexture);
+        topImage.setSize(WIDTH + widthPercent(20), HEIGHT/8 + heightPercent(7));
+        topImage.setPosition(0 - widthPercent(10), HEIGHT - HEIGHT/8);
+        stage.addActor(topImage);
+
+        Texture topText = new Texture("skins/topText.png");
+        topTextImage = new Image(topText);
+        topTextImage.setSize(WIDTH - (WIDTH/10)*2, HEIGHT/10 - 10);
+        topTextImage.setPosition(WIDTH/2 - topTextImage.getWidth()/2, topImage.getY() + HEIGHT/8/8);
+        stage.addActor(topTextImage);
+
         labelsInit();
     }
 
@@ -82,11 +107,11 @@ public class RulesScreen implements Screen, InputProcessor {
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 30;
-        parameter.color= Color.BLACK;
+        parameter.size = 25;
+        parameter.color= Color.valueOf("#bed5f6");
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         BitmapFont font = generator.generateFont(parameter);
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
+        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.valueOf("#bed5f6"));
 
         titleLable = new Label(LanguagesManager.getInstance().getString("rules"), labelStyle);
         titleLable.setWrap(true);
@@ -94,14 +119,14 @@ public class RulesScreen implements Screen, InputProcessor {
                 .expandX()
                 .left()
                 .padLeft(WIDTH/2 - titleLable.getWidth()/2)
-                .padTop(heightPercent(5));
+                .padTop(HEIGHT/8 + HEIGHT/40);
 
 
 
 
         parameter.size = 20;
         font = generator.generateFont(parameter);
-        labelStyle = new Label.LabelStyle(font, Color.BLACK);
+        labelStyle = new Label.LabelStyle(font, Color.valueOf("#bed5f6"));
         /*String text = "The standard Lorem Ipsum passage, used since the 1500s\"Lorem  ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat.\n" +
                 "\n" +
                 "Duis aute irure dolor in reprehenderit in voluptate  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint  occaecat cupidatat non proident, sunt in culpa qui officia deserunt  mollit anim id est laborum.\"  ";
@@ -191,6 +216,9 @@ public class RulesScreen implements Screen, InputProcessor {
         batch.setProjectionMatrix(camera.combined);
 
         stage.act();
+        stage.getBatch().begin();
+        stage.getBatch().draw(background, 0, 0);//drawing background
+        stage.getBatch().end();
         batch.begin();
         stage.draw();
         batch.end();
