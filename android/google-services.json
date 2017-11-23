@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "862911642227",
-    "firebase_url": "https://tsar2-573cf.firebaseio.com",
-    "project_id": "tsar2-573cf",
-    "storage_bucket": "tsar2-573cf.appspot.com"
+    "project_number": "994369425040",
+    "firebase_url": "https://tsar-10310718.firebaseio.com",
+    "project_id": "tsar-10310718",
+    "storage_bucket": "tsar-10310718.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:862911642227:android:799b35d68173aa62",
+        "mobilesdk_app_id": "1:994369425040:android:799b35d68173aa62",
         "android_client_info": {
           "package_name": "com.di.devs.tsar"
         }
       },
       "oauth_client": [
         {
-          "client_id": "862911642227-4bebpdvcs34tbm0j3i089o7gv62s8tq9.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.di.devs.tsar",
-            "certificate_hash": "70f32ac94d8d3947516de992122886ca05a71477"
-          }
-        },
-        {
-          "client_id": "862911642227-hdl7jcpddusl6b4oek1i9j4rmq87hc5u.apps.googleusercontent.com",
+          "client_id": "994369425040-pqh18ol4269h4lkcplpgkinrp5uqnae2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDlq--CgYah2xGdQWJp2pCuqkLAEMDEzBQ"
+          "current_key": "AIzaSyCS-XkNLz0ukjf3fu16f5XuONIHS2sL6Jc"
         }
       ],
       "services": {
@@ -40,7 +32,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "862911642227-hdl7jcpddusl6b4oek1i9j4rmq87hc5u.apps.googleusercontent.com",
+              "client_id": "994369425040-pqh18ol4269h4lkcplpgkinrp5uqnae2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
