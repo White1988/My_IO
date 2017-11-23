@@ -108,6 +108,8 @@ public class StatisticsScreen implements Screen,InputProcessor {
         topTextImage.setSize(WIDTH - (WIDTH/10)*2, HEIGHT/10 - 10);
         topTextImage.setPosition(WIDTH/2 - topTextImage.getWidth()/2, topImage.getY() + HEIGHT/8/8);
         stage.addActor(topTextImage);
+
+
         fontInit();
         buttonsInit();
         labelsInit();
@@ -186,7 +188,6 @@ public class StatisticsScreen implements Screen,InputProcessor {
         for (int i = amountLines-1; i > 0; i--) {
             addLineToTable(i, 10);
         }
-
 
     }
 

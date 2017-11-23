@@ -12,6 +12,8 @@ public class Constants {
     public static String MEDIUM_MODE = "Medium";
     public static String HARD_MODE = "Hard";
 
+    public static String STATS_TABLE = "stats";
+
     public static final Map<String, Integer> ATTEMPTS_IN_GAMEMODE ;
     static {
         Map<String, Integer> aMap = new HashMap<String, Integer>();

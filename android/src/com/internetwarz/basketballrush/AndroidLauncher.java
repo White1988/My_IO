@@ -33,6 +33,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
             }
         };
         gameHelper.setup(gameHelperListener);
+        FirebaseHelper.setPlayerId(Games.Players.getCurrentPlayerId(gameHelper.getApiClient()));
     }
 
     @Override

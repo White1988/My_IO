@@ -6,8 +6,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.internetwarz.basketballrush.model.UserScore;
 import com.internetwarz.basketballrush.utils.Assets;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
+
+import de.tomgrill.gdxfirebase.core.FirebaseConfiguration;
+import de.tomgrill.gdxfirebase.core.FirebaseFeatures;
+import de.tomgrill.gdxfirebase.core.FirebaseLoader;
+import de.tomgrill.gdxfirebase.core.auth.FirebaseUser;
+import de.tomgrill.gdxfirebase.core.auth.FirebaseUserBuilder;
 
 public class Tsar extends Game {
 	public SpriteBatch batch;
@@ -50,7 +57,7 @@ public class Tsar extends Game {
 
 		//Loading all the assets in the assets class
 		assets = new Assets();
-
+		initDB();
         //Changing the screen to display splash screen
 		this.setScreen(new SplashScreen(this)); //todo uncomment
 		//this.setScreen(new TsarGameplayScreen(this));
@@ -69,5 +76,29 @@ public class Tsar extends Game {
         assets.dispose();
 	}
 
+	private void initDB()
+	{
+		FirebaseUser firebaseUser = new FirebaseUserBuilder()
+				.setUid("SUPER_SECRET_UID")
+				.setName("Mike Pike")
+				.setAnonymous(true)
+				.build();
+
+
+		FirebaseConfiguration config = new FirebaseConfiguration();
+		config.desktopFirebaseUser = firebaseUser; // required on desktop
+
+		config.databaseUrl = "https://tsar-10310718.firebaseio.com/"; // get this from Firebase console
+		config.serviceAccount = Gdx.files.internal("Tsar-2ae2bff42014.json"); //
+
+		FirebaseLoader.load(config,
+				FirebaseFeatures.REALTIME_DATABASE // Just pass the enum for each FirebaseFeatures you want to enable.
+				//  FirebaseFeatures.AUTHENTICATION
+		);
+
+		FirebaseHelper.setPlayerId("testguy@gmail.com");
+		FirebaseHelper.saveUserScore(new UserScore("testguy@gmail.com", "Nikita", Constants.HARD_MODE, 1, 10));
+
+	}
 }
 
