@@ -118,6 +118,8 @@ public class SettingsScreen implements Screen, InputProcessor {
     private void buttonInit() {
         //Font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
+        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
+            generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/DroidSansFallback.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 16;
         parameter.color = Color.valueOf("#bed5f6");
@@ -125,6 +127,8 @@ public class SettingsScreen implements Screen, InputProcessor {
         parameter.shadowOffsetX = 1;
         parameter.shadowOffsetY = 1;
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
+            parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "로그 아웃" + "註銷" + "ログアウト";
         BitmapFont font = generator.generateFont(parameter);
 
         //Button checked texture
@@ -183,8 +187,14 @@ public class SettingsScreen implements Screen, InputProcessor {
 
     private void languagesInit() {
         languages2 = new HashMap<String, String>();
-        languages2.put("Ru", "Russian");
-        languages2.put("en_UK", "English");
+        languages2.put("RU", "Russian");
+        languages2.put("EN", "English");
+        languages2.put("DE", "Germany");
+        languages2.put("FR", "France");
+        languages2.put("ES", "Spanish");
+        languages2.put("JA", "Japan");
+        languages2.put("KO", "Korean");
+        languages2.put("ZH", "Chinese");
     }
 
     private void selectBoxInit() {
@@ -229,6 +239,9 @@ public class SettingsScreen implements Screen, InputProcessor {
 
         //Labels init
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
+        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
+            generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/DroidSansFallback.ttf"));
+
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 20;
         parameter.color= Color.valueOf("#ffffff");
@@ -236,6 +249,8 @@ public class SettingsScreen implements Screen, InputProcessor {
         //parameter.shadowOffsetX = -1;
         //parameter.shadowOffsetY = -2;
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
+            parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "言語" + "언어" + "語言";
         BitmapFont font = generator.generateFont(parameter);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.valueOf("#ffffff"));

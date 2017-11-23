@@ -1,71 +1,244 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <languages>
 
-<language name="en_UK" >
+<language name="EN">
+<string value="Hall of fame" key="hall_of_fame"/>
+<string value="Statistic" key="statistics"/>
+<string value="Play" key="play"/>
+<string value="Game over" key="game_over"/>
+<string value="Score" key="score"/>
+<string value="Result" key="result"/>
+<string value="Settings" key="settings"/>
+<string value="Easy" key="easy"/>
+<string value="Medium" key="medium"/>
+<string value="Hard" key="hard"/>
+<string value="Level" key="level"/>
+<string value="Tries" key="tries"/>
+<string value="Right!" key="right"/>
+<string value="Wrong!" key="wrong"/>
+<string value="Restart" key="restart"/>
+<string value="Yes" key="yes"/>
+<string value="No" key="no"/>
+<string value="Do you really want to restart the game?" key="restartText"/>
+<string value="Best" key="best"/>
+<string value="Game Over!" key="gameOver"/>
+<string value="Statistic (player)" key="statisticsPlayer"/>
+<string value="Hall of fame" key="hallOfFame"/>
+<string value="Rules" key="rules"/>
+<string value="The game field in the form of a circle is divided into sectors, with only one sector randomly located for each level. The task of the player, relying on the intuition to find this faithful 'green' sector. The number of sectors increases from level to level. By determining the correct sector, you are moving from level to level. Your result is the maximum level you reached during the game. It is he that is fixed in the rating table, and is located there until someone reaches the same result and will not sweep you away from the 'mountain'. In the game there are three types of complexity: 'Beginner', 'Intern' and 'Profi.' Beginners are given three attempts per level. For the level of 'Intern' - only two attempts per level. Playing at the 'Profi' difficulty level, the player must determine the correct sector on the first attempt for each level." key="rulesText"/>
+<string value="Sign out" key="signOut"/>
+<string value="Language" key="language"/>
+</language>
 
-    <string key="hall_of_fame" value="Hall of fame" />
-    <string key="statistics" value="Statistics" />
-    <string key="play" value="Play" />
-    <string key="game_over" value="Game over" />
-    <string key="score" value="Score" />
-    <string key="result" value="Result" />
-    <string key="settings" value="Settings" />
-    <string key="easy" value="Easy" />
-    <string key="medium" value="Medium" />
-    <string key="hard" value="Hard" />
-    <string key="level" value="Level" />
-    <string key="tries" value="Tries" />
-    <string key="right" value="Right!" />
-    <string key="wrong" value="Wrong!" />
-    <string key="restart" value="Restart" />
-    <string key="yes" value="Yes" />
-    <string key="no" value="No" />
-    <string key="restartText" value="Do you really want to restart the game?" />
-    <string key="best" value="Best" />
-    <string key="gameOver" value="Game Over!" />
-    <string key="statisticsPlayer" value="Statistics (player)" />
-    <string key="hallOfFame" value="Hall of fame" />
-    <string key="rules" value="Rules" />
-    <string key="rulesText" value="Text..." />
-    <string key="signOut" value="Sign out" />
-    <string key="language" value="Language" />
-
+<language name="DE">
+<string value="Ruhmeshalle" key="hall_of_fame"/>
+<string value="Statistik" key="statistics"/>
+<string value="Spielen" key="play"/>
+<string value="Spiel ist aus" key="game_over"/>
+<string value="Punkte" key="score"/>
+<string value="Ergebnis" key="result"/>
+<string value="Einstellungen" key="settings"/>
+<string value="Einfach" key="easy"/>
+<string value="Mittel" key="medium"/>
+<string value="Hart" key="hard"/>
+<string value="Niveau" key="level"/>
+<string value="Versuche" key="tries"/>
+<string value="Richtig!" key="right"/>
+<string value="Falsch!" key="wrong"/>
+<string value="Neustart" key="restart"/>
+<string value="Ja" key="yes"/>
+<string value="Nein" key="no"/>
+<string value="Wollen Sie das Spiel wirklich neu starten?" key="restartText"/>
+<string value="Bester Spieler" key="best"/>
+<string value="Spiel ist aus!" key="gameOver"/>
+<string value="Statistik (Spieler)" key="statisticsPlayer"/>
+<string value="Ruhmeshalle" key="hallOfFame"/>
+<string value="Regeln" key="rules"/>
+<string value="Das Spielfeld in der Form eines Kreises ist in Sektoren unterteilt, wobei für jede Ebene nur ein Sektor zufällig angeordnet ist. Die Aufgabe des Spielers ist, sich auf die Intuition zu verlassen, um diesen richtigen 'grünen' Sektor zu finden. Die Anzahl der Sektoren nimmt von Ebene zu Ebene zu. Indem Sie den richtigen Sektor bestimmen, bewegen Sie sich von Ebene zu Ebene. Dein Ergebnis ist das maximale Level, das du während des Spiels erreicht hast. Es gibt drei Arten von Komplexität im Spiel: 'Anfänger', 'Amateur' und 'Profi'. Anfänger erhalten pro Level drei Versuche. Für das Level 'Amateur' - nur zwei Versuche pro Level. Beim Schwierigkeitsgrad 'Profi' muss der Spieler beim ersten Versuch für jeden Level den richtigen Sektor ermitteln." key="rulesText"/>
+<string value="Ausloggen" key="signOut"/>
+<string value="Sprache" key="language"/>
 </language>
 
 
-<language name="Ru" >
-
-    <string key="hall_of_fame" value="Зал славы" />
-    <string key="statistics" value="Статистика" />
-    <string key="play" value="Играть" />
-    <string key="game_over" value="Конец игры" />
-    <string key="score" value="Очки" />
-    <string key="result" value="Результат" />
-    <string key="settings" value="Настройки" />
-    <string key="rules" value="Правила игры" />
-    <string key="easy" value="Новичок" />
-    <string key="medium" value="Любитель" />
-    <string key="hard" value="Профи" />
-    <string key="level" value="Уровень" />
-    <string key="tries" value="Попыток" />
-    <string key="right" value="Правильно!" />
-    <string key="wrong" value="Неверно!" />
-    <string key="restart" value="Рестарт" />
-    <string key="yes" value="Да" />
-    <string key="no" value="Нет" />
-    <string key="restartText" value="Вы действительно хотите начать игру сначала?" />
-    <string key="best" value="Лучший" />
-    <string key="gameOver" value="Игра окончена!" />
-    <string key="statisticsPlayer" value="Статистика (игрока)" />
-    <string key="hallOfFame" value="Зал славы" />
-    <string key="rules" value="Правила" />
-    <string key="rulesText" value="Содержание..." />
-    <string key="signOut" value="Выйти" />
-    <string key="language" value="Язык" />
-    <string key="countGames" value="Кол-во игр" />
-    <string key="lowcaseLevel" value="уровень" />
-    <string key="player" value="Игрок" />
-    <string key="date" value="Дата" />
-
+<language name="FR">
+<string value="Temple de la renommée" key="hall_of_fame"/>
+<string value="Statistiques" key="statistics"/>
+<string value="Jouer" key="play"/>
+<string value="Le jeu est terminé" key="game_over"/>
+<string value="But" key="score"/>
+<string value="Résultat" key="result"/>
+<string value="Paramètres" key="settings"/>
+<string value="Juste" key="easy"/>
+<string value="Moyens" key="medium"/>
+<string value="Dur" key="hard"/>
+<string value="Niveau" key="level"/>
+<string value="Expériences" key="tries"/>
+<string value="Droit!" key="right"/>
+<string value="Faux!" key="wrong"/>
+<string value="Recommencer" key="restart"/>
+<string value="Oui" key="yes"/>
+<string value="Aucun" key="no"/>
+<string value="Voulez-vous vraiment redémarrer le jeu?" key="restartText"/>
+<string value="Meilleur joueur" key="best"/>
+<string value="Le jeu est terminé!" key="gameOver"/>
+<string value="Statistiques (Joueur)" key="statisticsPlayer"/>
+<string value="Temple de la renommée" key="hallOfFame"/>
+<string value="Règles" key="rules"/>
+<string value="Le champ de jeu sous la forme d'un cercle est divisé en secteurs, avec un seul secteur situé au hasard pour chaque niveau. La tâche du joueur, s'appuyant sur l'intuition pour retrouver ce secteur 'vert' fidèle. Le nombre de secteurs augmente d'un niveau à l'autre. En déterminant le secteur correct, vous passez d'un niveau à un autre. Votre résultat est le niveau maximum atteint pendant le jeu. Il y a trois types de complexité dans le jeu: 'Débutant', 'Amateur' et 'Profi'. Les débutants ont trois tentatives par niveau. Pour le niveau de 'Amateur' - seulement deux tentatives par niveau. En jouant au niveau de difficulté 'Profi', le joueur doit déterminer le secteur correct à la première tentative pour chaque niveau." key="rulesText"/>
+<string value="Vous déconnecter" key="signOut"/>
+<string value="Langue" key="language"/>
 </language>
+
+
+<language name="RU">
+<string value="Зал славы" key="hall_of_fame"/>
+<string value="Статистика" key="statistics"/>
+<string value="Играть" key="play"/>
+<string value="Конец игры" key="game_over"/>
+<string value="Очки" key="score"/>
+<string value="Результат" key="result"/>
+<string value="Настройки" key="settings"/>
+<string value="Легкий" key="easy"/>
+<string value="Средний" key="medium"/>
+<string value="Тяжелый" key="hard"/>
+<string value="Уровень" key="level"/>
+<string value="Попытки" key="tries"/>
+<string value="Правильно!" key="right"/>
+<string value="Неверно!" key="wrong"/>
+<string value="Рестарт" key="restart"/>
+<string value="Да" key="yes"/>
+<string value="Нет" key="no"/>
+<string value="Вы действительно хотите начать игру сначала?" key="restartText"/>
+<string value="Лучший" key="best"/>
+<string value="Конц игры!" key="gameOver"/>
+<string value="Статистика (игрока)" key="statisticsPlayer"/>
+<string value="Зал славы" key="hallOfFame"/>
+<string value="Правила" key="rules"/>
+<string value="Игровое поле в виде круга делится на сектора, при этом для каждого уровня верным является всего один сектор, расположенный случайно. Задача игрока, полагаясь на интуицию найти этот верный «зеленый» сектор. Количество секторов увеличивается от уровня к уровню. Определяя правильный сектора, вы продвигаетесь от уровня к уровню. Ваш результат — это максимальный уровень, до которого вы добрались во время игры. В игре существуют три вида сложности: «Новичок», «Любитель» и «Профи». Новичку даются по три попытки на каждый уровень. Для уровня «Любитель» — всего две попытки на уровень. Играя на уровне сложности «Профи», игрок должен определить верный сектор с первой попытки для каждого уровня." key="rulesText"/>
+<string value="Выйти" key="signOut"/>
+<string value="Язык" key="language"/>
+</language>
+
+
+<language name="ES">
+<string value="Salón de la fama" key="hall_of_fame"/>
+<string value="Estadística" key="statistics"/>
+<string value="Jugar" key="play"/>
+<string value="El juego terminó" key="game_over"/>
+<string value="Puntuación" key="score"/>
+<string value="Resultado" key="result"/>
+<string value="Ajustes" key="settings"/>
+<string value="Justo" key="easy"/>
+<string value="Medio" key="medium"/>
+<string value="Duro" key="hard"/>
+<string value="Nivel" key="level"/>
+<string value="Experimentos" key="tries"/>
+<string value="¡Muy bien!" key="right"/>
+<string value="Mal!" key="wrong"/>
+<string value="Reanudar" key="restart"/>
+<string value="Sí" key="yes"/>
+<string value="No" key="no"/>
+<string value="¿De verdad quieres reiniciar el juego?" key="restartText"/>
+<string value="Mejor jugador" key="best"/>
+<string value="¡El juego se acabó!" key="gameOver"/>
+<string value="Estadísticas (jugador)" key="statisticsPlayer"/>
+<string value="Salón de la fama" key="hallOfFame"/>
+<string value="Normas" key="rules"/>
+<string value="El campo de juego en forma de círculo se divide en sectores, con solo un sector ubicado al azar para cada nivel. La tarea del jugador, confiar en la intuición para encontrar este fiel sector 'verde'. La cantidad de sectores aumenta de un nivel a otro. Al determinar el sector correcto, se está moviendo de nivel a nivel. Tu resultado es el nivel máximo alcanzado durante el juego. Hay tres tipos de complejidad en el juego: 'Principiante', 'Aficionado' y 'Profi'. Los principiantes reciben tres intentos por nivel. Para el nivel de 'Amateur': solo dos intentos por nivel. Jugando en el nivel de dificultad 'Profi', el jugador debe determinar el sector correcto en el primer intento para cada nivel." key="rulesText"/>
+<string value="Finalizar la sesión" key="signOut"/>
+<string value="Idioma" key="language"/>
+</language>
+
+
+<language name="JA">
+<string value="栄誉の殿堂" key="hall_of_fame"/>
+<string value="統計" key="statistics"/>
+<string value="遊びます" key="play"/>
+<string value="ゲームは終わった" key="game_over"/>
+<string value="結果" key="score"/>
+<string value="結果" key="result"/>
+<string value="設定" key="settings"/>
+<string value="ただ" key="easy"/>
+<string value="手段" key="medium"/>
+<string value="ハード" key="hard"/>
+<string value="レベル" key="level"/>
+<string value="実験" key="tries"/>
+<string value="右！" key="right"/>
+<string value="間違いました！" key="wrong"/>
+<string value="再起動" key="restart"/>
+<string value="はい" key="yes"/>
+<string value="いいえ" key="no"/>
+<string value="あなたは本当にゲームを再開しますか？" key="restartText"/>
+<string value="ベストプレーヤー" key="best"/>
+<string value="ゲームは終わった！" key="gameOver"/>
+<string value="統計（選手）" key="statisticsPlayer"/>
+<string value="栄誉の殿堂" key="hallOfFame"/>
+<string value="ルール" key="rules"/>
+<string value="円の形のゲームフィールドはセクタに分割されており、各レベルごとにランダムに1つのセクタしか配置されていません。この忠実な 'グリーン'セクターを見つける直感に頼る、プレーヤーの仕事。セクター数はレベルごとに増加します。正しいセクターを決定することによって、あなたはレベルからレベルに移動しています。結果はゲーム中に到達した最大レベルです。ゲームには、 'Beginner'、 'Amateur'、 'Profi'の3種類の複雑さがあります。初心者にはレベルごとに3回の試行が与えられます。 「アマチュア」のレベルでは、レベルごとに2回の試行しかありません。 'Profi'難易度でプレイする場合、プレイヤーは各レベルの最初の試行で正しいセクターを決定する必要があります。" key="rulesText"/>
+<string value="ログアウト" key="signOut"/>
+<string value="言語" key="language"/>
+</language>
+
+
+<language name="KO">
+<string value="명예의 전당" key="hall_of_fame"/>
+<string value="통계" key="statistics"/>
+<string value="놀이" key="play"/>
+<string value="게임이 끝났습니다." key="game_over"/>
+<string value="결과" key="score"/>
+<string value="결과" key="result"/>
+<string value="설정" key="settings"/>
+<string value="다만" key="easy"/>
+<string value="방법" key="medium"/>
+<string value="단단한" key="hard"/>
+<string value="수평" key="level"/>
+<string value="실험" key="tries"/>
+<string value="오른쪽!" key="right"/>
+<string value="잘못된!" key="wrong"/>
+<string value="다시 시작" key="restart"/>
+<string value="예" key="yes"/>
+<string value="아니오" key="no"/>
+<string value="게임을 다시 시작 하시겠습니까?" key="restartText"/>
+<string value="최고의 선수" key="best"/>
+<string value="게임은 끝났어!" key="gameOver"/>
+<string value="통계 (플레이어)" key="statisticsPlayer"/>
+<string value="명예의 전당" key="hallOfFame"/>
+<string value="규칙" key="rules"/>
+<string value="원 형태의 게임 필드는 섹터로 나뉘며, 각 레벨마다 하나의 섹터 만 임의로 배치됩니다. 이 충실한 '녹색'부문을 찾기 위해 직감에 의존하는 플레이어의 임무. 섹터의 수는 레벨마다 증가합니다. 올바른 분야를 결정함으로써, 당신은 레벨에서 레벨로 이동하고 있습니다. 결과는 게임 도중 도달 한 최대 레벨입니다. 게임에는 'Beginner', 'Amateur'및 'Profi'의 세 가지 유형의 복잡성이 있습니다. 초급자는 레벨 당 3 번 시도됩니다. '아마추어'레벨 - 레벨 당 단지 두 번의 시도. 'Profi'난이도에서 플레이 할 때, 플레이어는 각 레벨의 첫 번째 시도에서 올바른 섹터를 결정해야합니다." key="rulesText"/>
+<string value="로그 아웃" key="signOut"/>
+<string value="언어" key="language"/>
+</language>
+
+
+<language name="ZH">
+<string value="名人堂" key="hall_of_fame"/>
+<string value="統計" key="statistics"/>
+<string value="玩" key="play"/>
+<string value="遊戲結束了" key="game_over"/>
+<string value="結果" key="score"/>
+<string value="結果" key="result"/>
+<string value="設置" key="settings"/>
+<string value="只是" key="easy"/>
+<string value="手段" key="medium"/>
+<string value="硬" key="hard"/>
+<string value="水平" key="level"/>
+<string value="實驗" key="tries"/>
+<string value="對！" key="right"/>
+<string value="錯了！" key="wrong"/>
+<string value="重新開始" key="restart"/>
+<string value="是的" key="yes"/>
+<string value="沒有" key="no"/>
+<string value="你真的想重新啟動遊戲嗎？" key="restartText"/>
+<string value="最好的球員" key="best"/>
+<string value="遊戲結束了！" key="gameOver"/>
+<string value="統計（玩家）" key="statisticsPlayer"/>
+<string value="名人堂" key="hallOfFame"/>
+<string value="規則" key="rules"/>
+<string value="以圓圈形式的遊戲場被分成扇區，每個級別只有一個扇區隨機定位。玩家的任務，依靠直覺找到這個忠實的“綠色”部門。行業數量逐年遞增。通過確定正確的部門，你正在從一級到另一級。你的結果是你在比賽中達到的最高水平。遊戲中有三種類型的複雜性：“初學者”，“業餘”和“Profi”。初學者每級有三次嘗試。對於“業餘”級別 - 每級只有兩次嘗試。玩“Profi”難度級別時，玩家必須在每個級別的第一次嘗試中確定正確的扇區。" key="rulesText"/>
+<string value="註銷" key="signOut"/>
+<string value="語言" key="language"/>
+</language>
+
+
+
 </languages>

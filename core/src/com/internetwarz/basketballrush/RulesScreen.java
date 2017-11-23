@@ -106,10 +106,20 @@ public class RulesScreen implements Screen, InputProcessor {
         table.top();
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
+        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
+            generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/DroidSansFallback.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 25;
         parameter.color= Color.valueOf("#bed5f6");
         parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
+            parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ただ手段ハード栄誉の殿堂統計遊びますゲームは終わった結果設定ただ手段ハードレベル実験右！間違いました！再起動はいいいえあなたは本当にゲームを再開しますか？ベストプレーヤーゲームは終わった！統計選手栄誉の殿堂ルールログアウト言語"
+                    +"명예의 전당통계놀이게임이결과설정다만방법단단한수평실험오른쪽잘못된다시 시작예아니오게임을 다시 시작 하시겠습니까?최고의 선수게임은끝났어!통계(플레이어)명예의 전당규칙로그 아웃언어"
+                    +"名人堂統計玩遊戲結束了結果設置只是手段硬水平實驗對錯了重新開始是的沒有你真的想重新啟動遊戲嗎？最好的球員遊戲結束了統計玩家名人堂規則註銷語言"
+                    +"以圓圈形式的遊戲場被分成扇區，每個級別只有一個扇區隨機定位。玩家的任務，依靠直覺找到這個忠實的“綠色”部門。行業數量逐年遞增。通過確定正確的部門，你正在從一級到另一級。你的結果是你在比賽中達到的最高水平。遊戲中有三種類型的複雜性：“初學者”，“業餘”和“Profi”。初學者每級有三次嘗試。對於“業餘”級別 - 每級只有兩次嘗試。玩“Profi”難度級別時，玩家必須在每個級別的第一次嘗試中確定正確的扇區。"
+                    +"원 형태의 게임 필드는 섹터로 나뉘며, 각 레벨마다 하나의 섹터 만 임의로 배치됩니다. 이 충실한 '녹색'부문을 찾기 위해 직감에 의존하는 플레이어의 임무. 섹터의 수는 레벨마다 증가합니다. 올바른 분야를 결정함으로써, 당신은 레벨에서 레벨로 이동하고 있습니다. 결과는 게임 도중 도달 한 최대 레벨입니다. 게임에는 'Beginner', 'Amateur'및 'Profi'의 세 가지 유형의 복잡성이 있습니다. 초급자는 레벨 당 3 번 시도됩니다. '아마추어'레벨 - 레벨 당 단지 두 번의 시도. 'Profi'난이도에서 플레이 할 때, 플레이어는 각 레벨의 첫 번째 시도에서 올바른 섹터를 결정해야합니다."
+                    +"円の形のゲームフィールドはセクタに分割されており、各レベルごとにランダムに1つのセクタしか配置されていません。この忠実な 'グリーン'セクターを見つける直感に頼る、プレーヤーの仕事。セクター数はレベルごとに増加します。正しいセクターを決定することによって、あなたはレベルからレベルに移動しています。結果はゲーム中に到達した最大レベルです。ゲームには、 'Beginner'、 'Amateur'、 'Profi'の3種類の複雑さがあります。初心者にはレベルごとに3回の試行が与えられます。 「アマチュア」のレベルでは、レベルごとに2回の試行しかありません。 'Profi'難易度でプレイする場合、プレイヤーは各レベルの最初の試行で正しいセクターを決定する必要があります。";
+
         BitmapFont font = generator.generateFont(parameter);
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.valueOf("#bed5f6"));
 
@@ -124,7 +134,7 @@ public class RulesScreen implements Screen, InputProcessor {
 
 
 
-        parameter.size = 20;
+        parameter.size = 15;
         font = generator.generateFont(parameter);
         labelStyle = new Label.LabelStyle(font, Color.valueOf("#bed5f6"));
         /*String text = "The standard Lorem Ipsum passage, used since the 1500s\"Lorem  ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea  commodo consequat.\n" +

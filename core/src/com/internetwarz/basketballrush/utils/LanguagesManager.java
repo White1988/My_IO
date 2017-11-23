@@ -13,7 +13,7 @@ public class LanguagesManager {
     private static LanguagesManager _instance = null;
 
     private static final String LANGUAGES_FILE = "media/languages.xml";
-    private static final String DEFAULT_LANGUAGE = "Ru";
+    private static final String DEFAULT_LANGUAGE = "EN";
     private final Preferences prefs;
 
     //private HashMap<String, HashMap<String, String>> _strings = null;
@@ -84,18 +84,19 @@ public class LanguagesManager {
 
                     for (int j = 0; j < strings.size; ++j) {
                         XmlReader.Element string = strings.get(j);
-                        String key = string.getAttribute("key");
                         String value = string.getAttribute("value");
+                        String key = string.getAttribute("key");
                         value = value.replace("&lt;br /&gt;&lt;br /&gt;", "\n");
                         _language.put(key, value);
                     }
-
+                    _languageName = languageName;
                     return true;
                 }
             }
         }
         catch (Exception e) {
             System.out.println("Error loading languages file " + LANGUAGES_FILE);
+            e.printStackTrace();
             return false;
         }
 
