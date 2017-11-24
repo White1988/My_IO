@@ -1,24 +1,23 @@
 package com.internetwarz.basketballrush.model;
 
 
-
 public class UserScore
 {
-    private String email;
-    private String username;
-    private String difficulty;
+    //private String email;
+   // private String username;
+    //private String difficulty;
     private int  level;
     private int  gamesCount;
 
-    public UserScore(String email, String username, String difficulty, int level, int gamesCount) {
-        this.email = email;
-        this.username = username;
-        this.difficulty = difficulty;
+    public UserScore(int level, int gamesCount) {
+        //this.email = email;
+        //this.username = username;
+        //this.difficulty = difficulty;
         this.level = level;
         this.gamesCount = gamesCount;
     }
 
-    public String getId() {
+    /*public String getId() {
         return email.replaceAll("@", "_").replace(".", "_");
     }
 
@@ -40,7 +39,7 @@ public class UserScore
 
     public void setDifficulty(String difficulty) {
         this.difficulty = difficulty;
-    }
+    }*/
 
     public int getLevel() {
         return level;

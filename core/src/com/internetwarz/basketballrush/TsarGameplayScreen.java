@@ -532,7 +532,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
            if(curNumAttempts == 0) {
                String gameType;
-               if(numAttempts == 1)
+               if(numAttempts == 3)
                    gameType = EASY_MODE;
                else if(numAttempts == 2)
                    gameType = MEDIUM_MODE;
@@ -571,6 +571,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
     private void saveScore(Score score, String gameType) {
         //TODO: add saving data
+        System.out.println(gameType);
+        game.firebaseHelper.updateData(gameType, score.getScore());
     }
 
     private void setFillingParametrs(Color color, int pickedSector) {

@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.internetwarz.basketballrush.model.UserScore;
+import com.internetwarz.basketballrush.model.User;
 import com.internetwarz.basketballrush.utils.Assets;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
 
@@ -22,6 +22,9 @@ public class Tsar extends Game {
 	public FreeTypeFontGenerator generator;
     private static PlayServices playServices;
 	public Assets assets;
+	public FirebaseHelper firebaseHelper;
+
+	public User user;
 
     public Tsar(PlayServices playServices)
     {
@@ -96,8 +99,38 @@ public class Tsar extends Game {
 				//  FirebaseFeatures.AUTHENTICATION
 		);
 
-		FirebaseHelper.setPlayerId("testguy@gmail.com");
-		FirebaseHelper.saveUserScore(new UserScore("testguy@gmail.com", "Nikita", Constants.HARD_MODE, 1, 10));
+
+
+		//firebaseHelper.getData("Hard");
+		/*user = new User();
+		user.setListEasy(firebaseHelper.getData("Easy"));
+		user.setListMedium(firebaseHelper.getData("Medium"));
+		user.setListHard(firebaseHelper.getData("Hard"));
+
+
+		System.out.println(user.getListEasy());
+		System.out.println(user.getListMedium());
+		System.out.println(user.getListHard());
+
+		HashMap<String, Integer> start = new HashMap<String, Integer>();
+		start.put("level", 2);
+		start.put("gamesCount", 1);
+		user.getListEasy().add(start);
+
+		firebaseHelper.updateList("Easy", user.getListEasy()); */
+
+		firebaseHelper = new FirebaseHelper("testguy@gmail.com");
+		firebaseHelper.dataInit();
+
+		//firebaseHelper.updateData("Hard", 8);
+
+
+		/*ArrayList<UserScore> results = new ArrayList<UserScore>();
+		results.add(new UserScore(1,2));
+		results.add(new UserScore(2,3));
+		results.add(new UserScore(3,4));*/
+		//FirebaseHelper.saveUserScore(new UserScore(2, 10), "testguy@gmail.com", Constants.HARD_MODE, results);
+
 
 	}
 }
