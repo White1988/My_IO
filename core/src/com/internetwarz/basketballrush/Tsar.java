@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.internetwarz.basketballrush.model.User;
 import com.internetwarz.basketballrush.utils.Assets;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
 
@@ -24,7 +23,6 @@ public class Tsar extends Game {
 	public Assets assets;
 	public FirebaseHelper firebaseHelper;
 
-	public User user;
 
     public Tsar(PlayServices playServices)
     {
@@ -119,7 +117,8 @@ public class Tsar extends Game {
 
 		firebaseHelper.updateList("Easy", user.getListEasy()); */
 
-		firebaseHelper = new FirebaseHelper("testguy@gmail.com");
+		//firebaseHelper = new FirebaseHelper("testguy@gmail.com");
+		firebaseHelper = new FirebaseHelper("test@gmail.com");
 		firebaseHelper.dataInit();
 
 		//firebaseHelper.updateData("Hard", 8);

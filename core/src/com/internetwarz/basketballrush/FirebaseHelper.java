@@ -4,6 +4,8 @@ package com.internetwarz.basketballrush;
 import com.internetwarz.basketballrush.model.UserScore;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import de.tomgrill.gdxfirebase.core.GDXFirebase;
@@ -31,6 +33,18 @@ public  class FirebaseHelper
         reference = GDXFirebase.FirebaseDatabase().getReference(STATS_TABLE);
         mail = mail.replaceAll("@", "_").replace(".", "_");
         playerId = mail;
+    }
+
+    public ArrayList<HashMap> getListEasy() {
+        return listEasy;
+    }
+
+    public ArrayList<HashMap> getListMedium() {
+        return listMedium;
+    }
+
+    public ArrayList<HashMap> getListHard() {
+        return listHard;
     }
 
     public void dataInit() {
@@ -69,12 +83,22 @@ public  class FirebaseHelper
                     reference.child(playerId).child("Medium").setValue(listMedium);
                 }
 
-
-                listHard = (ArrayList) dataSnapshot.child(playerId).child(HARD_MODE).getValue();
-                for (HashMap map: listHard) {
-                    System.out.println(map.entrySet());
+                try {
+                    listHard = (ArrayList) dataSnapshot.child(playerId).child(HARD_MODE).getValue();
+                    for (HashMap map : listHard) {
+                        System.out.println(map.entrySet());
+                    }
+                    System.out.println("Hard size: " + listHard.size());
                 }
-                System.out.println("Hard size: " + listHard.size());
+                catch (NullPointerException e) {
+                    HashMap<String, Integer> start = new HashMap<String, Integer>();
+                    start.put("level", 1);
+                    start.put("gamesCount", 0);
+                    listHard = new ArrayList<HashMap>();
+                    listHard.add(start);
+                    reference.child(playerId).child("Hard").setValue(listHard);
+                }
+                sortData();
             }
 
             @Override
@@ -82,6 +106,19 @@ public  class FirebaseHelper
                 System.out.println(databaseError);
             }
         });
+    }
+
+    private void sortData() {
+        Comparator<HashMap> comparator = new Comparator<HashMap>() {
+            @Override
+            public int compare(HashMap hashMap, HashMap t1) {
+                return ((Number)t1.get("level")).intValue() - ((Number)hashMap.get("level")).intValue();
+            }
+        };
+        Collections.sort(listEasy, comparator);
+        Collections.sort(listMedium, comparator);
+        Collections.sort(listHard, comparator);
+        System.out.println("sorted");
     }
 
     /*public ArrayList getData(final String difficulty) {
@@ -186,11 +223,11 @@ public  class FirebaseHelper
         System.out.println("End");
     }
 
-    /*public static void setPlayerId(String id)
+    public static void setPlayerId(String id)
     {
         id.replaceAll("@", "_").replace(".", "_");
         playerId = id;
-    }*/
+    }
 
 
     //String playerId = Games.Players.getCurrentPlayerId(getApiClient());

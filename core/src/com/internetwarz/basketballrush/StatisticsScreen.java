@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by dell on 16.11.2017.
@@ -185,15 +186,26 @@ public class StatisticsScreen implements Screen,InputProcessor {
         stage.addActor(titleGames);
         amountLines = 6;
 
-        for (int i = amountLines-1; i > 0; i--) {
+        /*for (int i = amountLines-1; i > 0; i--) {
             addLineToTable(i, 10);
+        }*/
+        ArrayList<HashMap> list = game.firebaseHelper.getListEasy();
+        System.out.println(amountLines = list.size());
+        for (HashMap map: list) {
+            if(((Number)map.get("gamesCount")).longValue() == 0)
+                amountLines--;
+        }
+        int i = 1;
+        for (HashMap map: list) {
+            if(((Number)map.get("gamesCount")).longValue() != 0)
+                addLineToTable(((Number)map.get("level")).longValue(), ((Number)map.get("gamesCount")).longValue(),i++);
         }
 
     }
 
-    private void addLineToTable(int level, int countGames ) {
+    private void addLineToTable(long level, long countGames, int lineNumber ) {
         ArrayList<Label> row = new ArrayList<Label>();
-        if(level%2 == 0) {
+        if(lineNumber%2 == 0) {
             lineFontStyle = new Label.LabelStyle();
             lineFontStyle.font = fontLines;
             lineFontStyle.background = buttonSkin.getDrawable("line");
@@ -204,7 +216,7 @@ public class StatisticsScreen implements Screen,InputProcessor {
             lineFontStyle.background = buttonSkin.getDrawable("lineDark");
         }
         Label levelLabel = new Label(level + " " + LanguagesManager.getInstance().getString("lowcaseLevel"), lineFontStyle);
-        Label gamesLabel = new Label("Games" + countGames, lineFontStyle);
+        Label gamesLabel = new Label(String.valueOf(countGames), lineFontStyle);
         row.add(levelLabel);
         row.add(gamesLabel);
         rows.add(row);
@@ -299,11 +311,26 @@ public class StatisticsScreen implements Screen,InputProcessor {
         easyButton.setPosition(WIDTH/10,topImage.getY()  - easyButton.getHeight() - HEIGHT/17);
         easyButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
-                    if (prefs.getBoolean("soundOn", true))
-                        clickSound.play();
-                    System.out.println("easy clicked!");
-                    mediumButton.setChecked(false);
-                    hardButton.setChecked(false);
+                if (prefs.getBoolean("soundOn", true))
+                    clickSound.play();
+                System.out.println("easy clicked!");
+                mediumButton.setChecked(false);
+                hardButton.setChecked(false);
+                rows = new ArrayList<ArrayList<Label>>();
+                if(amountLines != 0) {
+                    stage.getActors().removeRange(stage.getActors().size - amountLines * 2, stage.getActors().size - 1);
+                }
+                ArrayList<HashMap> list = game.firebaseHelper.getListEasy();
+                System.out.println(amountLines = list.size());
+                for (HashMap map: list) {
+                    if(((Number)map.get("gamesCount")).longValue() == 0)
+                        amountLines--;
+                }
+                int i = 1;
+                for (HashMap map: list) {
+                    if(((Number)map.get("gamesCount")).longValue() != 0)
+                        addLineToTable(((Number)map.get("level")).longValue(), ((Number)map.get("gamesCount")).longValue(),i++);
+                }
             }
 
         });
@@ -319,10 +346,25 @@ public class StatisticsScreen implements Screen,InputProcessor {
         mediumButton.setPosition(easyButton.getX() + easyButton.getWidth(), topImage.getY()  - easyButton.getHeight() - HEIGHT/17);
         mediumButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
-                    if (prefs.getBoolean("soundOn", true))
-                        clickSound.play();
-                    easyButton.setChecked(false);
-                    hardButton.setChecked(false);
+                if (prefs.getBoolean("soundOn", true))
+                    clickSound.play();
+                easyButton.setChecked(false);
+                hardButton.setChecked(false);
+                rows = new ArrayList<ArrayList<Label>>();
+                if(amountLines != 0) {
+                    stage.getActors().removeRange(stage.getActors().size - amountLines * 2, stage.getActors().size - 1);
+                }
+                ArrayList<HashMap> list = game.firebaseHelper.getListMedium();
+                System.out.println(amountLines = list.size());
+                for (HashMap map: list) {
+                    if(((Number)map.get("gamesCount")).longValue() == 0)
+                        amountLines--;
+                }
+                int i = 1;
+                for (HashMap map: list) {
+                    if(((Number)map.get("gamesCount")).longValue() != 0)
+                        addLineToTable(((Number)map.get("level")).longValue(), ((Number)map.get("gamesCount")).longValue(),i++);
+                }
             }
         });
         stage.addActor(mediumButton);
@@ -337,10 +379,25 @@ public class StatisticsScreen implements Screen,InputProcessor {
         hardButton.setPosition(mediumButton.getX() + mediumButton.getWidth(), topImage.getY()  - easyButton.getHeight() - HEIGHT/17);
         hardButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
-                    if (prefs.getBoolean("soundOn", true))
-                        clickSound.play();
-                    mediumButton.setChecked(false);
-                    easyButton.setChecked(false);
+                if (prefs.getBoolean("soundOn", true))
+                    clickSound.play();
+                mediumButton.setChecked(false);
+                easyButton.setChecked(false);
+                rows = new ArrayList<ArrayList<Label>>();
+                if(amountLines != 0) {
+                    stage.getActors().removeRange(stage.getActors().size - amountLines * 2, stage.getActors().size - 1);
+                }
+                ArrayList<HashMap> list = game.firebaseHelper.getListHard();
+                System.out.println(amountLines = list.size());
+                for (HashMap map: list) {
+                    if(((Number)map.get("gamesCount")).longValue() == 0)
+                        amountLines--;
+                }
+                int i = 1;
+                for (HashMap map: list) {
+                    if(((Number)map.get("gamesCount")).longValue() != 0)
+                        addLineToTable(((Number)map.get("level")).longValue(), ((Number)map.get("gamesCount")).longValue(),i++);
+                }
             }
         });
         stage.addActor(hardButton);
