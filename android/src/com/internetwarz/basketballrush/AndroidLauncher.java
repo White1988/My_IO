@@ -33,7 +33,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
             }
         };
         gameHelper.setup(gameHelperListener);
-        FirebaseHelper.setPlayerId(Games.Players.getCurrentPlayerId(gameHelper.getApiClient()));
+        System.out.println("FIRST MESSAGE!");
+        //FirebaseHelper.setPlayerId(Games.Players.getCurrentPlayerId(gameHelper.getApiClient()));
     }
 
     @Override
@@ -51,6 +52,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         gameHelper.onActivityResult(requestCode, resultCode, data);
+        System.out.println("onActivityResult!!!!!!!");
+        System.out.println(gameHelper.getApiClient());
     }
 
 
@@ -66,6 +69,10 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         } catch (Exception e) {
             Gdx.app.log("MainActivity", "Log in failed: " + e.getMessage() + ".");
         }
+        System.out.println("signIn!!!!!!!");
+        System.out.println(gameHelper.getApiClient());
+        FirebaseHelper.isSignIn = true;
+        FirebaseHelper.setPlayerId(Games.Players.getCurrentPlayerId(gameHelper.getApiClient()));
     }
 
     @Override

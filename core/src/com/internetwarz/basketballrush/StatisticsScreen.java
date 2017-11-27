@@ -67,6 +67,8 @@ public class StatisticsScreen implements Screen,InputProcessor {
     private BitmapFont font;
     private Label.LabelStyle lineFontStyle;
     private BitmapFont fontLines;
+    private Label.LabelStyle numbersStyle;
+    private BitmapFont fontNumbers;
 
 
     public StatisticsScreen(Tsar game) {
@@ -168,6 +170,13 @@ public class StatisticsScreen implements Screen,InputProcessor {
         parameter.shadowOffsetY = 1;
         parameter.size = 16;
         fontLines = generator.generateFont(parameter);
+
+        //Font for numbers
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
+        fontNumbers = generator.generateFont(parameter);
+        numbersStyle = new Label.LabelStyle();
+        numbersStyle.font = fontNumbers;
+
         lineFontStyle = new Label.LabelStyle();
         lineFontStyle.font = fontLines;
 
@@ -209,14 +218,20 @@ public class StatisticsScreen implements Screen,InputProcessor {
             lineFontStyle = new Label.LabelStyle();
             lineFontStyle.font = fontLines;
             lineFontStyle.background = buttonSkin.getDrawable("line");
+            numbersStyle = new Label.LabelStyle();
+            numbersStyle.font = fontNumbers;
+            numbersStyle.background = buttonSkin.getDrawable("line");
         }
         else {
             lineFontStyle = new Label.LabelStyle();
             lineFontStyle.font = fontLines;
             lineFontStyle.background = buttonSkin.getDrawable("lineDark");
+            numbersStyle = new Label.LabelStyle();
+            numbersStyle.font = fontNumbers;
+            numbersStyle.background = buttonSkin.getDrawable("lineDark");
         }
-        Label levelLabel = new Label(level + " " + LanguagesManager.getInstance().getString("lowcaseLevel"), lineFontStyle);
-        Label gamesLabel = new Label(String.valueOf(countGames), lineFontStyle);
+        Label levelLabel = new Label(String.valueOf(level), numbersStyle);
+        Label gamesLabel = new Label(String.valueOf(countGames), numbersStyle);
         row.add(levelLabel);
         row.add(gamesLabel);
         rows.add(row);

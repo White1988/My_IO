@@ -120,6 +120,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     private BitmapFont font;
     private Image curLevelImage;
     private Image curAttemptsImage;
+    private Label scoreLabelNumber;
+    private Label triesLabelNumber;
 
     public TsarGameplayScreen(Tsar game, final int numAttempts) {
         System.out.println(LanguagesManager.getInstance().getLanguage());
@@ -428,18 +430,32 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         textStyle = new Label.LabelStyle();
         textStyle.font = font;
 
-        layoutScore.setText(font, LanguagesManager.getInstance().getString("level") + ": " + score.getStringScore());
-        layoutTries.setText(font, LanguagesManager.getInstance().getString("tries") + ": " + curNumAttempts);
+        //font for numbers
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
+        BitmapFont fontForNumbers = generator.generateFont(parameter);
+        Label.LabelStyle numbersStyle = new Label.LabelStyle();
+        numbersStyle.font = fontForNumbers;
 
-        scoreLabel = new Label(LanguagesManager.getInstance().getString("level") + ": 0", textStyle);
+        layoutScore.setText(font, LanguagesManager.getInstance().getString("level") + ": ");
+        layoutTries.setText(font, LanguagesManager.getInstance().getString("tries") + ": ");
+
+        scoreLabel = new Label(LanguagesManager.getInstance().getString("level") + ": ", textStyle);
         scoreLabel.setPosition(curLevelImage.getX() + WIDTH/40, curLevelImage.getY() + curLevelImage.getHeight()/3);
         scoreLabel.setSize(layoutScore.width, layoutScore.height);
         scoreLabel.setFontScale(1f, 1f);
 
+        scoreLabelNumber = new Label("1", numbersStyle);
+        scoreLabelNumber.setPosition(scoreLabel.getX() + scoreLabel.getWidth(), scoreLabel.getY());
+        scoreLabelNumber.setSize(layoutScore.width, layoutScore.height);
 
-        triesLabel = new Label(LanguagesManager.getInstance().getString("tries") + ": " + numAttempts, textStyle);
+
+        triesLabel = new Label(LanguagesManager.getInstance().getString("tries") + ": ", textStyle);
         triesLabel.setPosition(curAttemptsImage.getX() + WIDTH/40, scoreLabel.getY());
         triesLabel.setSize(layoutTries.width, layoutTries.height);
+
+        triesLabelNumber = new Label(String.valueOf(numAttempts), numbersStyle);
+        triesLabelNumber.setPosition(triesLabel.getX() + triesLabel.getWidth(), triesLabel.getY());
+        triesLabelNumber.setSize(layoutTries.width, layoutTries.height);
 
         rightWrongLabel = new Label(LanguagesManager.getInstance().getString("right"), rightStyle);
         rightWrongLabel = new Label(LanguagesManager.getInstance().getString("wrong"), wrongStyle);
@@ -448,6 +464,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
         stage.addActor(scoreLabel);
         stage.addActor(triesLabel);
+        stage.addActor(scoreLabelNumber);
+        stage.addActor(triesLabelNumber);
         stage.addActor(rightWrongLabel);
     }
 
@@ -506,8 +524,10 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                curNumAttempts = numAttempts;
                isGuessed = true;
                score.setScore(score.getScore() + points);
-               scoreLabel.setText(LanguagesManager.getInstance().getString("level") + ": "  + score.getScore());
+               scoreLabel.setText(LanguagesManager.getInstance().getString("level") + ": ");
+               scoreLabelNumber.setText(String.valueOf(score.getScore()));
                triesLabel.setText(LanguagesManager.getInstance().getString("tries") + ": " + numAttempts);
+               triesLabelNumber.setText(String.valueOf(numAttempts));
                rightWrongLabel.setText(LanguagesManager.getInstance().getString("right"));
                rightWrongLabel.setStyle(rightStyle);
                rightWrongLabel.setVisible(true);
@@ -521,7 +541,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                setFillingParametrs(Color.RED, pickedSector);
                System.out.println("LOSE");
                curNumAttempts--;
-               triesLabel.setText(LanguagesManager.getInstance().getString("tries") + ": " + curNumAttempts);
+               triesLabel.setText(LanguagesManager.getInstance().getString("tries") + ": ");
+               triesLabelNumber.setText(String.valueOf(curNumAttempts));
                rightWrongLabel.setText(LanguagesManager.getInstance().getString("wrong"));
                rightWrongLabel.setStyle(wrongStyle);
                rightWrongLabel.setVisible(true);
@@ -565,8 +586,10 @@ public class TsarGameplayScreen implements Screen,InputProcessor
             curNumAttempts = numAttempts = 2;
         else if (hardButton.isChecked())
             curNumAttempts = numAttempts = 1;
-        scoreLabel.setText(LanguagesManager.getInstance().getString("level") + ": " + this.score.getScore());
-        triesLabel.setText(LanguagesManager.getInstance().getString("tries") + ": " + numAttempts);
+        scoreLabel.setText(LanguagesManager.getInstance().getString("level") + ": ");
+        scoreLabelNumber.setText(String.valueOf(this.score.getScore()));
+        triesLabel.setText(LanguagesManager.getInstance().getString("tries") + ": ");
+        triesLabelNumber.setText(String.valueOf(numAttempts));
     }
 
     private void saveScore(Score score, String gameType) {
@@ -637,8 +660,10 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                 curNumAttempts = numAttempts = 2;
             else if (hardButton.isChecked())
                 curNumAttempts = numAttempts = 1;
-            scoreLabel.setText(LanguagesManager.getInstance().getString("level") + ": " + score.getScore());
-            triesLabel.setText(LanguagesManager.getInstance().getString("tries") + ": " + numAttempts);
+            scoreLabel.setText(LanguagesManager.getInstance().getString("level") + ": ");
+            scoreLabelNumber.setText(String.valueOf(score.getScore()));
+            triesLabel.setText(LanguagesManager.getInstance().getString("tries") + ": ");
+            triesLabelNumber.setText(String.valueOf(numAttempts));
         }
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -697,10 +722,10 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         HEIGHT = height;
 
         playerCircle = new Circle(WIDTH/2, HEIGHT /2, RADIUS);
-        batch.begin();
-        game.font.draw(batch,LanguagesManager.getInstance().getString("level") + ": " + score.getStringScore(),WIDTH-layoutScore.width - 4, HEIGHT - layoutScore.height);
-        game.font.draw(batch,LanguagesManager.getInstance().getString("tries") + ": " + curNumAttempts,4 , HEIGHT - layoutTries.height);
-        batch.end();
+        //batch.begin();
+        //game.font.draw(batch,LanguagesManager.getInstance().getString("level") + ": " + score.getStringScore(),WIDTH-layoutScore.width - 4, HEIGHT - layoutScore.height);
+        //game.font.draw(batch,LanguagesManager.getInstance().getString("tries") + ": " + curNumAttempts,4 , HEIGHT - layoutTries.height);
+        //batch.end();
 
         //camera.viewportWidth = width / VIEWPORT_SCALE;
         //camera.viewportHeight = height / VIEWPORT_SCALE;

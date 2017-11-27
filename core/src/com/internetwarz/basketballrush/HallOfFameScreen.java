@@ -68,6 +68,8 @@ public class HallOfFameScreen implements Screen, InputProcessor{
     private BitmapFont font;
     private BitmapFont fontLines;
     private Label.LabelStyle lineFontStyle;
+    private BitmapFont fontNumbers;
+    private Label.LabelStyle numbersStyle;
 
     public HallOfFameScreen(Tsar game) {
         this.game = game;
@@ -167,6 +169,13 @@ public class HallOfFameScreen implements Screen, InputProcessor{
         parameter.shadowOffsetY = 1;
         parameter.size = 16;
         fontLines = generator.generateFont(parameter);
+
+        //Font for numbers
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
+        fontNumbers = generator.generateFont(parameter);
+        numbersStyle = new Label.LabelStyle();
+        numbersStyle.font = fontNumbers;
+
         lineFontStyle = new Label.LabelStyle();
         lineFontStyle.font = fontLines;
 
@@ -208,15 +217,21 @@ public class HallOfFameScreen implements Screen, InputProcessor{
             lineFontStyle = new Label.LabelStyle();
             lineFontStyle.font = fontLines;
             lineFontStyle.background = buttonSkin.getDrawable("line");
+            numbersStyle = new Label.LabelStyle();
+            numbersStyle.font = fontNumbers;
+            numbersStyle.background = buttonSkin.getDrawable("line");
         }
         else {
             lineFontStyle = new Label.LabelStyle();
             lineFontStyle.font = fontLines;
             lineFontStyle.background = buttonSkin.getDrawable("lineDark");
+            numbersStyle = new Label.LabelStyle();
+            numbersStyle.font = fontNumbers;
+            numbersStyle.background = buttonSkin.getDrawable("lineDark");
         }
-        Label levelLabel = new Label(String.valueOf(level), lineFontStyle);
-        Label playersLabel = new Label("Games" + countGames, lineFontStyle);
-        Label dateLabel = new Label("Date" + date, lineFontStyle);
+        Label levelLabel = new Label(String.valueOf(level), numbersStyle);
+        Label playersLabel = new Label("Games" + countGames, numbersStyle);
+        Label dateLabel = new Label("Date" + date, numbersStyle);
         row.add(levelLabel);
         row.add(playersLabel);
         row.add(dateLabel);

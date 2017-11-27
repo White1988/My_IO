@@ -118,9 +118,11 @@ public class Tsar extends Game {
 		firebaseHelper.updateList("Easy", user.getListEasy()); */
 
 		//firebaseHelper = new FirebaseHelper("testguy@gmail.com");
-		firebaseHelper = new FirebaseHelper("test@gmail.com");
-		firebaseHelper.dataInit();
 
+/*
+		firebaseHelper = new FirebaseHelper();
+		firebaseHelper.dataInit();
+*/
 		//firebaseHelper.updateData("Hard", 8);
 
 

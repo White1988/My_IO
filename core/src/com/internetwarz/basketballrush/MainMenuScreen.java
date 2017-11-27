@@ -51,6 +51,12 @@ public class MainMenuScreen implements Screen,InputProcessor {
     public MainMenuScreen(final Tsar gam){
         this.game=gam;
         game.getPlayServices().signIn();
+
+        readDataFromDB();
+
+
+
+
         System.out.println(appWidth = Gdx.graphics.getWidth());
         System.out.println(appHeight = Gdx.graphics.getHeight());
         camera = new OrthographicCamera();
@@ -328,6 +334,17 @@ public class MainMenuScreen implements Screen,InputProcessor {
             }
         });
         stage.addActor(info);*/
+    }
+
+    private void readDataFromDB() {
+        int i = 0;
+        while(FirebaseHelper.isSignIn != true) {
+            i++;
+        }
+        System.out.println(FirebaseHelper.getPlayerId());
+        game.firebaseHelper = new FirebaseHelper();
+        game.firebaseHelper.dataInit();
+        System.out.println("Data downloaded");
     }
 
     private void fontInit() {

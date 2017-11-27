@@ -23,16 +23,25 @@ public  class FirebaseHelper
 {
 
     private static String playerId; // google acc id in android case, random email in desctop case
+    public static boolean isSignIn = false;
     DatabaseReference reference;
     //public ArrayList<HashMap> list = new ArrayList<HashMap>();
     ArrayList<HashMap> listEasy = new ArrayList<HashMap>();//List of records level = 3, gameCount = 4;
     ArrayList<HashMap> listMedium = new ArrayList<HashMap>();//List of records level = 3, gameCount = 4;
     ArrayList<HashMap> listHard = new ArrayList<HashMap>();//List of records level = 3, gameCount = 4;
+    public ArrayList<HashMap> list;
+    boolean isRead = false;
 
-    public FirebaseHelper(String mail) {
+    public FirebaseHelper() {
         reference = GDXFirebase.FirebaseDatabase().getReference(STATS_TABLE);
-        mail = mail.replaceAll("@", "_").replace(".", "_");
-        playerId = mail;
+        //mail = mail.replaceAll("@", "_").replace(".", "_");
+        //playerId = mail;
+        playerId = playerId.replaceAll("@", "_").replace(".", "_");
+        System.out.println(playerId);
+    }
+
+    public static String getPlayerId() {
+        return playerId;
     }
 
     public ArrayList<HashMap> getListEasy() {
@@ -47,58 +56,98 @@ public  class FirebaseHelper
         return listHard;
     }
 
-    public void dataInit() {
+    /*public static ArrayList<HashMap> readListEasy(final String level) {
+        final DatabaseReference reference = GDXFirebase.FirebaseDatabase().getReference(STATS_TABLE);
+        ArrayList<HashMap> list;
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
-                    listEasy = (ArrayList) dataSnapshot.child(playerId).child(EASY_MODE).getValue();
-                    for (HashMap map: listEasy) {
+                    list = (ArrayList) dataSnapshot.child(playerId).child(EASY_MODE).getValue();
+                    for (HashMap map : list) {
                         System.out.println(map.entrySet());
                     }
-                    System.out.println("Easy size: " + listEasy.size());
-                }
-                catch (NullPointerException e) {
+                    System.out.println("Easy size: " + list.size());
+                } catch (NullPointerException e) {
                     HashMap<String, Integer> start = new HashMap<String, Integer>();
                     start.put("level", 1);
                     start.put("gamesCount", 0);
-                    listEasy = new ArrayList<HashMap>();
-                    listEasy.add(start);
-                    reference.child(playerId).child("Easy").setValue(listEasy);
+                    list = new ArrayList<HashMap>();
+                    list.add(start);
+                    reference.child(playerId).child(level).setValue(list);
+                    //reference.child(playerId).child("Easy").setValue(list);
                 }
+            }
 
-                try {
-                    listMedium = (ArrayList) dataSnapshot.child(playerId).child(MEDIUM_MODE).getValue();
-                    for (HashMap map: listMedium) {
-                        System.out.println(map.entrySet());
-                    }
-                    System.out.println("Medium size: " + listMedium.size());
-                }
-                catch (NullPointerException e) {
-                    HashMap<String, Integer> start = new HashMap<String, Integer>();
-                    start.put("level", 1);
-                    start.put("gamesCount", 0);
-                    listMedium = new ArrayList<HashMap>();
-                    listMedium.add(start);
-                    reference.child(playerId).child("Medium").setValue(listMedium);
-                }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                try {
-                    listHard = (ArrayList) dataSnapshot.child(playerId).child(HARD_MODE).getValue();
-                    for (HashMap map : listHard) {
-                        System.out.println(map.entrySet());
+            }
+        });
+
+        return list;
+    }
+
+    public static ArrayList<HashMap> readListMedium() {
+        return listMedium;
+    }
+
+    public static ArrayList<HashMap> readListHard() {
+        return listHard;
+    }*/
+
+
+    public void dataInit() {
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!isRead) {
+                    try {
+                        listEasy = (ArrayList) dataSnapshot.child(playerId).child(EASY_MODE).getValue();
+                        for (HashMap map : listEasy) {
+                            System.out.println(map.entrySet());
+                        }
+                        System.out.println("Easy size: " + listEasy.size());
+                    } catch (NullPointerException e) {
+                        HashMap<String, Integer> start = new HashMap<String, Integer>();
+                        start.put("level", 1);
+                        start.put("gamesCount", 0);
+                        listEasy = new ArrayList<HashMap>();
+                        listEasy.add(start);
+                        reference.child(playerId).child("Easy").setValue(listEasy);
                     }
-                    System.out.println("Hard size: " + listHard.size());
+
+                    try {
+                        listMedium = (ArrayList) dataSnapshot.child(playerId).child(MEDIUM_MODE).getValue();
+                        for (HashMap map : listMedium) {
+                            System.out.println(map.entrySet());
+                        }
+                        System.out.println("Medium size: " + listMedium.size());
+                    } catch (NullPointerException e) {
+                        HashMap<String, Integer> start = new HashMap<String, Integer>();
+                        start.put("level", 1);
+                        start.put("gamesCount", 0);
+                        listMedium = new ArrayList<HashMap>();
+                        listMedium.add(start);
+                        reference.child(playerId).child("Medium").setValue(listMedium);
+                    }
+
+                    try {
+                        listHard = (ArrayList) dataSnapshot.child(playerId).child(HARD_MODE).getValue();
+                        for (HashMap map : listHard) {
+                            System.out.println(map.entrySet());
+                        }
+                        System.out.println("Hard size: " + listHard.size());
+                    } catch (NullPointerException e) {
+                        HashMap<String, Integer> start = new HashMap<String, Integer>();
+                        start.put("level", 1);
+                        start.put("gamesCount", 0);
+                        listHard = new ArrayList<HashMap>();
+                        listHard.add(start);
+                        reference.child(playerId).child("Hard").setValue(listHard);
+                    }
+                    sortData();
                 }
-                catch (NullPointerException e) {
-                    HashMap<String, Integer> start = new HashMap<String, Integer>();
-                    start.put("level", 1);
-                    start.put("gamesCount", 0);
-                    listHard = new ArrayList<HashMap>();
-                    listHard.add(start);
-                    reference.child(playerId).child("Hard").setValue(listHard);
-                }
-                sortData();
             }
 
             @Override
@@ -166,31 +215,31 @@ public  class FirebaseHelper
             e.printStackTrace();
         }*/
 
-        if(difficult == EASY_MODE) {
+        if(difficult.equals(EASY_MODE)) {
             System.out.println(listEasy.size());
             for(HashMap<String, Long> map: listEasy) {
                 if(map.get("level") == level) {
                     isExist = true;
                     map.put("gamesCount", map.get("gamesCount") + 1);
                     System.out.println(map.get("gamesCount"));
-                    reference.child(playerId).child("Hard").setValue(listEasy);
+                    reference.child(playerId).child("Easy").setValue(listEasy);
                     break;
                 }
             }
         }
-        else if(difficult == MEDIUM_MODE) {
+        else if(difficult.equals(MEDIUM_MODE)) {
             System.out.println(listMedium.size());
             for(HashMap<String, Long> map: listMedium) {
                 if(map.get("level") == level) {
                     isExist = true;
                     map.put("gamesCount", map.get("gamesCount") + 1);
                     System.out.println(map.get("gamesCount"));
-                    reference.child(playerId).child("Hard").setValue(listMedium);
+                    reference.child(playerId).child("Medium").setValue(listMedium);
                     break;
                 }
             }
         }
-        else if(difficult == HARD_MODE) {
+        else if(difficult.equals(HARD_MODE)) {
             System.out.println(listHard.size());
             for(HashMap<String, Long> map: listHard) {
                 if(map.get("level") == level) {
