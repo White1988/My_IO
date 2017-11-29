@@ -596,6 +596,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         //TODO: add saving data
         System.out.println(gameType);
         game.firebaseHelper.updateData(gameType, score.getScore());
+        game.getPlayServices().submitScore(score.getScore(),gameType);
     }
 
     private void setFillingParametrs(Color color, int pickedSector) {

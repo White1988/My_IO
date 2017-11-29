@@ -64,15 +64,16 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                 @Override
                 public void run() {
                     gameHelper.beginUserInitiatedSignIn();
+                    System.out.println("signed in!!!!!!!");
+                    FirebaseHelper.isSignIn = true;
+                    FirebaseHelper.setPlayerId(Games.Players.getCurrentPlayerId(gameHelper.getApiClient()));
                 }
             });
+
         } catch (Exception e) {
             Gdx.app.log("MainActivity", "Log in failed: " + e.getMessage() + ".");
         }
-        System.out.println("signIn!!!!!!!");
-        System.out.println(gameHelper.getApiClient());
-        FirebaseHelper.isSignIn = true;
-        FirebaseHelper.setPlayerId(Games.Players.getCurrentPlayerId(gameHelper.getApiClient()));
+
     }
 
     @Override

@@ -200,7 +200,8 @@ public class MainMenuScreen implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
-                game.setScreen(new HallOfFameScreen(game));
+                game.getPlayServices().showScore();
+                //game.setScreen(new HallOfFameScreen(game));
 
             }
         });
@@ -338,13 +339,22 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
     private void readDataFromDB() {
         int i = 0;
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         while(FirebaseHelper.isSignIn != true) {
             i++;
         }
-        System.out.println(FirebaseHelper.getPlayerId());
-        game.firebaseHelper = new FirebaseHelper();
-        game.firebaseHelper.dataInit();
-        System.out.println("Data downloaded");
+        if(game.getPlayServices().isSignedIn()) {
+            System.out.println(FirebaseHelper.getPlayerId());
+            game.firebaseHelper = new FirebaseHelper();
+            game.firebaseHelper.dataInit();
+            System.out.println("Data downloaded");
+        }
+        else
+            System.out.println("ERROR: DIDN'T SIGN IN");
     }
 
     private void fontInit() {
