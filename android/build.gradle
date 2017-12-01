@@ -16,7 +16,7 @@ android {
     }
     defaultConfig {
         applicationId "com.di.devs.tsar"
-        minSdkVersion 15
+        minSdkVersion 17
         targetSdkVersion 25
         versionCode 6
         versionName "1.5"
@@ -78,5 +78,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.firebase:firebase-crash:11.0.4'
     compile 'com.google.firebase:firebase-database:11.0.4'
+    compile 'com.google.firebase:firebase-ads:11.0.4'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -110,7 +110,7 @@
 <string value="Нет" key="no"/>
 <string value="Вы действительно хотите начать игру сначала?" key="restartText"/>
 <string value="Лучший" key="best"/>
-<string value="Конц игры!" key="gameOver"/>
+<string value="Конец игры!" key="gameOver"/>
 <string value="Статистика (игрока)" key="statisticsPlayer"/>
 <string value="Зал славы" key="hallOfFame"/>
 <string value="Правила" key="rules"/>

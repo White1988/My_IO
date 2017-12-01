@@ -39,7 +39,9 @@ import java.util.Map;
 public class SettingsScreen implements Screen, InputProcessor {
     private Image topTextImage;
     private Image topImage;
-    Tsar game;
+    private Tsar game;
+
+
 
     private int WIDTH;
     private int HEIGHT;
@@ -96,6 +98,17 @@ public class SettingsScreen implements Screen, InputProcessor {
         prefs = Gdx.app.getPreferences("My Preferences");
         clickSound = game.assets.getSound();
 
+        //Background init
+        Pixmap rect = new Pixmap((int) WIDTH, (int) HEIGHT, Pixmap.Format.RGBA8888);
+        rect.setColor(Color.valueOf("#15091e"));
+        rect.fillRectangle(0, 0, (int)WIDTH, (int) HEIGHT);
+        background = new Texture(rect);
+        rect.dispose();
+        Image backgroundImage = new Image(background);
+        backgroundImage.setSize(WIDTH, HEIGHT);
+        backgroundImage.setPosition(0, 0);
+        stage.addActor(backgroundImage);
+
         //Add text xIntuition and it's background
         Texture topImageTexture = new Texture("skins/topImage.png");
         topImage = new Image(topImageTexture);
@@ -148,14 +161,6 @@ public class SettingsScreen implements Screen, InputProcessor {
         Texture button = new Texture(rect2);
         rect2.dispose();
 
-        //Background init
-        rect = new Pixmap((int)WIDTH, (int)HEIGHT, Pixmap.Format.RGBA8888);
-        rect.setColor(Color.valueOf("#15091e"));
-        rect.fillRectangle(0, 0, (int)WIDTH, (int) HEIGHT);
-        background = new Texture(rect);
-        rect.dispose();
-
-
         //Buttons init
         buttonAtlas = game.assets.getButtonAtlas();
         buttonAtlas.addRegion("Button", button, 0, 0, 40, 20);
@@ -178,11 +183,14 @@ public class SettingsScreen implements Screen, InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if (prefs.getBoolean("soundOn", true))
                     clickSound.play();
-
+                System.out.println("Sign out clicked.");
+                game.getPlayServices().signOut();
+                game.setScreen(new MainMenuScreen(game));
             }
 
         });
         stage.addActor(signOut);
+
     }
 
     private void languagesInit() {
@@ -335,9 +343,9 @@ public class SettingsScreen implements Screen, InputProcessor {
         batch.setProjectionMatrix(camera.combined);
 
         stage.act();
-        stage.getBatch().begin();
-        stage.getBatch().draw(background, 0, 0);//drawing background
-        stage.getBatch().end();
+        //stage.getBatch().begin();
+        //stage.getBatch().draw(background, 0, 0);//drawing background
+        //stage.getBatch().end();
         batch.begin();
         stage.draw();
         batch.end();

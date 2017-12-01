@@ -132,7 +132,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
 
         WIDTH = (float) Gdx.graphics.getWidth();
         HEIGHT = (float) Gdx.graphics.getHeight();
-        RADIUS = (WIDTH-WIDTH/10*2)/2;
+        RADIUS = (WIDTH-WIDTH/10*2 - WIDTH/20)/2;
 
         stage = new Stage(new FitViewport(WIDTH, HEIGHT));
         stage.clear();
@@ -142,6 +142,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         plex.addProcessor(this);
 
         Gdx.input.setInputProcessor(plex);
+        Gdx.input.setCatchBackKey(true);
 
         //font init
         fontInit();
@@ -597,6 +598,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         System.out.println(gameType);
         game.firebaseHelper.updateData(gameType, score.getScore());
         game.getPlayServices().submitScore(score.getScore(),gameType);
+
     }
 
     private void setFillingParametrs(Color color, int pickedSector) {

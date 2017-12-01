@@ -1,24 +1,65 @@
 package com.internetwarz.basketballrush;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.GameHelper;
 
 public class AndroidLauncher extends AndroidApplication implements PlayServices {
     private GameHelper gameHelper;
     private final static int requestCode = 1;
+    private final static String AD_ID = "pub-8644762955474796";
+    //private final static String AD_ID = "ca-app-pub-3940256099942544/6300978111";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        initialize(new Tsar(this), config);
+
+        RelativeLayout layout = new RelativeLayout(this);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+
+        View gameView = initializeForView(new Tsar(this), config);
+        gameView.setId(View.generateViewId());
+
+        AdView adView = new AdView(this);
+        adView.setAdSize(AdSize.BANNER);
+        adView.setAdUnitId(AD_ID);
+        adView.setId(View.generateViewId());
+        adView.setBackgroundColor(Color.BLACK);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+        RelativeLayout.LayoutParams gameParams =
+                new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        layout.addView(gameView, gameParams);
+
+        RelativeLayout.LayoutParams adParams =
+                new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        adParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        adParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        adParams.addRule(RelativeLayout.BELOW, gameView.getId());;
+        layout.addView(adView, adParams);
+
+        setContentView(layout);
+        //initialize(new Tsar(this), config);
 
         gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
         gameHelper.enableDebugLog(true);
@@ -30,11 +71,15 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 
             @Override
             public void onSignInSucceeded() {
+                System.out.println("signed in!!!!!!!");
+                FirebaseHelper.isSignIn = true;
+                FirebaseHelper.setPlayerId(Games.Players.getCurrentPlayerId(gameHelper.getApiClient()));
             }
         };
         gameHelper.setup(gameHelperListener);
         System.out.println("FIRST MESSAGE!");
         //FirebaseHelper.setPlayerId(Games.Players.getCurrentPlayerId(gameHelper.getApiClient()));
+        //MobileAds.initialize(this);
     }
 
     @Override
@@ -64,9 +109,6 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                 @Override
                 public void run() {
                     gameHelper.beginUserInitiatedSignIn();
-                    System.out.println("signed in!!!!!!!");
-                    FirebaseHelper.isSignIn = true;
-                    FirebaseHelper.setPlayerId(Games.Players.getCurrentPlayerId(gameHelper.getApiClient()));
                 }
             });
 
@@ -75,6 +117,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         }
 
     }
+
+
 
     @Override
     public void signOut() {
@@ -85,6 +129,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                     gameHelper.signOut();
                 }
             });
+            System.out.println("Signed out!");
         } catch (Exception e) {
             Gdx.app.log("MainActivity", "Log out failed: " + e.getMessage() + ".");
         }
@@ -178,6 +223,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                 Games.Leaderboards.submitScore(gameHelper.getApiClient(),
                         getString(R.string.leaderboard_hard), highScore);
             }
+            System.out.println("Score is submitted for " + gameHelper.getApiClient());
         }
     }
 
@@ -203,5 +249,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     public boolean isSignedIn() {
         return gameHelper.isSignedIn();
     }
+
+
 
 }

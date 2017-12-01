@@ -22,6 +22,7 @@ public class Tsar extends Game {
     private static PlayServices playServices;
 	public Assets assets;
 	public FirebaseHelper firebaseHelper;
+	public boolean isFirstStart = true;
 
 
     public Tsar(PlayServices playServices)

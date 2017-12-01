@@ -50,11 +50,13 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
     public MainMenuScreen(final Tsar gam){
         this.game=gam;
-        game.getPlayServices().signIn();
+        if(!game.getPlayServices().isSignedIn() && game.isFirstStart) {
+            game.getPlayServices().signIn();
+            game.isFirstStart = false;
+        }
 
-        readDataFromDB();
-
-
+        if(game.isFirstStart)
+            readDataFromDB();
 
 
         System.out.println(appWidth = Gdx.graphics.getWidth());
@@ -156,11 +158,9 @@ public class MainMenuScreen implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
-                //System.out.println("Play clicked!");
-               /* if(prefs.getBoolean("first",true)) could be annoying for player
-                    game.setScreen(new RulesScreen(game));
-                else*/
-                    game.setScreen(new TsarGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE)));
+                if(!game.getPlayServices().isSignedIn())
+                    game.getPlayServices().signIn();
+                game.setScreen(new TsarGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE)));
 
             }
         });
@@ -181,6 +181,8 @@ public class MainMenuScreen implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
+                if(!game.getPlayServices().isSignedIn())
+                    game.getPlayServices().signIn();
                 game.setScreen(new StatisticsScreen(game));
             }
         });
@@ -200,6 +202,8 @@ public class MainMenuScreen implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
+                if(!game.getPlayServices().isSignedIn())
+                    game.getPlayServices().signIn();
                 game.getPlayServices().showScore();
                 //game.setScreen(new HallOfFameScreen(game));
 
@@ -240,6 +244,8 @@ public class MainMenuScreen implements Screen,InputProcessor {
             public void clicked(InputEvent event, float x, float y){
                 if(prefs.getBoolean("soundOn",true))
                     clickSound.play();
+                if(!game.getPlayServices().isSignedIn())
+                    game.getPlayServices().signIn();
                 game.setScreen(new SettingsScreen(game));
             }
         });
@@ -339,11 +345,6 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
     private void readDataFromDB() {
         int i = 0;
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         while(FirebaseHelper.isSignIn != true) {
             i++;
         }
