@@ -18,8 +18,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -69,6 +71,9 @@ public class MainMenuScreen implements Screen,InputProcessor {
         stage = new Stage(new FitViewport(appWidth,appHeight));
         stage.clear();
 
+        backgroundInit();
+
+
         fontInit();
 
         //Add text xIntuition and it's background
@@ -87,17 +92,17 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
 
         buttonAtlas = game.assets.getButtonAtlas();
-        Pixmap rect = new Pixmap((int)widthPercent(33),20,Pixmap.Format.RGBA8888);
+        Pixmap rect = new Pixmap((int)widthPercent(25),(int)heightPercent(8),Pixmap.Format.RGBA8888);
         rect.setColor(Color.LIGHT_GRAY);
-        rect.fillRectangle(0, 0, (int)widthPercent(33), 20);
+        rect.fillRectangle(0, 0, (int)widthPercent(25), (int)heightPercent(8));
         Texture buttonChecked = new Texture(rect);
         rect.setColor(Color.DARK_GRAY);
-        rect.drawRectangle(0,0,(int)widthPercent(33),20);
+        rect.drawRectangle(0,0,(int)widthPercent(25),(int)heightPercent(8));
         buttonChecked.draw(rect, 0, 0);
         rect.dispose();
 
         Texture buttonTexture = new Texture("skins/buttonPlay.png");
-        buttonAtlas.addRegion("Button", buttonChecked, 0, 0, (int)widthPercent(33), 20);
+        buttonAtlas.addRegion("Button", buttonChecked, 0, 0, (int)widthPercent(25),(int)heightPercent(8));
         buttonAtlas.addRegion("buttonPlay", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
         buttonTexture = new Texture("skins/buttonPlayClick.png");
         buttonAtlas.addRegion("buttonPlayClick", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
@@ -117,6 +122,10 @@ public class MainMenuScreen implements Screen,InputProcessor {
         buttonAtlas.addRegion("buttonSettings", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
         buttonTexture = new Texture("skins/buttonSettingsClick.png");
         buttonAtlas.addRegion("buttonSettingsClick", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/easyLevel.png");
+        buttonAtlas.addRegion("easyLevel", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+        buttonTexture = new Texture("skins/easyLevelClick.png");
+        buttonAtlas.addRegion("easyLevelClick", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
 
 
         rect = new Pixmap((int)appWidth, (int)appHeight, Pixmap.Format.RGBA8888);
@@ -151,7 +160,6 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
 
         playButton = new TextButton(LanguagesManager.getInstance().getString("play"), textButtonStyle);
-        //playButton.setSize(widthPercent(33), heightPercent(10));
         playButton.setSize(appWidth - appWidth/10*2, appHeight/9);
         playButton.setPosition(appWidth/10, topImage.getY() - playButton.getHeight() - appHeight/17);
         playButton.addListener(new ClickListener(){
@@ -343,6 +351,19 @@ public class MainMenuScreen implements Screen,InputProcessor {
         stage.addActor(info);*/
     }
 
+    private void backgroundInit() {
+        //Background init
+        Pixmap rect = new Pixmap((int) appWidth, (int) appHeight, Pixmap.Format.RGBA8888);
+        rect.setColor(Color.valueOf("#15091e"));
+        rect.fillRectangle(0, 0, (int)appWidth, (int) appHeight);
+        background = new Texture(rect);
+        rect.dispose();
+        Image backgroundImage = new Image(background);
+        backgroundImage.setSize(appWidth, appHeight);
+        backgroundImage.setPosition(0, 0);
+        stage.addActor(backgroundImage);
+    }
+
     private void readDataFromDB() {
         int i = 0;
         while(FirebaseHelper.isSignIn != true) {
@@ -386,9 +407,9 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
         stage.act();
         batch.begin();
-        stage.getBatch().begin();
-        stage.getBatch().draw(background, 0, 0);//drawing background
-        stage.getBatch().end();
+        //stage.getBatch().begin();
+        //stage.getBatch().draw(background, 0, 0);//drawing background
+        //stage.getBatch().end();
         stage.draw();
         batch.end();
 
@@ -444,10 +465,57 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.BACK){
-            Gdx.app.exit();
+        if(keycode == Input.Keys.BACK || keycode == Input.Keys.BACKSPACE){
+            exitConfirm();
+
         }
         return true;
+    }
+
+    private void exitConfirm() {
+        //Generate font
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
+        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
+            generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/DroidSansFallback.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 25;
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
+            parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ただ" + "手段" + "ハード" + "栄誉の殿堂統計遊びますゲームは終わった結果設定ただ手段ハードレベル実験右！間違いました！再起動はいいいえあなたは本当にゲームを再開しますか？ベストプレーヤーゲームは終わった！統計（選手）栄誉の殿堂ルールログアウト言語";
+        BitmapFont font = generator.generateFont(parameter);
+        Label.LabelStyle textStyle = new Label.LabelStyle(font, Color.WHITE);
+
+        Dialog restartConfirmDialog = new Dialog("Exit", new Skin(Gdx.files.internal("skins/uiskin.json")));
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+        textButtonStyle.up = buttonSkin.getDrawable("Button");
+
+        TextButton.TextButtonStyle textButtonStyle1 = textButtonStyle;
+
+        TextButton yes = new TextButton(LanguagesManager.getInstance().getString("yes"), textButtonStyle);
+        yes.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
+
+        TextButton no = new TextButton(LanguagesManager.getInstance().getString("no"), textButtonStyle);
+
+
+
+
+        restartConfirmDialog.text(LanguagesManager.getInstance().getString("exit"), textStyle);
+        restartConfirmDialog.button(yes);
+        restartConfirmDialog.button(no);
+
+
+        restartConfirmDialog.show(stage);
+        restartConfirmDialog.setSize(widthPercent(60),heightPercent(30));
+        restartConfirmDialog.setPosition(appWidth/2 - restartConfirmDialog.getWidth()/2, appHeight/2 - restartConfirmDialog.getHeight()/2);
+        //yes.setSize(appWidth/10,appHeight/20);
+        //no.setSize(yes.getWidth(), yes.getHeight());
+        //yes.setPosition(restartConfirmDialog.getWidth()/2, restartConfirmDialog.getY() + restartConfirmDialog.getHeight()/10);
+
     }
 
     @Override
