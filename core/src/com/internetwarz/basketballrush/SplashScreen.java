@@ -20,6 +20,7 @@ public class SplashScreen implements Screen {
     Texture splashImage;
     Stage stage;
     long startTime;
+    private boolean isDataRead = false;
 
     public SplashScreen(final Tsar gam){
         this.game = gam;
@@ -40,6 +41,25 @@ public class SplashScreen implements Screen {
 
         //Calling the load functions to load all the assets on the splash screen
         game.assets.load();
+        game.getPlayServices().signIn();
+        readDataFromDB();
+
+    }
+
+    private void readDataFromDB() {
+        int i = 0;
+        while(FirebaseHelper.isSignIn != true) {
+            i++;
+        }
+        if(game.getPlayServices().isSignedIn()) {
+            System.out.println(FirebaseHelper.getPlayerId());
+            game.firebaseHelper = new FirebaseHelper();
+            game.firebaseHelper.dataInit();
+            System.out.println("Data downloaded");
+            isDataRead = true;
+        }
+        else
+            System.out.println("ERROR: DIDN'T SIGN IN");
     }
 
     @Override
@@ -53,7 +73,7 @@ public class SplashScreen implements Screen {
         stage.draw();
         batch.end();
 
-        if(TimeUtils.millis() - startTime > 2000)
+        if(TimeUtils.millis() - startTime > 2000 && isDataRead)
             game.setScreen(new MainMenuScreen(game));
     }
 

@@ -52,14 +52,11 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
     public MainMenuScreen(final Tsar gam){
         this.game=gam;
-        if(!game.getPlayServices().isSignedIn() && game.isFirstStart) {
+        /*if(!game.getPlayServices().isSignedIn() && game.isFirstStart) {
             game.getPlayServices().signIn();
             game.isFirstStart = false;
-        }
-
-        if(game.isFirstStart)
             readDataFromDB();
-
+        }*/
 
         System.out.println(appWidth = Gdx.graphics.getWidth());
         System.out.println(appHeight = Gdx.graphics.getHeight());
