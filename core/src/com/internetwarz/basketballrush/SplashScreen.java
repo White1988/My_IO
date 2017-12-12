@@ -41,19 +41,19 @@ public class SplashScreen implements Screen {
 
         //Calling the load functions to load all the assets on the splash screen
         game.assets.load();
-        game.getPlayServices().signIn();
-        readDataFromDB();
+        //game.getPlayServices().signIn();
+        //readDataFromDB();
 
     }
 
     private void readDataFromDB() {
+        game.firebaseHelper = new FirebaseHelper();
         int i = 0;
         while(FirebaseHelper.isSignIn != true) {
             i++;
         }
         if(game.getPlayServices().isSignedIn()) {
             System.out.println(FirebaseHelper.getPlayerId());
-            game.firebaseHelper = new FirebaseHelper();
             game.firebaseHelper.dataInit();
             System.out.println("Data downloaded");
             isDataRead = true;
@@ -73,7 +73,7 @@ public class SplashScreen implements Screen {
         stage.draw();
         batch.end();
 
-        if(TimeUtils.millis() - startTime > 2000 && isDataRead)
+        if(TimeUtils.millis() - startTime > 2000)
             game.setScreen(new MainMenuScreen(game));
     }
 

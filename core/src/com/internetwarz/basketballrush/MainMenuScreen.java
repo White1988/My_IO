@@ -52,11 +52,11 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
     public MainMenuScreen(final Tsar gam){
         this.game=gam;
-        /*if(!game.getPlayServices().isSignedIn() && game.isFirstStart) {
+        if(!game.getPlayServices().isSignedIn() || game.isFirstStart) {
             game.getPlayServices().signIn();
             game.isFirstStart = false;
             readDataFromDB();
-        }*/
+        }
 
         System.out.println(appWidth = Gdx.graphics.getWidth());
         System.out.println(appHeight = Gdx.graphics.getHeight());
@@ -362,18 +362,21 @@ public class MainMenuScreen implements Screen,InputProcessor {
     }
 
     private void readDataFromDB() {
-        int i = 0;
-        while(FirebaseHelper.isSignIn != true) {
-            i++;
-        }
-        if(game.getPlayServices().isSignedIn()) {
-            System.out.println(FirebaseHelper.getPlayerId());
-            game.firebaseHelper = new FirebaseHelper();
-            game.firebaseHelper.dataInit();
-            System.out.println("Data downloaded");
-        }
-        else
-            System.out.println("ERROR: DIDN'T SIGN IN");
+        game.firebaseHelper = new FirebaseHelper();
+        Runnable runnable = new Runnable() {
+            boolean isDownloaded = false;
+            @Override
+            public void run() {
+                if(game.getPlayServices().isSignedIn() && !isDownloaded) {
+                    System.out.println(FirebaseHelper.getPlayerId());
+                    game.firebaseHelper.dataInit();
+                    System.out.println("Data downloaded");
+                    isDownloaded = true;
+                }
+            }
+        };
+        runnable.run();
+
     }
 
     private void fontInit() {

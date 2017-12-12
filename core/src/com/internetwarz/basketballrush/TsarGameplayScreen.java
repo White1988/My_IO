@@ -569,7 +569,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         isGameBegan = false;
         rightWrongLabel.setText(LanguagesManager.getInstance().getString("gameOver"));
         rightWrongLabel.setX(WIDTH/2 - rightWrongLabel.getPrefWidth()/2);
-        saveScore(score, gameType);
+        if(game.getPlayServices().isSignedIn())
+            saveScore(score, gameType);
 
         //Updating the circle
         stage.getActors().removeRange(stage.getActors().size - numSectors, stage.getActors().size - 1 );
