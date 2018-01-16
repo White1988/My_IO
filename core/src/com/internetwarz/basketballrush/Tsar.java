@@ -61,8 +61,9 @@ public class Tsar extends Game {
 		assets = new Assets();
 		initDB();
         //Changing the screen to display splash screen
-		this.setScreen(new SplashScreen(this)); //todo uncomment
-		//this.setScreen(new TsarGameplayScreen(this));
+//		this.setScreen(new SplashScreen(this));
+		this.setScreen(new DuelScreen(this));
+//		this.setScreen(new TsarGameplayScreen(this));
 	}
 
 	@Override

@@ -36,7 +36,7 @@ public  class FirebaseHelper
         reference = GDXFirebase.FirebaseDatabase().getReference(STATS_TABLE);
         //mail = mail.replaceAll("@", "_").replace(".", "_");
         //playerId = mail;
-        playerId = playerId.replaceAll("@", "_").replace(".", "_");
+     /// todo uncomment   playerId = playerId.replaceAll("@", "_").replace(".", "_");
         System.out.println(playerId);
     }
 
