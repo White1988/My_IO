@@ -11,6 +11,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
@@ -31,15 +34,11 @@ public class DuelScreen implements Screen, InputProcessor{
     private ShapeRenderer shapeRenderer;
     OrthographicCamera camera;
 
-
-
-
     private float WIDTH;
     private float HEIGHT;
 
-
-
-
+    Image imageRectangle;
+    Rectangle rectangle;
 
 
     public DuelScreen(Tsar game ) {
@@ -48,11 +47,11 @@ public class DuelScreen implements Screen, InputProcessor{
         WIDTH = (float) Gdx.graphics.getWidth();
         HEIGHT = (float) Gdx.graphics.getHeight();
 
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH/ VIEWPORT_SCALE, HEIGHT / VIEWPORT_SCALE);
 
         shapeRenderer = new ShapeRenderer(15000); //increase smoothness of circle
+        Gdx.input.setInputProcessor(this);
 
     }
 
@@ -73,7 +72,9 @@ public class DuelScreen implements Screen, InputProcessor{
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.WHITE);
         shapeRenderer.rect(10,10,130,90);
-        shapeRenderer.end();    }
+        shapeRenderer.end();
+
+    }
 
     @Override
     public void resize(int width, int height) {
@@ -117,6 +118,16 @@ public class DuelScreen implements Screen, InputProcessor{
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        Vector3 coord =  camera.unproject(new Vector3(screenX, screenY, 0));
+
+        System.out.println("worldX " +coord.x);
+        System.out.println("worldY " +coord.y);
+        rectangle= new Rectangle(10,10,130,90);
+        if(Intersector.overlaps(rectangle, new Rectangle(coord.x, coord.y, 1,1)))
+        {
+            System.out.println("Попал");
+            }
+
         return false;
     }
 
