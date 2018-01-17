@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
@@ -22,14 +23,37 @@ import jdk.nashorn.internal.codegen.MethodEmitter;
 
 public class DuelScreen implements Screen, InputProcessor{
 
+//    private SpriteBatch batch;
+//    private Texture texture;
     private final Tsar game;
-    private SpriteBatch batch;
-    private Texture texture;
+    private static int VIEWPORT_SCALE = 1;
+
     private ShapeRenderer shapeRenderer;
     OrthographicCamera camera;
 
+
+
+
+    private float WIDTH;
+    private float HEIGHT;
+
+
+
+
+
+
     public DuelScreen(Tsar game ) {
         this.game = game;
+
+        WIDTH = (float) Gdx.graphics.getWidth();
+        HEIGHT = (float) Gdx.graphics.getHeight();
+
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, WIDTH/ VIEWPORT_SCALE, HEIGHT / VIEWPORT_SCALE);
+
+        shapeRenderer = new ShapeRenderer(15000); //increase smoothness of circle
+
     }
 
 
@@ -40,8 +64,16 @@ public class DuelScreen implements Screen, InputProcessor{
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0,0,0,1);
 
-    }
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.WHITE);
+        shapeRenderer.rect(10,10,130,90);
+        shapeRenderer.end();    }
 
     @Override
     public void resize(int width, int height) {
