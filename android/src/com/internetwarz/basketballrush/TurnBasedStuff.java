@@ -16,42 +16,25 @@ package com.internetwarz.basketballrush;/*
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.games.Games;
-import com.google.android.gms.games.GamesCallbackStatusCodes;
-import com.google.android.gms.games.GamesClient;
-import com.google.android.gms.games.GamesClientStatusCodes;
 import com.google.android.gms.games.InvitationsClient;
-import com.google.android.gms.games.Player;
 import com.google.android.gms.games.TurnBasedMultiplayerClient;
 import com.google.android.gms.games.multiplayer.Invitation;
 import com.google.android.gms.games.multiplayer.InvitationCallback;
-import com.google.android.gms.games.multiplayer.Multiplayer;
 import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatch;
 import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatchConfig;
 import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatchUpdateCallback;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.example.games.basegameutils.PlayerTurn;
 
 import java.util.ArrayList;
 
-import static com.internetwarz.basketballrush.AndroidLauncher.RC_LOOK_AT_MATCHES;
 import static com.internetwarz.basketballrush.AndroidLauncher.RC_SELECT_PLAYERS;
 
 
@@ -72,8 +55,8 @@ import static com.internetwarz.basketballrush.AndroidLauncher.RC_SELECT_PLAYERS;
  *
  * @author Wolff (wolff@google.com), 2013
  */
-public class TurnBasedStuff implements TurnBasedService
-         {
+public class TurnBasedStuff implements TurnBasedService  {
+
 
     public static final String TAG = "TurnBasedStuff";
 
@@ -99,78 +82,42 @@ public class TurnBasedStuff implements TurnBasedService
     // Do not retain references to match data once you have
     // taken an action on the match, such as takeTurn()
     public PlayerTurn mTurnData;
-
-
-
-
-
-
-    @Override
-    public void onPause() {
-        if (mInvitationsClient != null) {
-            mInvitationsClient.unregisterInvitationCallback(mInvitationCallback);
-        }
-
-        if (mTurnBasedMultiplayerClient != null) {
-            mTurnBasedMultiplayerClient.unregisterTurnBasedMatchUpdateCallback(mMatchUpdateCallback);
-        }
-    }
-
-             public String mDisplayName;
-             public String mPlayerId;
-
-
-
+    public String mDisplayName;public String mPlayerId;
 
 
     // This is a helper functio that will do all the setup to create a simple failure message.
     // Add it to any task and in the case of an failure, it will report the string in an alert
     // dialog.
-    private OnFailureListener createFailureListener(final String string) {
+    public OnFailureListener createFailureListener(final String string) {
         return new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                handleException(e, string);
+                System.out.println(e.getMessage());
             }
         };
     }
 
-    // Displays your inbox. You will get back onActivityResult where
-    // you will need to figure out what you clicked on.
-    public void onCheckGamesClicked(View view) {
-        mTurnBasedMultiplayerClient.getInboxIntent()
-                .addOnSuccessListener(new OnSuccessListener<Intent>() {
-                    @Override
-                    public void onSuccess(Intent intent) {
-                        startActivityForResult(intent, RC_LOOK_AT_MATCHES);
-                    }
-                })
-                .addOnFailureListener(createFailureListener(getString(com.google.example.games.basegameutils.R.string.error_get_inbox_intent)));
-    }
 
-    // Open the create-game UI. You will get back an onActivityResult
-    // and figure out what to do.
-    public void onStartMatchClicked(View view) {
-        mTurnBasedMultiplayerClient.getSelectOpponentsIntent(1, 7, true)
+    public void onStartMatchClicked(final Activity a) {
+          mTurnBasedMultiplayerClient.getSelectOpponentsIntent(1, 7, true)
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
                     @Override
                     public void onSuccess(Intent intent) {
-                        startActivityForResult(intent, RC_SELECT_PLAYERS);
+                      a.  startActivityForResult(intent, RC_SELECT_PLAYERS);
                     }
                 })
                 .addOnFailureListener(createFailureListener(
-                        getString(com.google.example.games.basegameutils.R.string.error_get_select_opponents)));
+                        "Select opponents!"));
     }
 
-    // Create a one-on-one automatch game.
-    public void onQuickMatchClicked(View view) {
+    //todo add in mainMenuScreen
+    @Override
+    public void onQuickMatchClicked() {
 
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(1, 1, 0);
 
         TurnBasedMatchConfig turnBasedMatchConfig = TurnBasedMatchConfig.builder()
                 .setAutoMatchCriteria(autoMatchCriteria).build();
-
-        showSpinner();
 
         // Start the match
         mTurnBasedMultiplayerClient.createMatch(turnBasedMatchConfig)
@@ -187,8 +134,12 @@ public class TurnBasedStuff implements TurnBasedService
 
     // Cancel the game. Should possibly wait until the game is canceled before
     // giving up on the view.
-    public void onCancelClicked(View view) {
-        showSpinner();
+
+     //todo add in Duelscreen
+     @Override
+
+    public void onCancelClicked() {
+
 
         mTurnBasedMultiplayerClient.cancelMatch(mMatch.getMatchId())
                 .addOnSuccessListener(new OnSuccessListener<String>() {
@@ -202,9 +153,8 @@ public class TurnBasedStuff implements TurnBasedService
         isDoingTurn = false;
 
     }
-
-    // Leave the game during your turn. Note that there is a separate
-    // mTurnBasedMultiplayerClient.leaveMatch() if you want to leave NOT on your turn.
+    @Override
+    //todo add in mainMenuScreen
     public void onLeaveClicked() {
 
         String nextParticipantId = getNextParticipantId();
@@ -221,7 +171,8 @@ public class TurnBasedStuff implements TurnBasedService
 
     }
 
-      //todo call after onFinish button from DuelScreen
+    @Override
+    //todo call after onFinish button from DuelScreen
     public void onFinishClicked() {
 
         mTurnBasedMultiplayerClient.finishMatch(mMatch.getMatchId())
@@ -241,6 +192,7 @@ public class TurnBasedStuff implements TurnBasedService
     // Upload your new gamestate, then take a turn, and pass it on to the next
     // player.
 
+    @Override
     //todo call after move from DuelScreen
     public void onDoneClicked() {
 
@@ -404,7 +356,7 @@ public class TurnBasedStuff implements TurnBasedService
                 "All other players will have their game ended.");
     }
 
-    private void onInitiateMatch(TurnBasedMatch match) {
+    public void onInitiateMatch(TurnBasedMatch match) {
 
 
         if (match.getData() != null) {
@@ -415,6 +367,8 @@ public class TurnBasedStuff implements TurnBasedService
 
         startMatch(match);
     }
+
+
 
     private void onLeaveMatch() {
 

@@ -1,30 +1,24 @@
 package com.internetwarz.basketballrush;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.internetwarz.basketballrush.utils.LanguagesManager;
-
-import jdk.nashorn.internal.codegen.MethodEmitter;
 
 /**
  * Created by Дмитрий on 12.01.2018.
  */
 
 public class DuelScreen implements Screen, InputProcessor{
+
+
 
 //    private SpriteBatch batch;
 //    private Texture texture;

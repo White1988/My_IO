@@ -20,14 +20,17 @@ public class Tsar extends Game {
 	public BitmapFont font;
 	public FreeTypeFontGenerator generator;
     private static PlayServices playServices;
+    private static TurnBasedService turnBasedService;
 	public Assets assets;
 	public FirebaseHelper firebaseHelper;
 	public boolean isFirstStart = true;
 
 
-    public Tsar(PlayServices playServices)
+    public Tsar(PlayServices playServices, TurnBasedService service)
     {
         this.playServices = playServices;
+        this.turnBasedService = service;
+
     }
 
 

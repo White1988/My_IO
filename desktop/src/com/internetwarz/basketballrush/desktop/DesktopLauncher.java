@@ -16,6 +16,6 @@ public class DesktopLauncher {
 		config.width = 360;//800
 		config.height = 640;//600
 
-		new LwjglApplication(new Tsar(new PlayServicesStub()), config);
+		new LwjglApplication(new Tsar(new PlayServicesStub(), new TurnbasedServiceStub()), config);
 	}
 }

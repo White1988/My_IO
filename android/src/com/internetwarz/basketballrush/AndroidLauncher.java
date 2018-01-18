@@ -38,13 +38,15 @@ import com.google.example.games.basegameutils.GameHelper;
 
 import java.util.ArrayList;
 
+import static android.content.ContentValues.TAG;
+
 public class AndroidLauncher extends AndroidApplication implements PlayServices {
     private GameHelper gameHelper;
     private final static int requestCode = 1;
     private final static String AD_ID = "pub-8644762955474796";
     //private final static String AD_ID = "ca-app-pub-3940256099942544/6300978111";
 
-    TurnBasedStuff turnBasedStuff = new TurnBasedStuff();
+    TurnBasedStuff turnBasedStuff = new TurnBasedStuff(); // !!VERY important that we are using TurnBasedStuff instead TurnBasedService
     private AlertDialog mAlertDialog;
 
     @Override
@@ -59,7 +61,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
-        View gameView = initializeForView(new Tsar(this), config);
+        View gameView = initializeForView(new Tsar(this, turnBasedStuff), config);
         gameView.setId(View.generateViewId());
 
         AdView adView = new AdView(this);
@@ -120,6 +122,11 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     private static final int RC_SIGN_IN = 9001;
     final static int RC_SELECT_PLAYERS = 10000;
     final static int RC_LOOK_AT_MATCHES = 10001;
+    // Open the create-game UI. You will get back an onActivityResult
+    // and figure out what to do.
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -139,7 +146,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
             } catch (ApiException apiException) {
                 String message = apiException.getMessage();
                 if (message == null || message.isEmpty()) {
-                    message = getString(com.google.example.games.basegameutils.R.string.signin_other_error);
+                    message = getString(R.string.signin_other_error);
                 }
 
                 onDisconnected();
@@ -162,7 +169,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                     .getParcelableExtra(Multiplayer.EXTRA_TURN_BASED_MATCH);
 
             if (match != null) {
-              turnBasedStuff.  updateMatch(match);
+                turnBasedStuff. updateMatch(match);
             }
 
             Log.d(TAG, "Match = " + match);
@@ -198,14 +205,14 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                     .setAutoMatchCriteria(autoMatchCriteria).build();
 
             // Start the match
-        turnBasedStuff. mTurnBasedMultiplayerClient.createMatch(tbmc)
+          turnBasedStuff.  mTurnBasedMultiplayerClient.createMatch(tbmc)
                     .addOnSuccessListener(new OnSuccessListener<TurnBasedMatch>() {
                         @Override
                         public void onSuccess(TurnBasedMatch turnBasedMatch) {
-                            onInitiateMatch(turnBasedMatch);
+                            turnBasedStuff.onInitiateMatch(turnBasedMatch);
                         }
                     })
-                    .addOnFailureListener(createFailureListener("There was a problem creating a match!"));
+                    .addOnFailureListener(turnBasedStuff.createFailureListener("There was a problem creating a match!"));
 
         }
     }
@@ -219,7 +226,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 
         setViewVisibility();
     }
-    turnBasedStuff.
+
     private void onConnected(GoogleSignInAccount googleSignInAccount) {
 
 
@@ -239,7 +246,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                             }
                         }
                 )
-                .addOnFailureListener(createFailureListener("There was a problem getting the player!"));
+                .addOnFailureListener(turnBasedStuff.createFailureListener("There was a problem getting the player!"));
 
         Log.d(TAG, "onConnected(): Connection successful");
 
@@ -253,12 +260,12 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                             TurnBasedMatch match = hint.getParcelable(Multiplayer.EXTRA_TURN_BASED_MATCH);
 
                             if (match != null) {
-                                updateMatch(match);
+                               turnBasedStuff. updateMatch(match);
                             }
                         }
                     }
                 })
-                .addOnFailureListener(createFailureListener(
+                .addOnFailureListener(turnBasedStuff.createFailureListener(
                         "There was a problem getting the activation hint!"));
 
         setViewVisibility();
@@ -337,7 +344,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                     .show();
 
             TurnBasedMatch match = matchOutOfDateApiException.getMatch();
-            updateMatch(match);
+            turnBasedStuff. updateMatch(match);
 
             return;
         }
@@ -364,39 +371,30 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                 + message);
     }
 
-
-    // Returns false if something went wrong, probably. This should handle
-    // more cases, and probably report more accurate results.
-    private boolean checkStatusCode(int statusCode) {
-        switch (statusCode) {
-            case GamesCallbackStatusCodes.OK:
-                return true;
-
-            case GamesClientStatusCodes.MULTIPLAYER_ERROR_NOT_TRUSTED_TESTER:
-                showErrorMessage(com.google.example.games.basegameutils.R.string.status_multiplayer_error_not_trusted_tester);
-                break;
-            case GamesClientStatusCodes.MATCH_ERROR_ALREADY_REMATCHED:
-                showErrorMessage(com.google.example.games.basegameutils.R.string.match_error_already_rematched);
-                break;
-            case GamesClientStatusCodes.NETWORK_ERROR_OPERATION_FAILED:
-                showErrorMessage(com.google.example.games.basegameutils.R.string.network_error_operation_failed);
-                break;
-            case GamesClientStatusCodes.INTERNAL_ERROR:
-                showErrorMessage(com.google.example.games.basegameutils.R.string.internal_error);
-                break;
-            case GamesClientStatusCodes.MATCH_ERROR_INACTIVE_MATCH:
-                showErrorMessage(com.google.example.games.basegameutils.R.string.match_error_inactive_match);
-                break;
-            case GamesClientStatusCodes.MATCH_ERROR_LOCALLY_MODIFIED:
-                showErrorMessage(com.google.example.games.basegameutils.R.string.match_error_locally_modified);
-                break;
-            default:
-                showErrorMessage(com.google.example.games.basegameutils.R.string.unexpected_status);
-                Log.d(TAG, "Did not have warning or string to deal with: "
-                        + statusCode);
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (turnBasedStuff.  mInvitationsClient != null) {
+            turnBasedStuff.  mInvitationsClient.unregisterInvitationCallback(turnBasedStuff.  mInvitationCallback);
         }
 
-        return false;
+        if (turnBasedStuff.  mTurnBasedMultiplayerClient != null) {
+            turnBasedStuff.  mTurnBasedMultiplayerClient.unregisterTurnBasedMatchUpdateCallback(turnBasedStuff.  mMatchUpdateCallback);
+        }
+    }
+
+
+    // Displays your inbox. You will get back onActivityResult where
+    // you will need to figure out what you clicked on.
+    public void onCheckGamesClicked(View view) {
+     turnBasedStuff.   mTurnBasedMultiplayerClient.getInboxIntent()
+                .addOnSuccessListener(new OnSuccessListener<Intent>() {
+                    @Override
+                    public void onSuccess(Intent intent) {
+                        startActivityForResult(intent, RC_LOOK_AT_MATCHES);
+                    }
+                })
+                .addOnFailureListener(turnBasedStuff.createFailureListener(getString(com.google.example.games.basegameutils.R.string.error_get_inbox_intent)));
     }
 
 
