@@ -4,7 +4,7 @@ import com.internetwarz.basketballrush.TurnBasedService;
 import com.internetwarz.basketballrush.model.PlayerTurn;
 
 
-public class TurnbasedServiceStub implements TurnBasedService {
+public class TurnbasedServiceStub extends TurnBasedService {
 
     PlayerTurn playerTurn = new PlayerTurn();
 
@@ -12,6 +12,15 @@ public class TurnbasedServiceStub implements TurnBasedService {
     public void onQuickMatchClicked() {
 
         System.out.println("onQuickMatchClicked");
+
+        turnBasedCallBacks.onMatchStartedCallback();
+    }
+
+    @Override
+    public void onStartMatchClicked() {
+        System.out.println("onStartMatchClicked");
+
+        turnBasedCallBacks.onMatchStartedCallback();
     }
 
     @Override
@@ -37,8 +46,4 @@ public class TurnbasedServiceStub implements TurnBasedService {
         System.out.println("onDoneClicked selectedNumber: " + selectedNumber);
     }
 
-    @Override
-    public void onStartMatchClicked() {
-        System.out.println("onStartMatchClicked");
-    }
 }

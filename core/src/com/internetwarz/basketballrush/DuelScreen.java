@@ -12,9 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-/**
- * Created by Дмитрий on 12.01.2018.
- */
+
 
 public class DuelScreen implements Screen, InputProcessor{
 

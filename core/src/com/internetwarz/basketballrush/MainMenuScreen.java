@@ -165,7 +165,15 @@ public class MainMenuScreen implements Screen,InputProcessor {
                     clickSound.play();
                 if(!game.getPlayServices().isSignedIn())
                     game.getPlayServices().signIn();
-                game.setScreen(new TsarGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE)));
+
+                game.getTurnBasedService().turnBasedCallBacks = new TurnBasedService.TurnBasedCallBacks() {
+                    @Override
+                    public void onMatchStartedCallback() {
+                        game.setScreen(new TsarGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE)));
+                    }
+                };
+                game.getTurnBasedService().onQuickMatchClicked();
+
 
             }
         });

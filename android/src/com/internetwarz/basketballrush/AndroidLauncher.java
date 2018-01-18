@@ -46,7 +46,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     private final static String AD_ID = "pub-8644762955474796";
     //private final static String AD_ID = "ca-app-pub-3940256099942544/6300978111";
 
-    TurnBasedStuff turnBasedStuff = new TurnBasedStuff(this); // !!VERY important that we are using TurnBasedStuff instead TurnBasedService
+    TurnBasedAndroid turnBasedAndroid = new TurnBasedAndroid(this); // !!VERY important that we are using TurnBasedAndroid instead TurnBasedService
     private AlertDialog mAlertDialog;
 
     @Override
@@ -61,7 +61,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
-        View gameView = initializeForView(new Tsar(this, turnBasedStuff), config);
+        View gameView = initializeForView(new Tsar(this, turnBasedAndroid), config);
         gameView.setId(View.generateViewId());
 
         AdView adView = new AdView(this);
@@ -169,7 +169,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                     .getParcelableExtra(Multiplayer.EXTRA_TURN_BASED_MATCH);
 
             if (match != null) {
-                turnBasedStuff. updateMatch(match);
+                turnBasedAndroid. updateMatch(match);
             }
 
             Log.d(TAG, "Match = " + match);
@@ -205,14 +205,14 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                     .setAutoMatchCriteria(autoMatchCriteria).build();
 
             // Start the match
-          turnBasedStuff.  mTurnBasedMultiplayerClient.createMatch(tbmc)
+          turnBasedAndroid.  mTurnBasedMultiplayerClient.createMatch(tbmc)
                     .addOnSuccessListener(new OnSuccessListener<TurnBasedMatch>() {
                         @Override
                         public void onSuccess(TurnBasedMatch turnBasedMatch) {
-                            turnBasedStuff.onInitiateMatch(turnBasedMatch);
+                            turnBasedAndroid.onInitiateMatch(turnBasedMatch);
                         }
                     })
-                    .addOnFailureListener(turnBasedStuff.createFailureListener("There was a problem creating a match!"));
+                    .addOnFailureListener(turnBasedAndroid.createFailureListener("There was a problem creating a match!"));
 
         }
     }
@@ -221,8 +221,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 
         System.out.println( "onDisconnected()");
 
-        turnBasedStuff.  mTurnBasedMultiplayerClient = null;
-        turnBasedStuff.    mInvitationsClient = null;
+        turnBasedAndroid.  mTurnBasedMultiplayerClient = null;
+        turnBasedAndroid.    mInvitationsClient = null;
 
         setViewVisibility();
     }
@@ -230,8 +230,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     private void onConnected(GoogleSignInAccount googleSignInAccount) {
 
 
-        turnBasedStuff.     mTurnBasedMultiplayerClient = Games.getTurnBasedMultiplayerClient(this, googleSignInAccount);
-        turnBasedStuff.     mInvitationsClient = Games.getInvitationsClient(this, googleSignInAccount);
+        turnBasedAndroid.     mTurnBasedMultiplayerClient = Games.getTurnBasedMultiplayerClient(this, googleSignInAccount);
+        turnBasedAndroid.     mInvitationsClient = Games.getInvitationsClient(this, googleSignInAccount);
 
         Games.getPlayersClient(this, googleSignInAccount)
                 .getCurrentPlayer()
@@ -239,14 +239,14 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                         new OnSuccessListener<Player>() {
                             @Override
                             public void onSuccess(Player player) {
-                          turnBasedStuff.      mDisplayName = player.getDisplayName();
-                                turnBasedStuff.       mPlayerId = player.getPlayerId();
+                          turnBasedAndroid.      mDisplayName = player.getDisplayName();
+                                turnBasedAndroid.       mPlayerId = player.getPlayerId();
 
                                 setViewVisibility();
                             }
                         }
                 )
-                .addOnFailureListener(turnBasedStuff.createFailureListener("There was a problem getting the player!"));
+                .addOnFailureListener(turnBasedAndroid.createFailureListener("There was a problem getting the player!"));
 
         Log.d(TAG, "onConnected(): Connection successful");
 
@@ -260,12 +260,12 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                             TurnBasedMatch match = hint.getParcelable(Multiplayer.EXTRA_TURN_BASED_MATCH);
 
                             if (match != null) {
-                               turnBasedStuff. updateMatch(match);
+                               turnBasedAndroid. updateMatch(match);
                             }
                         }
                     }
                 })
-                .addOnFailureListener(turnBasedStuff.createFailureListener(
+                .addOnFailureListener(turnBasedAndroid.createFailureListener(
                         "There was a problem getting the activation hint!"));
 
         setViewVisibility();
@@ -276,12 +276,12 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         // This is *NOT* required; if you do not register a handler for
         // invitation events, you will get standard notifications instead.
         // Standard notifications may be preferable behavior in many cases.
-         turnBasedStuff.     mInvitationsClient.registerInvitationCallback(turnBasedStuff. mInvitationCallback);
+         turnBasedAndroid.     mInvitationsClient.registerInvitationCallback(turnBasedAndroid. mInvitationCallback);
 
         // Likewise, we are registering the optional MatchUpdateListener, which
         // will replace notifications you would get otherwise. You do *NOT* have
         // to register a MatchUpdateListener.
-        turnBasedStuff.    mTurnBasedMultiplayerClient.registerTurnBasedMatchUpdateCallback(turnBasedStuff.mMatchUpdateCallback);
+        turnBasedAndroid.    mTurnBasedMultiplayerClient.registerTurnBasedMatchUpdateCallback(turnBasedAndroid.mMatchUpdateCallback);
     }
 
 
@@ -344,7 +344,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                     .show();
 
             TurnBasedMatch match = matchOutOfDateApiException.getMatch();
-            turnBasedStuff. updateMatch(match);
+            turnBasedAndroid. updateMatch(match);
 
             return;
         }
@@ -374,12 +374,12 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     @Override
     public void onPause() {
         super.onPause();
-        if (turnBasedStuff.  mInvitationsClient != null) {
-            turnBasedStuff.  mInvitationsClient.unregisterInvitationCallback(turnBasedStuff.  mInvitationCallback);
+        if (turnBasedAndroid.  mInvitationsClient != null) {
+            turnBasedAndroid.  mInvitationsClient.unregisterInvitationCallback(turnBasedAndroid.  mInvitationCallback);
         }
 
-        if (turnBasedStuff.  mTurnBasedMultiplayerClient != null) {
-            turnBasedStuff.  mTurnBasedMultiplayerClient.unregisterTurnBasedMatchUpdateCallback(turnBasedStuff.  mMatchUpdateCallback);
+        if (turnBasedAndroid.  mTurnBasedMultiplayerClient != null) {
+            turnBasedAndroid.  mTurnBasedMultiplayerClient.unregisterTurnBasedMatchUpdateCallback(turnBasedAndroid.  mMatchUpdateCallback);
         }
     }
 
@@ -387,20 +387,20 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     // Displays your inbox. You will get back onActivityResult where
     // you will need to figure out what you clicked on.
     public void onCheckGamesClicked(View view) {
-     turnBasedStuff.   mTurnBasedMultiplayerClient.getInboxIntent()
+     turnBasedAndroid.   mTurnBasedMultiplayerClient.getInboxIntent()
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
                     @Override
                     public void onSuccess(Intent intent) {
                         startActivityForResult(intent, RC_LOOK_AT_MATCHES);
                     }
                 })
-                .addOnFailureListener(turnBasedStuff.createFailureListener(getString(com.google.example.games.basegameutils.R.string.error_get_inbox_intent)));
+                .addOnFailureListener(turnBasedAndroid.createFailureListener(getString(com.google.example.games.basegameutils.R.string.error_get_inbox_intent)));
     }
 
 
     // Update the visibility based on what state we're in.
     public void setViewVisibility() {
-        boolean isSignedIn = turnBasedStuff. mTurnBasedMultiplayerClient != null;
+        boolean isSignedIn = turnBasedAndroid. mTurnBasedMultiplayerClient != null;
 
         if (!isSignedIn) {
             //findViewById(com.google.example.games.basegameutils.R.id.login_layout).setVisibility(View.VISIBLE);
@@ -418,7 +418,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         //((TextView) findViewById(com.google.example.games.basegameutils.R.id.name_field)).setText(mDisplayName);
         // findViewById(com.google.example.games.basegameutils.R.id.login_layout).setVisibility(View.GONE);
 
-        if (turnBasedStuff. isDoingTurn) {
+        if (turnBasedAndroid. isDoingTurn) {
             System.out.println("isDoingTurn");
 
             // findViewById(com.google.example.games.basegameutils.R.id.matchup_layout).setVisibility(View.GONE);

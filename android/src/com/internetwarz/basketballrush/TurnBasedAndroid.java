@@ -55,10 +55,10 @@ import static com.internetwarz.basketballrush.AndroidLauncher.RC_SELECT_PLAYERS;
  *
  * @author Wolff (wolff@google.com), 2013
  */
-public class TurnBasedStuff implements TurnBasedService  {
+public class TurnBasedAndroid extends TurnBasedService  {
 
 
-    public static final String TAG = "TurnBasedStuff";
+    public static final String TAG = "TurnBasedAndroid";
 
     // Client used to interact with the TurnBasedMultiplayer system.
     public TurnBasedMultiplayerClient mTurnBasedMultiplayerClient = null;
@@ -71,7 +71,7 @@ public class TurnBasedStuff implements TurnBasedService  {
     public TextView mTurnTextView;
 
 
-    public TurnBasedStuff(Activity contextActivity) {
+    public TurnBasedAndroid(Activity contextActivity) {
         this.contextActivity = contextActivity;
     }
 
@@ -129,12 +129,15 @@ public class TurnBasedStuff implements TurnBasedService  {
                     @Override
                     public void onSuccess(TurnBasedMatch turnBasedMatch) {
                         onInitiateMatch(turnBasedMatch);
+
+                        turnBasedCallBacks.onMatchStartedCallback();
                     }
                 })
                 .addOnFailureListener(createFailureListener("There was a problem creating a match!"));
     }
 
     // In-game controls
+
 
 
 
