@@ -126,7 +126,7 @@ public class DuelScreen implements Screen, InputProcessor{
         if(Intersector.overlaps(rectangle, new Rectangle(coord.x, coord.y, 1,1)))
         {
             System.out.println("Попал");
-            }
+        }
 
         return false;
     }
