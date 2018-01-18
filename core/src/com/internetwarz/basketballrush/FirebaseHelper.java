@@ -36,7 +36,7 @@ public  class FirebaseHelper
         reference = GDXFirebase.FirebaseDatabase().getReference(STATS_TABLE);
         //mail = mail.replaceAll("@", "_").replace(".", "_");
         //playerId = mail;
-        playerId = playerId.replaceAll("@", "_").replace(".", "_");
+     /// todo uncomment   playerId = playerId.replaceAll("@", "_").replace(".", "_");
         System.out.println(playerId);
     }
 
@@ -208,6 +208,7 @@ public  class FirebaseHelper
 
     public void updateData(String difficult, int level) {
         //getData(difficult);
+
         boolean isExist = false;
         /*try {
             Thread.sleep(5000);
@@ -241,7 +242,7 @@ public  class FirebaseHelper
         }
         else if(difficult.equals(HARD_MODE)) {
             System.out.println(listHard.size());
-            for(HashMap<String, Long> map: listHard) {
+            for(HashMap<String, Integer> map: listHard) {
                 if(map.get("level") == level) {
                     isExist = true;
                     map.put("gamesCount", map.get("gamesCount") + 1);

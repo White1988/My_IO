@@ -368,15 +368,13 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         TextButton.TextButtonStyle textButtonStyle1 = textButtonStyle;
         textButtonStyle1.down = buttonSkin.getDrawable("Button checked");
         textButtonStyle1.checked = null;
-        TextButton yes = new TextButton(LanguagesManager.getInstance().getString("yes"), textButtonStyle1);
+        TextButton yes = new TextButton(LanguagesManager.getInstance().getString("yes"), textButtonStyle);
         yes.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new TsarGameplayScreen(game, numAttempts));
             }
         });
-        TextButton no = new TextButton(LanguagesManager.getInstance().getString("no"), textButtonStyle1);
-
-
+        TextButton no = new TextButton(LanguagesManager.getInstance().getString("no"), textButtonStyle);
 
 
         restartConfirmDialog.text(LanguagesManager.getInstance().getString("restartText"), textStyle);
@@ -475,6 +473,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.BACKSPACE || keycode == Input.Keys.BACK){
             game.setScreen(new MainMenuScreen(game));
+
         }
         return false;
     }
@@ -571,7 +570,8 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         isGameBegan = false;
         rightWrongLabel.setText(LanguagesManager.getInstance().getString("gameOver"));
         rightWrongLabel.setX(WIDTH/2 - rightWrongLabel.getPrefWidth()/2);
-        saveScore(score, gameType);
+        if(game.getPlayServices().isSignedIn())
+            saveScore(score, gameType);
 
         //Updating the circle
         stage.getActors().removeRange(stage.getActors().size - numSectors, stage.getActors().size - 1 );

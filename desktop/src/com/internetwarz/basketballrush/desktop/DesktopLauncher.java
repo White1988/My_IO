@@ -6,7 +6,9 @@ import com.internetwarz.basketballrush.Tsar;
 
 
 public class DesktopLauncher {
+
 	public static void main (String[] arg) {
+		System.setProperty("user.name","CorrectUserName");
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
 		config.title = "MyGame";

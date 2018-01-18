@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 public class Assets {
 
     //Image Resources
-    Texture gameName,logo, line;
+    Texture logo, line;
     TextureAtlas buttonAtlas;
 
     //Sound Resources
@@ -16,7 +16,6 @@ public class Assets {
 
     public void load(){
 
-        gameName = new Texture(Gdx.files.internal("images/gameName.png"));
         logo = new Texture(Gdx.files.internal("images/internetwarz.png"));
         line = new Texture(Gdx.files.internal("images/line_txtr.png"));
 
@@ -28,10 +27,8 @@ public class Assets {
 
     public Texture getTexture(String file){
 
-         if(file.equals("gameName")){
-            return  gameName;
-        }
-        else if(file.equals("internetwarz")){
+
+        if(file.equals("internetwarz")){
             return  logo;
         }
         else if(file.equals("line_txtr"))
@@ -48,8 +45,6 @@ public class Assets {
     }
 
     public void dispose(){
-
-        gameName.dispose();
         logo.dispose();
         line.dispose();
 

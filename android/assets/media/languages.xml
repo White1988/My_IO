@@ -28,6 +28,7 @@
 <string value="The game field in the form of a circle is divided into sectors, with only one sector randomly located for each level. The task of the player, relying on the intuition to find this faithful 'green' sector. The number of sectors increases from level to level. By determining the correct sector, you are moving from level to level. Your result is the maximum level you reached during the game. It is he that is fixed in the rating table, and is located there until someone reaches the same result and will not sweep you away from the 'mountain'. In the game there are three types of complexity: 'Beginner', 'Intern' and 'Profi.' Beginners are given three attempts per level. For the level of 'Intern' - only two attempts per level. Playing at the 'Profi' difficulty level, the player must determine the correct sector on the first attempt for each level." key="rulesText"/>
 <string value="Sign out" key="signOut"/>
 <string value="Language" key="language"/>
+<string value="Close the game?" key="exit"/>
 </language>
 
 <language name="DE">
@@ -57,6 +58,7 @@
 <string value="Das Spielfeld in der Form eines Kreises ist in Sektoren unterteilt, wobei für jede Ebene nur ein Sektor zufällig angeordnet ist. Die Aufgabe des Spielers ist, sich auf die Intuition zu verlassen, um diesen richtigen 'grünen' Sektor zu finden. Die Anzahl der Sektoren nimmt von Ebene zu Ebene zu. Indem Sie den richtigen Sektor bestimmen, bewegen Sie sich von Ebene zu Ebene. Dein Ergebnis ist das maximale Level, das du während des Spiels erreicht hast. Es gibt drei Arten von Komplexität im Spiel: 'Anfänger', 'Amateur' und 'Profi'. Anfänger erhalten pro Level drei Versuche. Für das Level 'Amateur' - nur zwei Versuche pro Level. Beim Schwierigkeitsgrad 'Profi' muss der Spieler beim ersten Versuch für jeden Level den richtigen Sektor ermitteln." key="rulesText"/>
 <string value="Ausloggen" key="signOut"/>
 <string value="Sprache" key="language"/>
+<string value="Spiel schließen?" key="exit"/>
 </language>
 
 
@@ -87,6 +89,7 @@
 <string value="Le champ de jeu sous la forme d'un cercle est divisé en secteurs, avec un seul secteur situé au hasard pour chaque niveau. La tâche du joueur, s'appuyant sur l'intuition pour retrouver ce secteur 'vert' fidèle. Le nombre de secteurs augmente d'un niveau à l'autre. En déterminant le secteur correct, vous passez d'un niveau à un autre. Votre résultat est le niveau maximum atteint pendant le jeu. Il y a trois types de complexité dans le jeu: 'Débutant', 'Amateur' et 'Profi'. Les débutants ont trois tentatives par niveau. Pour le niveau de 'Amateur' - seulement deux tentatives par niveau. En jouant au niveau de difficulté 'Profi', le joueur doit déterminer le secteur correct à la première tentative pour chaque niveau." key="rulesText"/>
 <string value="Vous déconnecter" key="signOut"/>
 <string value="Langue" key="language"/>
+<string value="Fermer le jeu?" key="exit"/>
 </language>
 
 
@@ -117,6 +120,7 @@
 <string value="Игровое поле в виде круга делится на сектора, при этом для каждого уровня верным является всего один сектор, расположенный случайно. Задача игрока, полагаясь на интуицию найти этот верный «зеленый» сектор. Количество секторов увеличивается от уровня к уровню. Определяя правильный сектора, вы продвигаетесь от уровня к уровню. Ваш результат — это максимальный уровень, до которого вы добрались во время игры. В игре существуют три вида сложности: «Новичок», «Любитель» и «Профи». Новичку даются по три попытки на каждый уровень. Для уровня «Любитель» — всего две попытки на уровень. Играя на уровне сложности «Профи», игрок должен определить верный сектор с первой попытки для каждого уровня." key="rulesText"/>
 <string value="Выйти" key="signOut"/>
 <string value="Язык" key="language"/>
+<string value="Закрыть игру?" key="exit"/>
 </language>
 
 
@@ -147,6 +151,7 @@
 <string value="El campo de juego en forma de círculo se divide en sectores, con solo un sector ubicado al azar para cada nivel. La tarea del jugador, confiar en la intuición para encontrar este fiel sector 'verde'. La cantidad de sectores aumenta de un nivel a otro. Al determinar el sector correcto, se está moviendo de nivel a nivel. Tu resultado es el nivel máximo alcanzado durante el juego. Hay tres tipos de complejidad en el juego: 'Principiante', 'Aficionado' y 'Profi'. Los principiantes reciben tres intentos por nivel. Para el nivel de 'Amateur': solo dos intentos por nivel. Jugando en el nivel de dificultad 'Profi', el jugador debe determinar el sector correcto en el primer intento para cada nivel." key="rulesText"/>
 <string value="Finalizar la sesión" key="signOut"/>
 <string value="Idioma" key="language"/>
+<string value="Cerrar el juego?" key="exit"/>
 </language>
 
 
@@ -177,6 +182,7 @@
 <string value="円の形のゲームフィールドはセクタに分割されており、各レベルごとにランダムに1つのセクタしか配置されていません。この忠実な 'グリーン'セクターを見つける直感に頼る、プレーヤーの仕事。セクター数はレベルごとに増加します。正しいセクターを決定することによって、あなたはレベルからレベルに移動しています。結果はゲーム中に到達した最大レベルです。ゲームには、 'Beginner'、 'Amateur'、 'Profi'の3種類の複雑さがあります。初心者にはレベルごとに3回の試行が与えられます。 「アマチュア」のレベルでは、レベルごとに2回の試行しかありません。 'Profi'難易度でプレイする場合、プレイヤーは各レベルの最初の試行で正しいセクターを決定する必要があります。" key="rulesText"/>
 <string value="ログアウト" key="signOut"/>
 <string value="言語" key="language"/>
+<string value="ゲームを閉じますか？" key="exit"/>
 </language>
 
 
@@ -207,6 +213,7 @@
 <string value="원 형태의 게임 필드는 섹터로 나뉘며, 각 레벨마다 하나의 섹터 만 임의로 배치됩니다. 이 충실한 '녹색'부문을 찾기 위해 직감에 의존하는 플레이어의 임무. 섹터의 수는 레벨마다 증가합니다. 올바른 분야를 결정함으로써, 당신은 레벨에서 레벨로 이동하고 있습니다. 결과는 게임 도중 도달 한 최대 레벨입니다. 게임에는 'Beginner', 'Amateur'및 'Profi'의 세 가지 유형의 복잡성이 있습니다. 초급자는 레벨 당 3 번 시도됩니다. '아마추어'레벨 - 레벨 당 단지 두 번의 시도. 'Profi'난이도에서 플레이 할 때, 플레이어는 각 레벨의 첫 번째 시도에서 올바른 섹터를 결정해야합니다." key="rulesText"/>
 <string value="로그 아웃" key="signOut"/>
 <string value="언어" key="language"/>
+<string value="게임을 닫으시겠습니까?" key="exit"/>
 </language>
 
 
@@ -237,6 +244,7 @@
 <string value="以圓圈形式的遊戲場被分成扇區，每個級別只有一個扇區隨機定位。玩家的任務，依靠直覺找到這個忠實的“綠色”部門。行業數量逐年遞增。通過確定正確的部門，你正在從一級到另一級。你的結果是你在比賽中達到的最高水平。遊戲中有三種類型的複雜性：“初學者”，“業餘”和“Profi”。初學者每級有三次嘗試。對於“業餘”級別 - 每級只有兩次嘗試。玩“Profi”難度級別時，玩家必須在每個級別的第一次嘗試中確定正確的扇區。" key="rulesText"/>
 <string value="註銷" key="signOut"/>
 <string value="語言" key="language"/>
+<string value="關閉遊戲？" key="exit"/>
 </language>
 
 
