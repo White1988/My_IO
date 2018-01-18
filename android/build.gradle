@@ -15,7 +15,7 @@ android {
         instrumentTest.setRoot('tests')
     }
     defaultConfig {
-        applicationId "com.di.devs.tsar"
+        applicationId "com.di.devs.xintuition"
         minSdkVersion 17
         targetSdkVersion 25
         versionCode 6

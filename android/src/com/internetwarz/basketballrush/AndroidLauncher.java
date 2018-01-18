@@ -44,7 +44,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         adView.setAdUnitId(AD_ID);
         adView.setId(View.generateViewId());
         adView.setBackgroundColor(Color.BLACK);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder().s.build();
         adView.loadAd(adRequest);
 
         RelativeLayout.LayoutParams gameParams =
