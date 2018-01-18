@@ -4,4 +4,13 @@
     <string name="app_misconfigured">The application is incorrectly configured. Check that the package name and signing certificate match the client ID created in Developer Console. Also, if the application is not yet published, check that the account you are trying to sign in with is listed as a tester account. See logs for more information.</string>
     <string name="license_failed">License check failed.</string>
     <string name="unknown_error">Unknown error.</string>
+    <string name="error_get_inbox_intent">Cannot get inbox intent</string>
+    <string formatted="false" name="status_exception_error">%s%i%s</string>
+    <string name="status_multiplayer_error_not_trusted_tester" >MULTIPLAYER_ERROR_NOT_TRUSTED_TESTER</string>
+    <string name="match_error_already_rematched">MATCH_ERROR_ALREADY_REMATCHED</string>
+    <string name="network_error_operation_failed">NETWORK_ERROR_OPERATION_FAILED</string>
+    <string name="internal_error">INTERNAL_ERROR</string>
+    <string name="match_error_inactive_match">MATCH_ERROR_INACTIVE_MATCH</string>
+    <string name="match_error_locally_modified">MATCH_ERROR_LOCALLY_MODIFIED</string>
+    <string name="unexpected_status">unexpected_status</string>
 </resources>

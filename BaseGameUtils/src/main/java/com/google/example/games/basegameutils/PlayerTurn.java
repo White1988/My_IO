@@ -5,4 +5,15 @@ package com.google.example.games.basegameutils;
  */
 
 public class PlayerTurn {
+    public String data;
+    public int turnCounter;
+
+    public byte[] persist() {
+        return null;
+    }
+
+    public static PlayerTurn unpersist(byte[] data) {
+
+        return null;
+    }
 }
