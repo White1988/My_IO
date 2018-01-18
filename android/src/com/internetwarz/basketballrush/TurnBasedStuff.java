@@ -31,7 +31,7 @@ import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatchConfig;
 import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatchUpdateCallback;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.example.games.basegameutils.PlayerTurn;
+import com.internetwarz.basketballrush.model.PlayerTurn;
 
 import java.util.ArrayList;
 
@@ -71,6 +71,9 @@ public class TurnBasedStuff implements TurnBasedService  {
     public TextView mTurnTextView;
 
 
+    public TurnBasedStuff(Activity contextActivity) {
+        this.contextActivity = contextActivity;
+    }
 
     // Should I be showing the turn API?
     public boolean isDoingTurn = false;
@@ -97,13 +100,14 @@ public class TurnBasedStuff implements TurnBasedService  {
         };
     }
 
+   private final Activity contextActivity ;
 
-    public void onStartMatchClicked(final Activity a) {
+    public void onStartMatchClicked() {
           mTurnBasedMultiplayerClient.getSelectOpponentsIntent(1, 7, true)
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
                     @Override
                     public void onSuccess(Intent intent) {
-                      a.  startActivityForResult(intent, RC_SELECT_PLAYERS);
+                        contextActivity.  startActivityForResult(intent, RC_SELECT_PLAYERS);
                     }
                 })
                 .addOnFailureListener(createFailureListener(
@@ -132,8 +136,7 @@ public class TurnBasedStuff implements TurnBasedService  {
 
     // In-game controls
 
-    // Cancel the game. Should possibly wait until the game is canceled before
-    // giving up on the view.
+
 
      //todo add in Duelscreen
      @Override
@@ -189,17 +192,16 @@ public class TurnBasedStuff implements TurnBasedService  {
     }
 
 
-    // Upload your new gamestate, then take a turn, and pass it on to the next
-    // player.
+
 
     @Override
     //todo call after move from DuelScreen
-    public void onDoneClicked() {
+    public void onDoneClicked(int selectedNumber) {
 
         String nextParticipantId = getNextParticipantId();
         // Create the next turn
         mTurnData.turnCounter += 1;
-        mTurnData.data = mDataView.getText().toString();
+        mTurnData.selectedNumber = selectedNumber;
 
         mTurnBasedMultiplayerClient.takeTurn(mMatch.getMatchId(),
                 mTurnData.persist(), nextParticipantId)
@@ -226,7 +228,7 @@ public class TurnBasedStuff implements TurnBasedService  {
     public void startMatch(TurnBasedMatch match) {
         mTurnData = new PlayerTurn();
         // Some basic turn data
-        mTurnData.data = "First turn";
+        mTurnData.selectedNumber = 0;
 
         mMatch = match;
 

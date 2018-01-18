@@ -46,7 +46,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     private final static String AD_ID = "pub-8644762955474796";
     //private final static String AD_ID = "ca-app-pub-3940256099942544/6300978111";
 
-    TurnBasedStuff turnBasedStuff = new TurnBasedStuff(); // !!VERY important that we are using TurnBasedStuff instead TurnBasedService
+    TurnBasedStuff turnBasedStuff = new TurnBasedStuff(this); // !!VERY important that we are using TurnBasedStuff instead TurnBasedService
     private AlertDialog mAlertDialog;
 
     @Override

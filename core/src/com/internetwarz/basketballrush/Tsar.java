@@ -38,6 +38,10 @@ public class Tsar extends Game {
 		return playServices;
 	}
 
+	public static TurnBasedService getTurnBasedService() {
+		return turnBasedService;
+	}
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
