@@ -472,6 +472,7 @@ public class XintuitionGameplayScreen implements Screen,InputProcessor
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.BACKSPACE || keycode == Input.Keys.BACK){
+            Xintuition.getTurnBasedService().onLeaveClicked();
             game.setScreen(new MainMenuScreen(game));
 
         }
@@ -535,6 +536,10 @@ public class XintuitionGameplayScreen implements Screen,InputProcessor
                rightWrongLabel.setPosition(imageCircle.getX() + imageCircle.getWidth()/2 - rightWrongLabel.getPrefWidth()/2 + 8, imageCircle.getY() - rightWrongLabel.getHeight() - 4);
                //numSectors++;
                isDrawLines = true;
+
+
+               Xintuition.getTurnBasedService().onDoneClicked(2);
+
            }
            else {
                isShow = true;
@@ -549,6 +554,8 @@ public class XintuitionGameplayScreen implements Screen,InputProcessor
                //rightWrongLabel.setPosition(WIDTH/2 - rightWrongLabel.getWidth()/2, HEIGHT/2 - RADIUS - rightWrongLabel.getHeight() - 4);
                rightWrongLabel.setPosition(imageCircle.getX() + imageCircle.getWidth()/2 - rightWrongLabel.getWidth()/2, imageCircle.getY() - rightWrongLabel.getHeight() - 4);
                isGuessed = false;
+
+               Xintuition.getTurnBasedService().onFinishClicked();
            }
 
            if(curNumAttempts == 0) {

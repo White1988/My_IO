@@ -35,6 +35,7 @@ import com.internetwarz.basketballrush.model.PlayerTurn;
 
 import java.util.ArrayList;
 
+import static com.internetwarz.basketballrush.AndroidLauncher.RC_LOOK_AT_MATCHES;
 import static com.internetwarz.basketballrush.AndroidLauncher.RC_SELECT_PLAYERS;
 
 
@@ -113,6 +114,19 @@ public class TurnBasedAndroid extends TurnBasedService  {
                 })
                 .addOnFailureListener(createFailureListener(
                         "Select opponents!"));
+    }
+
+    // Displays your inbox. You will get back onActivityResult where
+    // you will need to figure out what you clicked on.
+    public void showMatchMakingLobby() {
+        mTurnBasedMultiplayerClient.getInboxIntent()
+                .addOnSuccessListener(new OnSuccessListener<Intent>() {
+                    @Override
+                    public void onSuccess(Intent intent) {
+                        contextActivity.startActivityForResult(intent, RC_LOOK_AT_MATCHES);
+                    }
+                })
+                .addOnFailureListener(createFailureListener("Cannot get inbox intent!"));
     }
 
     //todo add in mainMenuScreen
@@ -372,7 +386,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
             updateMatch(match);
             return;
         }
-
+        coreGameplayCallBacks.fireMatchStartedEvent();
         startMatch(match);
     }
 

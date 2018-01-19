@@ -41,6 +41,11 @@ public class TurnbasedServiceStub extends TurnBasedService {
     }
 
     @Override
+    public void showMatchMakingLobby() {
+
+    }
+
+    @Override
     public void onDoneClicked(int selectedNumber) {
 
         System.out.println("onDoneClicked selectedNumber: " + selectedNumber);
