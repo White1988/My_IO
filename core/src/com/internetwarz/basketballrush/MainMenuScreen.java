@@ -135,6 +135,29 @@ public class MainMenuScreen implements Screen,InputProcessor {
         Skin playBtnSkin = new Skin();
         playBtnSkin.add("playButton", buttonTexture);
 
+        Xintuition.getTurnBasedService().coreGameplayCallBacks = new TurnBasedService.TurnBasedCallBacks() ;
+
+        Xintuition.getTurnBasedService().coreGameplayCallBacks.addMatchStartedCallback(new TurnBasedService.VoidAction() {
+            @Override
+            public void Action() {
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new XintuitionGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE)));
+                    }
+                });
+
+
+            }
+        });
+
+        Xintuition.getTurnBasedService().coreGameplayCallBacks.addEnemyTurnFinishedCallback(new TurnBasedService.EnemyTurnAction() {
+            @Override
+            public void Action(PlayerTurn t) {
+                System.out.println("Enemy turn was: " + t);
+            }
+        });
+
 
         buttonSkin = new Skin();
         buttonSkin.addRegions(buttonAtlas);
@@ -157,7 +180,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
 
 
-        playButton = new TextButton(LanguagesManager.getInstance().getString("play"), textButtonStyle);
+        playButton = new TextButton(/*LanguagesManager.getInstance().getString("play")*/ "Quick match", textButtonStyle);
         playButton.setSize(appWidth - appWidth/10*2, appHeight/9);
         playButton.setPosition(appWidth/10, topImage.getY() - playButton.getHeight() - appHeight/17);
         playButton.addListener(new ClickListener(){
@@ -166,34 +189,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
                     clickSound.play();
                 if(!game.getPlayServices().isSignedIn())
                     game.getPlayServices().signIn();
-
-                Xintuition.getTurnBasedService().coreGameplayCallBacks = new TurnBasedService.TurnBasedCallBacks() ;
-
-                Xintuition.getTurnBasedService().coreGameplayCallBacks.addMatchStartedCallback(new TurnBasedService.VoidAction() {
-                    @Override
-                    public void Action() {
-                        Gdx.app.postRunnable(new Runnable() {
-                            @Override
-                            public void run() {
-                                game.setScreen(new XintuitionGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE)));
-                            }
-                        });
-
-
-                    }
-                });
-
-                Xintuition.getTurnBasedService().coreGameplayCallBacks.addEnemyTurnFinishedCallback(new TurnBasedService.EnemyTurnAction() {
-                    @Override
-                    public void Action(PlayerTurn t) {
-                        System.out.println("Enemy turn was: " + t);
-                    }
-                });
-
-
                 Xintuition.getTurnBasedService().onQuickMatchClicked();
-
-
             }
         });
         //playButton.getLabelCell().padLeft(120);
@@ -206,7 +202,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
         textButtonStyle.up = buttonSkin.getDrawable("buttonStatistics");
         textButtonStyle.down = buttonSkin.getDrawable("buttonStatisticsClick");
 
-        statisticButton = new TextButton(LanguagesManager.getInstance().getString("statistics"), textButtonStyle);
+        statisticButton = new TextButton(/*LanguagesManager.getInstance().getString("statistics")*/"Start match", textButtonStyle);
         statisticButton.setSize(playButton.getWidth(), playButton.getHeight());
         statisticButton.setPosition(playButton.getX(), playButton.getY() - playButton.getHeight() - appHeight/22);
         statisticButton.addListener(new ClickListener(){
@@ -215,7 +211,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
                     clickSound.play();
                 if(!game.getPlayServices().isSignedIn())
                     game.getPlayServices().signIn();
-                game.setScreen(new StatisticsScreen(game));
+                Xintuition.getTurnBasedService().onStartMatchClicked();
             }
         });
         statisticButton.getLabel().setAlignment(Align.left);
@@ -227,7 +223,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
         textButtonStyle.up = buttonSkin.getDrawable("buttonHallOfFame");
         textButtonStyle.down = buttonSkin.getDrawable("buttonHallOfFameClick");
 
-        hallButton = new TextButton(LanguagesManager.getInstance().getString("hall_of_fame"), textButtonStyle);
+        hallButton = new TextButton(/*LanguagesManager.getInstance().getString("hall_of_fame")*/ "Matchmaking", textButtonStyle);
         hallButton.setSize(playButton.getWidth(), playButton.getHeight());
         hallButton.setPosition(playButton.getX(), statisticButton.getY() - statisticButton.getHeight() - appHeight/22);
         hallButton.addListener(new ClickListener(){
@@ -236,9 +232,9 @@ public class MainMenuScreen implements Screen,InputProcessor {
                     clickSound.play();
                 if(!game.getPlayServices().isSignedIn())
                     game.getPlayServices().signIn();
-                game.getPlayServices().showScore();
+               // game.getPlayServices().showScore();
                 //game.setScreen(new HallOfFameScreen(game));
-
+                Xintuition.getTurnBasedService().showMatchMakingLobby();
             }
         });
         hallButton.getLabel().setAlignment(Align.left);

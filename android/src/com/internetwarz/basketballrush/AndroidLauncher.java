@@ -274,14 +274,14 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                             public void onSuccess(Player player) {
                                 turnBasedAndroid.mDisplayName = player.getDisplayName();
                                 turnBasedAndroid.mPlayerId = player.getPlayerId();
-
+                                Log.d(TAG, "onConnected(): Connection successful");
                                 setViewVisibility();
                             }
                         }
                 )
                 .addOnFailureListener(turnBasedAndroid.createFailureListener("There was a problem getting the player!"));
 
-        Log.d(TAG, "onConnected(): Connection successful");
+       // Log.d(TAG, "onConnected(): Connection successful");
 
         // Retrieve the TurnBasedMatch from the connectionHint
         GamesClient gamesClient = Games.getGamesClient(this, googleSignInAccount);
@@ -417,18 +417,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     }
 
 
-    // Displays your inbox. You will get back onActivityResult where
-    // you will need to figure out what you clicked on.
-    public void onCheckGamesClicked(View view) {
-     turnBasedAndroid.   mTurnBasedMultiplayerClient.getInboxIntent()
-                .addOnSuccessListener(new OnSuccessListener<Intent>() {
-                    @Override
-                    public void onSuccess(Intent intent) {
-                        startActivityForResult(intent, RC_LOOK_AT_MATCHES);
-                    }
-                })
-                .addOnFailureListener(turnBasedAndroid.createFailureListener(getString(com.google.example.games.basegameutils.R.string.error_get_inbox_intent)));
-    }
+
 
 
     // Update the visibility based on what state we're in.

@@ -20,6 +20,7 @@ public abstract class TurnBasedService {
 
     public abstract void onLeaveClicked();
     public abstract void onFinishClicked();
+    public abstract void showMatchMakingLobby();
 
 
     // Upload your new gamestate, then take a turn, and pass it on to the next
