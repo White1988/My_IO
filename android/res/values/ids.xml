@@ -4,13 +4,9 @@ Contains leaderboard and achievements id
 -->
 <resources>
     <!-- app_id -->
-    <string name="app_id" translatable="false">994369425040</string>
+    <string name="app_id" translatable="false">856282404565</string>
     <!-- package_name -->
-    <string name="package_name" translatable="false">com.di.devs.tsar</string>
-    <!-- leaderboard Easy -->
-    <string name="leaderboard_easy" translatable="false">CgkIkJ2lqPgcEAIQAQ</string>
-    <!-- leaderboard Medium -->
-    <string name="leaderboard_medium" translatable="false">CgkIkJ2lqPgcEAIQAg</string>
-    <!-- leaderboard Hard -->
-    <string name="leaderboard_hard" translatable="false">CgkIkJ2lqPgcEAIQAw</string>
+    <string name="package_name" translatable="false">com.di.devs.xintuition</string>
+    <!-- leaderboard Leaderboard -->
+    <string name="leaderboard_leaderboard" translatable="false">CgkI1a2i8_UYEAIQAQ</string>
 </resources>

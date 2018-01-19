@@ -15,7 +15,7 @@ import de.tomgrill.gdxfirebase.core.FirebaseLoader;
 import de.tomgrill.gdxfirebase.core.auth.FirebaseUser;
 import de.tomgrill.gdxfirebase.core.auth.FirebaseUserBuilder;
 
-public class Tsar extends Game {
+public class Xintuition extends Game {
 	public SpriteBatch batch;
 	public BitmapFont font;
 	public FreeTypeFontGenerator generator;
@@ -26,7 +26,7 @@ public class Tsar extends Game {
 	public boolean isFirstStart = true;
 
 
-    public Tsar(PlayServices playServices, TurnBasedService service)
+    public Xintuition(PlayServices playServices, TurnBasedService service)
     {
         this.playServices = playServices;
         this.turnBasedService = service;
@@ -68,9 +68,9 @@ public class Tsar extends Game {
 		assets = new Assets();
 		initDB();
         //Changing the screen to display splash screen
-//		this.setScreen(new SplashScreen(this));
-		this.setScreen(new DuelScreen(this));
-//		this.setScreen(new TsarGameplayScreen(this));
+		this.setScreen(new SplashScreen(this));
+	//	this.setScreen(new DuelScreen(this));
+//		this.setScreen(new XintuitionGameplayScreen(this));
 	}
 
 	@Override

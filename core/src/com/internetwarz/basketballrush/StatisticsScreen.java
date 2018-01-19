@@ -37,7 +37,7 @@ import java.util.HashMap;
 public class StatisticsScreen implements Screen,InputProcessor {
     private final Image topImage;
     private final Image topTextImage;
-    Tsar game;
+    Xintuition game;
 
     private int WIDTH;
     private int HEIGHT;
@@ -71,7 +71,7 @@ public class StatisticsScreen implements Screen,InputProcessor {
     private BitmapFont fontNumbers;
 
 
-    public StatisticsScreen(Tsar game) {
+    public StatisticsScreen(Xintuition game) {
         this.game = game;
         WIDTH = Gdx.graphics.getWidth();
         HEIGHT = Gdx.graphics.getHeight();

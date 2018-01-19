@@ -43,7 +43,7 @@ project(":android") {
     dependencies {
         compile project(":core")
         compile project(':BaseGameUtils')
-        compile 'com.google.android.gms:play-services-games:11.0.4'
+        compile 'com.google.android.gms:play-services-games:11.8.0'
         compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"

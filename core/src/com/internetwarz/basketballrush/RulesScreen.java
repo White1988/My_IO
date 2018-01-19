@@ -29,7 +29,7 @@ import com.internetwarz.basketballrush.utils.LanguagesManager;
 public class RulesScreen implements Screen, InputProcessor {
     private final Image topImage;
     private final Image topTextImage;
-    Tsar game;
+    Xintuition game;
 
     private int WIDTH;
     private int HEIGHT;
@@ -48,7 +48,7 @@ public class RulesScreen implements Screen, InputProcessor {
     Label textLabel;
     private Texture background;
 
-    public RulesScreen(Tsar game) {
+    public RulesScreen(Xintuition game) {
         this.game = game;
         WIDTH = Gdx.graphics.getWidth();
         HEIGHT = Gdx.graphics.getHeight();

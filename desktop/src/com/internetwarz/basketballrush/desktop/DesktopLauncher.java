@@ -2,7 +2,7 @@ package com.internetwarz.basketballrush.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.internetwarz.basketballrush.Tsar;
+import com.internetwarz.basketballrush.Xintuition;
 
 
 public class DesktopLauncher {
@@ -16,6 +16,6 @@ public class DesktopLauncher {
 		config.width = 360;//800
 		config.height = 640;//600
 
-		new LwjglApplication(new Tsar(new PlayServicesStub(), new TurnbasedServiceStub()), config);
+		new LwjglApplication(new Xintuition(new PlayServicesStub(), new TurnbasedServiceStub()), config);
 	}
 }

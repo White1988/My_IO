@@ -20,7 +20,7 @@ public class DuelScreen implements Screen, InputProcessor{
 
 //    private SpriteBatch batch;
 //    private Texture texture;
-    private final Tsar game;
+    private final Xintuition game;
     private static int VIEWPORT_SCALE = 1;
 
     private ShapeRenderer shapeRenderer;
@@ -33,7 +33,7 @@ public class DuelScreen implements Screen, InputProcessor{
     Rectangle rectangle;
 
 
-    public DuelScreen(Tsar game ) {
+    public DuelScreen(Xintuition game ) {
         this.game = game;
 
         WIDTH = (float) Gdx.graphics.getWidth();

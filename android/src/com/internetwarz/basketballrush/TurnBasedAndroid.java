@@ -96,6 +96,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
             @Override
             public void onFailure(@NonNull Exception e) {
                 System.out.println(e.getMessage());
+                System.out.println(string);
             }
         };
     }

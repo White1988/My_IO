@@ -33,7 +33,7 @@ import com.internetwarz.basketballrush.utils.LanguagesManager;
 import static com.internetwarz.basketballrush.Constants.EASY_MODE;
 
 public class MainMenuScreen implements Screen,InputProcessor {
-    final Tsar game;
+    final Xintuition game;
     final float appWidth;
     final float appHeight;
     SpriteBatch batch;
@@ -51,7 +51,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
     private FreeTypeFontGenerator generator;
     private BitmapFont font;
 
-    public MainMenuScreen(final Tsar gam){
+    public MainMenuScreen(final Xintuition gam){
         this.game=gam;
         if(!game.getPlayServices().isSignedIn() || game.isFirstStart) {
             game.getPlayServices().signIn();
@@ -167,16 +167,23 @@ public class MainMenuScreen implements Screen,InputProcessor {
                 if(!game.getPlayServices().isSignedIn())
                     game.getPlayServices().signIn();
 
-                Tsar.getTurnBasedService().coreGameplayCallBacks = new TurnBasedService.TurnBasedCallBacks() ;
+                Xintuition.getTurnBasedService().coreGameplayCallBacks = new TurnBasedService.TurnBasedCallBacks() ;
 
-                Tsar.getTurnBasedService().coreGameplayCallBacks.addMatchStartedCallback(new TurnBasedService.VoidAction() {
+                Xintuition.getTurnBasedService().coreGameplayCallBacks.addMatchStartedCallback(new TurnBasedService.VoidAction() {
                     @Override
                     public void Action() {
-                        game.setScreen(new TsarGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE)));
+                        Gdx.app.postRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                game.setScreen(new XintuitionGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE)));
+                            }
+                        });
+
+
                     }
                 });
 
-                Tsar.getTurnBasedService().coreGameplayCallBacks.addEnemyTurnFinishedCallback(new TurnBasedService.EnemyTurnAction() {
+                Xintuition.getTurnBasedService().coreGameplayCallBacks.addEnemyTurnFinishedCallback(new TurnBasedService.EnemyTurnAction() {
                     @Override
                     public void Action(PlayerTurn t) {
                         System.out.println("Enemy turn was: " + t);
@@ -184,7 +191,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
                 });
 
 
-                Tsar.getTurnBasedService().onQuickMatchClicked();
+                Xintuition.getTurnBasedService().onQuickMatchClicked();
 
 
             }
@@ -286,7 +293,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
                     game.setScreen(new HowToPlay(game));
                 else
                     //game.setScreen(new GameModeSelect(game));
-                    game.setScreen(new TsarGameplayScreen(game, 3));
+                    game.setScreen(new XintuitionGameplayScreen(game, 3));
             }
         });
         stage.addActor(playButton);

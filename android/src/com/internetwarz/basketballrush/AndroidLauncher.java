@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -21,6 +22,8 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesCallbackStatusCodes;
@@ -32,22 +35,23 @@ import com.google.android.gms.games.multiplayer.Multiplayer;
 import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatch;
 import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatchConfig;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.example.games.basegameutils.GameHelper;
 
 import java.util.ArrayList;
 
-import static android.content.ContentValues.TAG;
-
 public class AndroidLauncher extends AndroidApplication implements PlayServices {
     private GameHelper gameHelper;
     private final static int requestCode = 1;
     private final static String AD_ID = "pub-8644762955474796";
     //private final static String AD_ID = "ca-app-pub-3940256099942544/6300978111";
-
+    public static final String TAG = "AndroidLauncher";
     TurnBasedAndroid turnBasedAndroid = new TurnBasedAndroid(this); // !!VERY important that we are using TurnBasedAndroid instead TurnBasedService
     private AlertDialog mAlertDialog;
+    // Client used to sign in with Google APIs
+    private GoogleSignInClient mGoogleSignInClient = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
-        View gameView = initializeForView(new Tsar(this, turnBasedAndroid), config);
+        View gameView = initializeForView(new Xintuition(this, turnBasedAndroid), config);
         gameView.setId(View.generateViewId());
 
         AdView adView = new AdView(this);
@@ -84,7 +88,11 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         layout.addView(adView, adParams);
 
         setContentView(layout);
-        //initialize(new Tsar(this), config);
+        //initialize(new Xintuition(this), config);
+
+        Log.d(TAG, "mGoogleSignInClient ");
+        mGoogleSignInClient = GoogleSignIn.getClient(this, GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN);
+        Log.d(TAG, "after mGoogleSignInClient ");
 
         gameHelper = new GameHelper(this, GameHelper.CLIENT_GAMES);
         gameHelper.enableDebugLog(true);
@@ -113,9 +121,35 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         gameHelper.onStart(this);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        signInSilently();
+    }
+
+    public void signInSilently() {
+        Log.d(TAG, "signInSilently()");
+
+        mGoogleSignInClient.silentSignIn().addOnCompleteListener(this,
+                new OnCompleteListener<GoogleSignInAccount>() {
+                    @Override
+                    public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "signInSilently(): success");
+                            onConnected(task.getResult());
+                        } else {
+                            Log.d(TAG, "signInSilently(): failure", task.getException());
+                            onDisconnected();
+                        }
+                    }
+                });
+    }
+
     @Override
     protected void onStop() {
         super.onStop();
+        Gdx.app.log(TAG,"onStop" );
     }
 
     // For our intents
@@ -132,9 +166,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         gameHelper.onActivityResult(requestCode, resultCode, intent);
-        System.out.println("onActivityResult!!!!!!!");
-        System.out.println(gameHelper.getApiClient());
 
+        Gdx.app.log(TAG,"onActivityResult" );
         if (requestCode == RC_SIGN_IN) {
 
             Task<GoogleSignInAccount> task =
@@ -218,7 +251,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     }
 
     private void onDisconnected() {
-
+        Gdx.app.log(TAG,"onDisconnected" );
         System.out.println( "onDisconnected()");
 
         turnBasedAndroid.  mTurnBasedMultiplayerClient = null;
@@ -228,7 +261,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     }
 
     private void onConnected(GoogleSignInAccount googleSignInAccount) {
-
+        Gdx.app.log(TAG,"onConnected" );
 
         turnBasedAndroid.     mTurnBasedMultiplayerClient = Games.getTurnBasedMultiplayerClient(this, googleSignInAccount);
         turnBasedAndroid.     mInvitationsClient = Games.getInvitationsClient(this, googleSignInAccount);
@@ -239,8 +272,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                         new OnSuccessListener<Player>() {
                             @Override
                             public void onSuccess(Player player) {
-                          turnBasedAndroid.      mDisplayName = player.getDisplayName();
-                                turnBasedAndroid.       mPlayerId = player.getPlayerId();
+                                turnBasedAndroid.mDisplayName = player.getDisplayName();
+                                turnBasedAndroid.mPlayerId = player.getPlayerId();
 
                                 setViewVisibility();
                             }
@@ -493,7 +526,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 
     @Override
     public void rateGame() {
-        String str = "https://play.google.com/store/apps/details?id=com.di.devs.tsar";
+        String str = "https://play.google.com/store/apps/details?id=com.di.devs.xintuition";
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(str)));
     }
 
@@ -571,17 +604,11 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         if (isSignedIn()) {
             if (gameType.equals(Constants.EASY_MODE)) {
                 Games.Leaderboards.submitScore(gameHelper.getApiClient(),
-                        getString(R.string.leaderboard_easy), highScore);
-            } else if (gameType.equals(Constants.MEDIUM_MODE)) {
-                Games.Leaderboards.submitScore(gameHelper.getApiClient(),
-                        getString(R.string.leaderboard_medium), highScore);
-            } else if (gameType.equals(Constants.HARD_MODE)) {
-                Games.Leaderboards.submitScore(gameHelper.getApiClient(),
-                        getString(R.string.leaderboard_hard), highScore);
-            }
+                        getString(R.string.leaderboard_leaderboard), highScore);
+
             System.out.println("Score is submitted for " + gameHelper.getApiClient());
         }
-    }
+    }}
 
     @Override
     public void showAchievement() {

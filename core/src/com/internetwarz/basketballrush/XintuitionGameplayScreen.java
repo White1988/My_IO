@@ -42,11 +42,11 @@ import static com.internetwarz.basketballrush.Constants.EASY_MODE;
 import static com.internetwarz.basketballrush.Constants.HARD_MODE;
 import static com.internetwarz.basketballrush.Constants.MEDIUM_MODE;
 
-public class TsarGameplayScreen implements Screen,InputProcessor
+public class XintuitionGameplayScreen implements Screen,InputProcessor
 {
     private Image topImage;
     private Image topTextImage;
-    private Tsar game;
+    private Xintuition game;
     private boolean isGameBegan = false;
     SpriteBatch batch;
     OrthographicCamera camera;
@@ -123,7 +123,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
     private Label scoreLabelNumber;
     private Label triesLabelNumber;
 
-    public TsarGameplayScreen(Tsar game, final int numAttempts) {
+    public XintuitionGameplayScreen(Xintuition game, final int numAttempts) {
         System.out.println(LanguagesManager.getInstance().getLanguage());
         this.game = game;
         this.numAttempts = numAttempts;
@@ -286,7 +286,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                     hardButton.setChecked(false);
                 }
                 else {
-                    game.setScreen(new TsarGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE)));
+                    game.setScreen(new XintuitionGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE)));
                     //restartGame(Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE));
                 }
             }
@@ -312,7 +312,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                 }
                 else {
                    //restartGame(Constants.ATTEMPTS_IN_GAMEMODE.get(Constants.MEDIUM_MODE));
-                    game.setScreen(new TsarGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(MEDIUM_MODE)));
+                    game.setScreen(new XintuitionGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(MEDIUM_MODE)));
 
                 }
             }
@@ -337,7 +337,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
                 }
                 else {
                     //restartGame(Constants.ATTEMPTS_IN_GAMEMODE.get(Constants.HARD_MODE));
-                    game.setScreen(new TsarGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(HARD_MODE)));
+                    game.setScreen(new XintuitionGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(HARD_MODE)));
                 }
             }
         });
@@ -371,7 +371,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
         TextButton yes = new TextButton(LanguagesManager.getInstance().getString("yes"), textButtonStyle);
         yes.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new TsarGameplayScreen(game, numAttempts));
+                game.setScreen(new XintuitionGameplayScreen(game, numAttempts));
             }
         });
         TextButton no = new TextButton(LanguagesManager.getInstance().getString("no"), textButtonStyle);
@@ -566,7 +566,7 @@ public class TsarGameplayScreen implements Screen,InputProcessor
        return false;
     }
 
-    private void gameOver(Tsar game, Score score, String gameType, int numAttempts) {
+    private void gameOver(Xintuition game, Score score, String gameType, int numAttempts) {
         isGameBegan = false;
         rightWrongLabel.setText(LanguagesManager.getInstance().getString("gameOver"));
         rightWrongLabel.setX(WIDTH/2 - rightWrongLabel.getPrefWidth()/2);

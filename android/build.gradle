@@ -1,4 +1,12 @@
 android {
+    signingConfigs {
+        config {
+            keyAlias 'android'
+            keyPassword 'jsuqbpy3'
+            storeFile file('C:/Users/Igor/Desktop/release.keystore')
+            storePassword 'jsuqbpy3'
+        }
+    }
     buildToolsVersion "25.0.3"
     compileSdkVersion 25
     sourceSets {
@@ -21,6 +29,11 @@ android {
         versionCode 8
         versionName "1.7"
         multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.config
+        }
     }
 }
 // called every time gradle gets executed, takes the native dependencies of
@@ -74,7 +87,7 @@ idea {
 }
 dependencies {
     compile 'com.android.support:multidex:1.0.1'
-    compile 'com.google.android.gms:play-services:11.0.4'
+    compile 'com.google.android.gms:play-services:11.8.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.firebase:firebase-crash:11.0.4'
     compile 'com.google.firebase:firebase-database:11.0.4'

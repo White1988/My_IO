@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Tsar</string>
+    <string name="app_name">Xintuition</string>
     <string name="signin_other_error">Other error</string>
     <string name="error_get_select_opponents">Select opponents</string>
 

@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class SplashScreen implements Screen {
-    final Tsar game;
+    final Xintuition game;
     float appWidth;
     float appHeight;
     SpriteBatch batch;
@@ -22,7 +22,7 @@ public class SplashScreen implements Screen {
     long startTime;
     private boolean isDataRead = false;
 
-    public SplashScreen(final Tsar gam){
+    public SplashScreen(final Xintuition gam){
         this.game = gam;
         appWidth = Gdx.graphics.getWidth();
         appHeight = Gdx.graphics.getHeight();

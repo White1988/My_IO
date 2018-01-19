@@ -36,7 +36,7 @@ import java.util.ArrayList;
 public class HallOfFameScreen implements Screen, InputProcessor{
     private final Image topImage;
     private final Image topTextImage;
-    Tsar game;
+    Xintuition game;
 
     private int WIDTH;
     private int HEIGHT;
@@ -71,7 +71,7 @@ public class HallOfFameScreen implements Screen, InputProcessor{
     private BitmapFont fontNumbers;
     private Label.LabelStyle numbersStyle;
 
-    public HallOfFameScreen(Tsar game) {
+    public HallOfFameScreen(Xintuition game) {
         this.game = game;
         WIDTH = Gdx.graphics.getWidth();
         HEIGHT = Gdx.graphics.getHeight();

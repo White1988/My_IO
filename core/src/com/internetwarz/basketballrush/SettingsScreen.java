@@ -39,7 +39,7 @@ import java.util.Map;
 public class SettingsScreen implements Screen, InputProcessor {
     private Image topTextImage;
     private Image topImage;
-    private Tsar game;
+    private Xintuition game;
 
 
 
@@ -72,7 +72,7 @@ public class SettingsScreen implements Screen, InputProcessor {
     SelectBox languagesSB;
     private Texture background;
 
-    public SettingsScreen(Tsar game) {
+    public SettingsScreen(Xintuition game) {
         this.game = game;
         WIDTH = Gdx.graphics.getWidth();
         HEIGHT = Gdx.graphics.getHeight();

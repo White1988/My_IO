@@ -26,7 +26,7 @@ import com.internetwarz.basketballrush.utils.LanguagesManager;
 import com.internetwarz.basketballrush.utils.Score;
 
 public class GameEndScreen implements Screen,InputProcessor {
-    final Tsar game;
+    final Xintuition game;
     private final TextButton.TextButtonStyle textButtonStyle;
     Score score;
     final float appWidth = 768;
@@ -49,7 +49,7 @@ public class GameEndScreen implements Screen,InputProcessor {
     private int numAttempts;
     private BitmapFont font;
 
-    public GameEndScreen(final Tsar gam, Score scor, String gt, final int numAttempts){
+    public GameEndScreen(final Xintuition gam, Score scor, String gt, final int numAttempts){
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Attractive-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = (int) (40 * 2.5);
@@ -141,7 +141,7 @@ public class GameEndScreen implements Screen,InputProcessor {
         playButton.setPosition(appWidth/2-playButton.getWidth()/2,appHeight/2-playButton.getHeight()/2);
         playButton.addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y){
-                game.setScreen(new TsarGameplayScreen(game, numAttempts));
+                game.setScreen(new XintuitionGameplayScreen(game, numAttempts));
             }
         });
         stage.addActor(playButton);
