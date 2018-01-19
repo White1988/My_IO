@@ -130,7 +130,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
                     public void onSuccess(TurnBasedMatch turnBasedMatch) {
                         onInitiateMatch(turnBasedMatch);
 
-                        turnBasedCallBacks.onMatchStartedCallback();
+                        coreGameplayCallBacks.fireMatchStartedEvent();
                     }
                 })
                 .addOnFailureListener(createFailureListener("There was a problem creating a match!"));
@@ -337,6 +337,8 @@ public class TurnBasedAndroid extends TurnBasedService  {
         switch (turnStatus) {
             case TurnBasedMatch.MATCH_TURN_STATUS_MY_TURN:
                 mTurnData = PlayerTurn.unpersist(mMatch.getData());
+
+                coreGameplayCallBacks.fireEnemyTurnFinishedEvent(mTurnData);
                 System.out.println("MATCH_TURN_STATUS_MY_TURN");
                 return;
             case TurnBasedMatch.MATCH_TURN_STATUS_THEIR_TURN:

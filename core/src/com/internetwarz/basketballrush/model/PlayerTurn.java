@@ -58,4 +58,12 @@ public class PlayerTurn {
         return in.readObject();
 
     }
+
+    @Override
+    public String toString() {
+        return "PlayerTurn{" +
+                "selectedNumber=" + selectedNumber +
+                ", turnCounter=" + turnCounter +
+                '}';
+    }
 }

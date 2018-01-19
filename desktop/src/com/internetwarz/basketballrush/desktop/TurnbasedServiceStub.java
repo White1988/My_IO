@@ -13,14 +13,14 @@ public class TurnbasedServiceStub extends TurnBasedService {
 
         System.out.println("onQuickMatchClicked");
 
-        turnBasedCallBacks.onMatchStartedCallback();
+        coreGameplayCallBacks.fireMatchStartedEvent();
     }
 
     @Override
     public void onStartMatchClicked() {
         System.out.println("onStartMatchClicked");
 
-        turnBasedCallBacks.onMatchStartedCallback();
+        coreGameplayCallBacks.fireMatchStartedEvent();
     }
 
     @Override

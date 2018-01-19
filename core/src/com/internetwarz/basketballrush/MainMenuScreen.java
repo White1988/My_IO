@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.internetwarz.basketballrush.model.PlayerTurn;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
 
 import static com.internetwarz.basketballrush.Constants.EASY_MODE;
@@ -166,13 +167,24 @@ public class MainMenuScreen implements Screen,InputProcessor {
                 if(!game.getPlayServices().isSignedIn())
                     game.getPlayServices().signIn();
 
-                game.getTurnBasedService().turnBasedCallBacks = new TurnBasedService.TurnBasedCallBacks() {
+                Tsar.getTurnBasedService().coreGameplayCallBacks = new TurnBasedService.TurnBasedCallBacks() ;
+
+                Tsar.getTurnBasedService().coreGameplayCallBacks.addMatchStartedCallback(new TurnBasedService.VoidAction() {
                     @Override
-                    public void onMatchStartedCallback() {
+                    public void Action() {
                         game.setScreen(new TsarGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE)));
                     }
-                };
-                game.getTurnBasedService().onQuickMatchClicked();
+                });
+
+                Tsar.getTurnBasedService().coreGameplayCallBacks.addEnemyTurnFinishedCallback(new TurnBasedService.EnemyTurnAction() {
+                    @Override
+                    public void Action(PlayerTurn t) {
+                        System.out.println("Enemy turn was: " + t);
+                    }
+                });
+
+
+                Tsar.getTurnBasedService().onQuickMatchClicked();
 
 
             }
