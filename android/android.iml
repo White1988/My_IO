@@ -213,6 +213,5 @@
     <orderEntry type="library" exported="" name="support-vector-drawable-25.2.0" level="project" />
     <orderEntry type="module" module-name="core" exported="" />
     <orderEntry type="module" module-name="BaseGameUtils" exported="" />
-    <orderEntry type="library" exported="" name="appcompat-v7-20.0.0" level="project" />
   </component>
 </module>

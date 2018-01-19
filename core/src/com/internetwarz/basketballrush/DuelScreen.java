@@ -1,36 +1,57 @@
 package com.internetwarz.basketballrush;
-
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.internetwarz.basketballrush.utils.LanguagesManager;
+
+import jdk.nashorn.internal.codegen.MethodEmitter;
 
 
 
 public class DuelScreen implements Screen, InputProcessor{
 
-
-
-//    private SpriteBatch batch;
-//    private Texture texture;
+    private SpriteBatch batch;
+    private Texture background;
     private final Xintuition game;
     private static int VIEWPORT_SCALE = 1;
 
+
+    private Label label;
+    private Label.LabelStyle rightStyle;
+    private Label.LabelStyle textStyle;
+    private GlyphLayout layout;
+
+    private Stage stage;
+    private BitmapFont font;
+
     private ShapeRenderer shapeRenderer;
-    OrthographicCamera camera;
+    private OrthographicCamera camera;
 
     private float WIDTH;
     private float HEIGHT;
 
-    Image imageRectangle;
-    Rectangle rectangle;
+    private Rectangle rectangle;
+
 
 
     public DuelScreen(Xintuition game ) {
@@ -39,12 +60,105 @@ public class DuelScreen implements Screen, InputProcessor{
         WIDTH = (float) Gdx.graphics.getWidth();
         HEIGHT = (float) Gdx.graphics.getHeight();
 
+        stage = new Stage(new FitViewport(WIDTH, HEIGHT));
+        stage.clear();
+
+        InputMultiplexer plex = new InputMultiplexer();
+        plex.addProcessor(stage);
+        plex.addProcessor(this);
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH/ VIEWPORT_SCALE, HEIGHT / VIEWPORT_SCALE);
 
         shapeRenderer = new ShapeRenderer(15000); //increase smoothness of circle
-        Gdx.input.setInputProcessor(this);
 
+        batch = new SpriteBatch();
+        batch.setProjectionMatrix(camera.combined);
+
+
+        buttonsInit();
+        //font init
+        fontInit();
+
+        InitLabels();
+
+    }
+    private void buttonsInit(){
+        Pixmap rect = new Pixmap(40,20,Pixmap.Format.RGBA8888);
+        rect.setColor(Color.LIGHT_GRAY);
+        rect.fillRectangle(0, 0, 40, 20);
+        Texture buttonChecked = new Texture(rect);
+        rect.setColor(Color.DARK_GRAY);
+        rect.drawRectangle(0,0,40,20);
+        buttonChecked.draw(rect, 0, 0);
+        rect.dispose();
+        Gdx.input.setInputProcessor(this);
+        rect = new Pixmap((int)WIDTH, (int)HEIGHT, Pixmap.Format.RGBA8888);
+        rect.setColor(Color.valueOf("#15091e"));
+        rect.fillRectangle(0, 0, (int)WIDTH, (int) HEIGHT);
+        background = new Texture(rect);
+        rect.dispose();
+    }
+    private void InitLabels(){
+        layout = new GlyphLayout();
+
+        //Labels init
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
+        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
+            generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/DroidSansFallback.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 30;
+        parameter.color= Color.GREEN;
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
+            parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ただ手段ハード栄誉の殿堂統計遊びますゲームは終わった結果設定ただ手段ハードレベル実験右！間違いました！再起動はいいいえあなたは本当にゲームを再開しますか？ベストプレーヤーゲームは終わった！統計選手栄誉の殿堂ルールログアウト言語"
+                    +"명예의 전당통계놀이게임이결과설정다만방법단단한수평실험오른쪽잘못된다시 시작예아니오게임을 다시 시작 하시겠습니까?최고의 선수게임은끝났어!통계(플레이어)명예의 전당규칙로그 아웃언어"
+                    +"名人堂統計玩遊戲結束了結果設置只是手段硬水平實驗對錯了重新開始是的沒有你真的想重新啟動遊戲嗎？最好的球員遊戲結束了統計玩家名人堂規則註銷語言";
+        BitmapFont font = generator.generateFont(parameter);
+        rightStyle = new Label.LabelStyle(font, Color.GREEN);
+
+        parameter.size = 18;
+        parameter.color = Color.valueOf("#bed5f6");
+        parameter.shadowColor = Color.valueOf("#202123");
+        parameter.shadowOffsetX = 1;
+        parameter.shadowOffsetY = 1;
+        font = generator.generateFont(parameter);
+        textStyle = new Label.LabelStyle();
+        textStyle.font = font;
+
+        //font for numbers
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
+        BitmapFont fontForNumbers = generator.generateFont(parameter);
+        Label.LabelStyle numbersStyle = new Label.LabelStyle();
+        numbersStyle.font = fontForNumbers;
+
+        layout.setText(font, "layout");
+
+        label = new Label( "label ", textStyle);
+        label.setPosition(40, 40);
+        label.setSize(55, 55);
+        label.setFontScale(1f, 1f);
+
+        stage.addActor(label);
+    }
+    private void fontInit() {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
+        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
+            generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/DroidSansFallback.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 14;
+        parameter.color= Color.valueOf("#506878");
+        parameter.borderStraight = false;
+        parameter.borderWidth = 1;
+        parameter.borderColor = Color.valueOf("#e2e3e7");
+        parameter.shadowColor = Color.valueOf("#141a1e");
+
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
+            parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ただ手段ハード栄誉の殿堂統計遊びますゲームは終わった結果設定ただ手段ハードレベル実験右！間違いました！再起動はいいいえあなたは本当にゲームを再開しますか？ベストプレーヤーゲームは終わった！統計選手栄誉の殿堂ルールログアウト言語"
+                    +"명예의 전당통계놀이게임이결과설정다만방법단단한수평실험오른쪽잘못된다시 시작예아니오게임을 다시 시작 하시겠습니까?최고의 선수게임은끝났어!통계(플레이어)명예의 전당규칙로그 아웃언어"
+                    +"名人堂統計玩遊戲結束了結果設置只是手段硬水平實驗對錯了重新開始是的沒有你真的想重新啟動遊戲嗎？最好的球員遊戲結束了統計玩家名人堂規則註銷語言";
+        font=generator.generateFont(parameter);
     }
 
 
@@ -60,8 +174,21 @@ public class DuelScreen implements Screen, InputProcessor{
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        label.setText("7");
+
+
+        stage.act();
+        batch.begin();
+        stage.getBatch().begin();
+        stage.getBatch().draw(background, 0, 0);//drawing background
+        stage.getBatch().end();
+        stage.draw();
+        batch.end();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);//drawing rectangle
         shapeRenderer.setColor(Color.WHITE);
         shapeRenderer.rect(10,10,130,90);
         shapeRenderer.end();
@@ -117,7 +244,7 @@ public class DuelScreen implements Screen, InputProcessor{
         rectangle= new Rectangle(10,10,130,90);
         if(Intersector.overlaps(rectangle, new Rectangle(coord.x, coord.y, 1,1)))
         {
-            System.out.println("Попал");
+            System.out.println("Click on rectangle");
         }
 
         return false;
