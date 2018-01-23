@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -99,6 +100,8 @@ public class TurnBasedAndroid extends TurnBasedService  {
             public void onFailure(@NonNull Exception e) {
                 System.out.println(e.getMessage());
                 System.out.println(string);
+                Toast.makeText(contextActivity.getApplication().getApplicationContext(), string +"  exception : " + e.getMessage(),
+                        Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -110,6 +113,8 @@ public class TurnBasedAndroid extends TurnBasedService  {
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
                     @Override
                     public void onSuccess(Intent intent) {
+                        Toast.makeText(contextActivity.getApplication().getApplicationContext(), "getSelectOpponentsIntent!", Toast.LENGTH_SHORT).show();
+
                         contextActivity.  startActivityForResult(intent, RC_SELECT_PLAYERS);
                     }
                 })
@@ -124,6 +129,8 @@ public class TurnBasedAndroid extends TurnBasedService  {
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
                     @Override
                     public void onSuccess(Intent intent) {
+                        Toast.makeText(contextActivity.getApplication().getApplicationContext(), "getInboxIntent!", Toast.LENGTH_SHORT).show();
+
                         contextActivity.startActivityForResult(intent, RC_LOOK_AT_MATCHES);
                     }
                 })
@@ -144,6 +151,8 @@ public class TurnBasedAndroid extends TurnBasedService  {
                 .addOnSuccessListener(new OnSuccessListener<TurnBasedMatch>() {
                     @Override
                     public void onSuccess(TurnBasedMatch turnBasedMatch) {
+                        Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onInitiateMatch!", Toast.LENGTH_SHORT).show();
+
                         onInitiateMatch(turnBasedMatch);
 
                         coreGameplayCallBacks.fireMatchStartedEvent();
@@ -153,6 +162,24 @@ public class TurnBasedAndroid extends TurnBasedService  {
     }
 
     // In-game controls
+
+
+    private void getAllDebugMatchInfo(TurnBasedMatch match)
+    {
+        Log.d(TAG, "getAvailableAutoMatchSlots =" + match.getAvailableAutoMatchSlots());
+        Log.d(TAG, "getParticipants size =" + match.getParticipants().size());
+        Log.d(TAG, "getCreatorId =" + match.getCreatorId());
+        Log.d(TAG, "getDescription =" + match.getDescription());
+        Log.d(TAG, "getDescriptionParticipantId =" + match.getDescriptionParticipantId());
+        Log.d(TAG, "getLastUpdaterId =" + match.getLastUpdaterId());
+        Log.d(TAG, "getMatchId =" + match.getMatchId());
+        Log.d(TAG, "getPendingParticipantId =" + match.getPendingParticipantId());
+        Log.d(TAG, "getStatus =" + match.getStatus());
+        Log.d(TAG, "getTurnStatus =" + match.getTurnStatus());
+        Log.d(TAG, "getVariant =" + match.getVariant());
+        Log.d(TAG, "getVersion =" + match.getVersion());
+       // Log.d(TAG, "getPendingParticipantId =" + match.getPendingParticipantId());
+    }
 
 
 
@@ -167,6 +194,8 @@ public class TurnBasedAndroid extends TurnBasedService  {
                 .addOnSuccessListener(new OnSuccessListener<String>() {
                     @Override
                     public void onSuccess(String matchId) {
+                        Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onCancelMatch!", Toast.LENGTH_SHORT).show();
+
                         onCancelMatch(matchId);
                     }
                 })
@@ -178,7 +207,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
     @Override
     //todo add in mainMenuScreen
     public void onLeaveClicked() {
-        Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onLeaveClicked!", Toast.LENGTH_SHORT).show();
+     //   Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onLeaveClicked!", Toast.LENGTH_SHORT).show();
 
         String nextParticipantId = getNextParticipantId();
 
@@ -186,6 +215,8 @@ public class TurnBasedAndroid extends TurnBasedService  {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onLeaveMatch!", Toast.LENGTH_SHORT).show();
+
                         onLeaveMatch();
                     }
                 })
@@ -198,12 +229,14 @@ public class TurnBasedAndroid extends TurnBasedService  {
     //todo call after onFinish button from DuelScreen
     public void onFinishClicked() {
 
-        Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onFinishClicked!", Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onFinishClicked!", Toast.LENGTH_SHORT).show();
 
         mTurnBasedMultiplayerClient.finishMatch(mMatch.getMatchId())
                 .addOnSuccessListener(new OnSuccessListener<TurnBasedMatch>() {
                     @Override
                     public void onSuccess(TurnBasedMatch turnBasedMatch) {
+                        Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onUpdateMatch!", Toast.LENGTH_SHORT).show();
+
                         onUpdateMatch(turnBasedMatch);
                     }
                 })
@@ -220,10 +253,11 @@ public class TurnBasedAndroid extends TurnBasedService  {
     //todo call after move from DuelScreen
     public void onDoneClicked(int selectedNumber) {
 
-        Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onDoneClicked!", Toast.LENGTH_SHORT).show();
+     //   Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onDoneClicked!", Toast.LENGTH_SHORT).show();
 
         String nextParticipantId = getNextParticipantId();
         // Create the next turn
+        mTurnData = new PlayerTurn();
         mTurnData.turnCounter += 1;
         mTurnData.selectedNumber = selectedNumber;
 
@@ -232,6 +266,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
                 .addOnSuccessListener(new OnSuccessListener<TurnBasedMatch>() {
                     @Override
                     public void onSuccess(TurnBasedMatch turnBasedMatch) {
+                        Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onUpdateMatch2!", Toast.LENGTH_SHORT).show();
                         onUpdateMatch(turnBasedMatch);
                     }
                 })
@@ -265,6 +300,8 @@ public class TurnBasedAndroid extends TurnBasedService  {
                 .addOnSuccessListener(new OnSuccessListener<TurnBasedMatch>() {
                     @Override
                     public void onSuccess(TurnBasedMatch turnBasedMatch) {
+                        Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onUpdateMatch3!", Toast.LENGTH_SHORT).show();
+
                         updateMatch(turnBasedMatch);
                     }
                 })
@@ -277,6 +314,8 @@ public class TurnBasedAndroid extends TurnBasedService  {
                 .addOnSuccessListener(new OnSuccessListener<TurnBasedMatch>() {
                     @Override
                     public void onSuccess(TurnBasedMatch turnBasedMatch) {
+                        Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onInitiateMatch!", Toast.LENGTH_SHORT).show();
+
                         onInitiateMatch(turnBasedMatch);
                     }
                 })
@@ -331,9 +370,11 @@ public class TurnBasedAndroid extends TurnBasedService  {
 
         switch (status) {
             case TurnBasedMatch.MATCH_STATUS_CANCELED:
+                 showToast("This game was canceled!!");
                 System.out.println( "This game was canceled!");
                 return;
             case TurnBasedMatch.MATCH_STATUS_EXPIRED:
+                  showToast("This game is expired.  So sad!");
                 System.out.println( "This game is expired.  So sad!");
                 return;
             case TurnBasedMatch.MATCH_STATUS_AUTO_MATCHING:
@@ -342,6 +383,8 @@ public class TurnBasedAndroid extends TurnBasedService  {
                 return;
             case TurnBasedMatch.MATCH_STATUS_COMPLETE:
                 if (turnStatus == TurnBasedMatch.MATCH_TURN_STATUS_COMPLETE) {
+                    showToast("This game is over; someone finished it, and so did you!  " +
+                            "There is nothing to be done.");
                     System.out.println(
                             "This game is over; someone finished it, and so did you!  " +
                                     "There is nothing to be done.");
@@ -361,13 +404,16 @@ public class TurnBasedAndroid extends TurnBasedService  {
 
                 coreGameplayCallBacks.fireEnemyTurnFinishedEvent(mTurnData);
                 System.out.println("MATCH_TURN_STATUS_MY_TURN");
+                showToast("MATCH_TURN_STATUS_MY_TURN");
                 return;
             case TurnBasedMatch.MATCH_TURN_STATUS_THEIR_TURN:
                 // Should return results.
                 System.out.println("MATCH_TURN_STATUS_THEIR_TURN");
+                showToast("MATCH_TURN_STATUS_THEIR_TURN");
                 break;
             case TurnBasedMatch.MATCH_TURN_STATUS_INVITED:
                 System.out.println("MATCH_TURN_STATUS_INVITED");
+                showToast("MATCH_TURN_STATUS_INVITED");
         }
 
         mTurnData = null;
@@ -375,11 +421,18 @@ public class TurnBasedAndroid extends TurnBasedService  {
 
     }
 
+    private void showToast(String text)
+    {
+        Toast.makeText(contextActivity.getApplication().getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+
+    }
+
     private void onCancelMatch(String matchId) {
 
 
         isDoingTurn = false;
-
+        showToast("This match (" + matchId + ") was canceled.  " +
+                "All other players will have their game ended.");
         System.out.println( "This match (" + matchId + ") was canceled.  " +
                 "All other players will have their game ended.");
     }
@@ -403,12 +456,13 @@ public class TurnBasedAndroid extends TurnBasedService  {
 
         isDoingTurn = false;
         System.out.println( "You've left this match.");
+        showToast("You've left this match.");
     }
 
 
     public void onUpdateMatch(TurnBasedMatch match) {
 
-
+        getAllDebugMatchInfo(match);
         if (match.canRematch()) {
           //  askForRematch();
         }
@@ -426,11 +480,15 @@ public class TurnBasedAndroid extends TurnBasedService  {
         // Handle notification events.
         @Override
         public void onInvitationReceived(@NonNull Invitation invitation) {
+         showToast("\"onInvitationReceived\", inviter = " + invitation.getInviter().getDisplayName());
             System.out.println("\"onInvitationReceived\"" + invitation);
+
+
         }
 
         @Override
         public void onInvitationRemoved(@NonNull String invitationId) {
+            showToast("\"onInvitationRemoved\"" );
             System.out.println("\"onInvitationRemoved\"");
         }
     };
@@ -438,11 +496,13 @@ public class TurnBasedAndroid extends TurnBasedService  {
              public TurnBasedMatchUpdateCallback mMatchUpdateCallback = new TurnBasedMatchUpdateCallback() {
         @Override
         public void onTurnBasedMatchReceived(@NonNull TurnBasedMatch turnBasedMatch) {
+            showToast("\"onTurnBasedMatchReceived\"" );
             System.out.println("\"onTurnBasedMatchReceived\"");
         }
 
         @Override
         public void onTurnBasedMatchRemoved(@NonNull String matchId) {
+            showToast("\"onTurnBasedMatchRemoved\"  " + matchId );
             System.out.println("\"onTurnBasedMatchRemoved.\"");
         }
     };

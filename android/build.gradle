@@ -24,7 +24,7 @@ android {
     }
     defaultConfig {
         applicationId "com.di.devs.xintuition"
-        minSdkVersion 17
+        minSdkVersion 16
         targetSdkVersion 25
         versionCode 8
         versionName "1.7"

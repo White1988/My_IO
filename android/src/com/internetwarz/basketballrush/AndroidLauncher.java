@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -66,12 +67,12 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
         View gameView = initializeForView(new Xintuition(this, turnBasedAndroid), config);
-        gameView.setId(View.generateViewId());
+        gameView.setId(R.id.auto);
 
         AdView adView = new AdView(this);
         adView.setAdSize(AdSize.BANNER);
         adView.setAdUnitId(AD_ID);
-        adView.setId(View.generateViewId());
+        adView.setId(R.id.auto);
         adView.setBackgroundColor(Color.BLACK);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
@@ -242,6 +243,8 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
                     .addOnSuccessListener(new OnSuccessListener<TurnBasedMatch>() {
                         @Override
                         public void onSuccess(TurnBasedMatch turnBasedMatch) {
+                            Toast.makeText(getApplication().getApplicationContext(), "onInitiateMatch!", Toast.LENGTH_SHORT).show();
+
                             turnBasedAndroid.onInitiateMatch(turnBasedMatch);
                         }
                     })

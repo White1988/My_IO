@@ -19,7 +19,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.internetwarz.basketballrush.model.PlayerTurn;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
 
 
@@ -221,8 +220,8 @@ public class DuelScreen implements Screen, InputProcessor{
 
         Vector3 coord =  camera.unproject(new Vector3(screenX, screenY, 0));
 
-        System.out.println("worldX " +coord.x);
-        System.out.println("worldY " +coord.y);
+        Gdx.app.log("Duel","worldX " +coord.x);
+        Gdx.app.log("Duel","worldY " +coord.y);
         rectangle= new Rectangle(10,10,80,80);
         rectangle2= new Rectangle(100,10,80,80);
         rectangle3= new Rectangle(10,100,80,80);
@@ -230,7 +229,7 @@ public class DuelScreen implements Screen, InputProcessor{
         if(Intersector.overlaps(rectangle, new Rectangle(coord.x, coord.y, 1,1)))
         {
 
-            System.out.println("Click on Done");
+            Gdx.app.log("Duel","Click on Done");
             Xintuition.getTurnBasedService().onDoneClicked(7);
 
         }
@@ -238,13 +237,15 @@ public class DuelScreen implements Screen, InputProcessor{
         if(Intersector.overlaps(rectangle2, new Rectangle(coord.x, coord.y, 1,1)))
         {
 
-            System.out.println("Click on Leave");
+            Gdx.app.log("Duel","Click on Leave");
+
+            //todo (Dima) add "Are you sure" dialog
             Xintuition.getTurnBasedService().onLeaveClicked();
         }
         if(Intersector.overlaps(rectangle3, new Rectangle(coord.x, coord.y, 1,1)))
         {
 
-            System.out.println("Click on Finish");
+            Gdx.app.log("Duel","Click on Finish");
             Xintuition.getTurnBasedService().onFinishClicked();
         }
 
