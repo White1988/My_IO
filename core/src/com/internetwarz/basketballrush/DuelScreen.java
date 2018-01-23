@@ -194,6 +194,7 @@ public class DuelScreen implements Screen, InputProcessor{
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
@@ -222,6 +223,11 @@ public class DuelScreen implements Screen, InputProcessor{
         shapeRenderer.rect(10,10,80,80);
         shapeRenderer.rect(100,10,80,80);
         shapeRenderer.rect(10,100,80,80);
+
+        /*shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.WHITE);
+        shapeRenderer.circle(100, 300, 100);
+        shapeRenderer.end();*/
 
         shapeRenderer.end();
 
