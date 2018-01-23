@@ -244,9 +244,9 @@ public class DuelScreen implements Screen, InputProcessor{
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);//drawing rectangle
         shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.rect(10,10,80,80);
-        shapeRenderer.rect(100,10,80,80);
-        shapeRenderer.rect(10,100,80,80);
+        shapeRenderer.rect(500,500,80,80);
+        shapeRenderer.rect(400,400,80,80);
+        shapeRenderer.rect(600,600,80,80);
 
         /*shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.WHITE);
