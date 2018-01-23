@@ -156,6 +156,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
                         onInitiateMatch(turnBasedMatch);
 
                         coreGameplayCallBacks.fireMatchStartedEvent();
+                        gameStartedLocally = true;
                     }
                 })
                 .addOnFailureListener(createFailureListener("There was a problem creating a match!"));
@@ -260,6 +261,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
         mTurnData = new PlayerTurn();
         mTurnData.turnCounter += 1;
         mTurnData.selectedNumber = selectedNumber;
+        mTurnData.player1Score = selectedNumber;
 
         mTurnBasedMultiplayerClient.takeTurn(mMatch.getMatchId(),
                 mTurnData.persist(), nextParticipantId)
@@ -276,7 +278,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
     }
 
 
-
+    private boolean isPlayer1 = true;
 
     // startMatch() happens in response to the createTurnBasedMatch()
     // above. This is only called on success, so we should have a
@@ -287,12 +289,23 @@ public class TurnBasedAndroid extends TurnBasedService  {
     public void startMatch(TurnBasedMatch match) {
         mTurnData = new PlayerTurn();
         // Some basic turn data
-        mTurnData.selectedNumber = 0;
+        mTurnData.selectedNumber = -1;
 
         mMatch = match;
 
         String myParticipantId = mMatch.getParticipantId(mPlayerId);
 
+
+
+        if(mMatch.getData() != null) //todo if its even possible?
+        {
+
+            mTurnData.player2Id = myParticipantId;
+        }
+        else
+        {
+            mTurnData.player1Id = myParticipantId;
+        }
 
 
         mTurnBasedMultiplayerClient.takeTurn(match.getMatchId(),
@@ -402,9 +415,16 @@ public class TurnBasedAndroid extends TurnBasedService  {
             case TurnBasedMatch.MATCH_TURN_STATUS_MY_TURN:
                 mTurnData = PlayerTurn.unpersist(mMatch.getData());
 
+                if(!gameStartedLocally)
+                {
+                    coreGameplayCallBacks.fireMatchStartedEvent();
+                }
+
                 coreGameplayCallBacks.fireEnemyTurnFinishedEvent(mTurnData);
                 System.out.println("MATCH_TURN_STATUS_MY_TURN");
                 showToast("MATCH_TURN_STATUS_MY_TURN");
+
+
                 return;
             case TurnBasedMatch.MATCH_TURN_STATUS_THEIR_TURN:
                 // Should return results.
@@ -446,6 +466,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
             return;
         }
         coreGameplayCallBacks.fireMatchStartedEvent();
+        gameStartedLocally = true;
         startMatch(match);
     }
 

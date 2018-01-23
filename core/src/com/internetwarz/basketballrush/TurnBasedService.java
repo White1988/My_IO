@@ -8,6 +8,14 @@ import java.util.List;
 
 public abstract class TurnBasedService {
 
+    // we can interrupt match and then return to it, since its turn-based game:)
+    //
+    protected boolean gameStartedLocally = false;
+
+
+    public boolean isGameStartedLocally() {
+        return gameStartedLocally;
+    }
 
     public TurnBasedCallBacks coreGameplayCallBacks = null;
     public abstract void onQuickMatchClicked();
@@ -38,7 +46,7 @@ public abstract class TurnBasedService {
      */
     public static class TurnBasedCallBacks {
 
-         private   List<VoidAction> onMatchStartedCallbacks = new ArrayList<>();
+         private  List<VoidAction> onMatchStartedCallbacks = new ArrayList<>();
          private  List<EnemyTurnAction> onEnemyTurnCallbacks = new ArrayList<>();
 
             public void addMatchStartedCallback(VoidAction callback)

@@ -19,6 +19,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.internetwarz.basketballrush.model.PlayerTurn;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
 
 
@@ -34,6 +35,12 @@ public class DuelScreen implements Screen, InputProcessor{
 
 
     private Label label;
+
+    private Label debugLabel1;
+    private Label debugLabel2;
+    private Label debugLabel3;
+    private Label debugLabel4;
+
     private Label.LabelStyle rightStyle;
     private Label.LabelStyle textStyle;
     private GlyphLayout layout;
@@ -51,6 +58,8 @@ public class DuelScreen implements Screen, InputProcessor{
     private Rectangle rectangle3;
 
 
+
+    private PlayerTurn lastTurnData = null;
 
     public DuelScreen(Xintuition game ) {
 
@@ -78,6 +87,13 @@ public class DuelScreen implements Screen, InputProcessor{
         buttonsInit();
 
         InitLabels();
+
+        Xintuition.getTurnBasedService().coreGameplayCallBacks.addEnemyTurnFinishedCallback(new TurnBasedService.EnemyTurnAction() {
+            @Override
+            public void Action(PlayerTurn param) {
+                lastTurnData = param;
+            }
+        });
 
     }
     private void buttonsInit(){
@@ -136,7 +152,34 @@ public class DuelScreen implements Screen, InputProcessor{
         label.setSize(55, 55);
         label.setFontScale(1f, 1f);
 
+
+
+        debugLabel1 = new Label( "label ", textStyle);
+        debugLabel1.setPosition(140, 140);
+        debugLabel1.setSize(55, 55);
+        debugLabel1.setFontScale(1f, 1f);
+
+        debugLabel2 = new Label( "label ", textStyle);
+        debugLabel2.setPosition(140, 200);
+        debugLabel2.setSize(55, 55);
+        debugLabel2.setFontScale(1f, 1f);
+
+        debugLabel3 = new Label( "label ", textStyle);
+        debugLabel3.setPosition(140, 250);
+        debugLabel3.setSize(55, 55);
+        debugLabel3.setFontScale(1f, 1f);
+
+        debugLabel4 = new Label( "label ", textStyle);
+        debugLabel4.setPosition(140, 300);
+        debugLabel4.setSize(55, 55);
+        debugLabel4.setFontScale(1f, 1f);
+
         stage.addActor(label);
+        stage.addActor(debugLabel1);
+        stage.addActor(debugLabel2);
+        stage.addActor(debugLabel3);
+        stage.addActor(debugLabel4);
+
     }
 
     @Override
@@ -155,6 +198,15 @@ public class DuelScreen implements Screen, InputProcessor{
         batch.setProjectionMatrix(camera.combined);
 
         label.setText("7");
+
+
+        if(lastTurnData != null)
+        {
+           debugLabel1.setText("Turn count: " + lastTurnData.turnCounter);
+           debugLabel2.setText("Selected number: " + lastTurnData.selectedNumber);
+           debugLabel3.setText("player1Score: " + lastTurnData.player1Score);
+           debugLabel4.setText("player2Score: " + lastTurnData.player2Score);
+        }
 
 
         stage.act();

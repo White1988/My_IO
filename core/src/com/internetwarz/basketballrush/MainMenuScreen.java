@@ -30,8 +30,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.internetwarz.basketballrush.model.PlayerTurn;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
 
-import static com.internetwarz.basketballrush.Constants.EASY_MODE;
-
 public class MainMenuScreen implements Screen,InputProcessor {
     final Xintuition game;
     final float appWidth;
@@ -155,6 +153,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
             @Override
             public void Action(PlayerTurn t) {
                 System.out.println("Enemy turn was: " + t);
+                Gdx.app.log("Xintuition", "Enemy turn was: " + t);
             }
         });
 
