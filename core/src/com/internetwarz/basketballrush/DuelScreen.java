@@ -25,7 +25,7 @@ import com.internetwarz.basketballrush.utils.LanguagesManager;
 
 
 
-public class DuelScreen extends ApplicationAdapter implements Screen, InputProcessor{
+public class DuelScreen implements Screen, InputProcessor{
 
     private SpriteBatch batch;
     private Texture background;
