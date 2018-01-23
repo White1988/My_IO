@@ -1,4 +1,5 @@
 package com.internetwarz.basketballrush;
+import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -19,13 +20,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.internetwarz.basketballrush.model.PlayerTurn;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
 
 
 
 
-public class DuelScreen implements Screen, InputProcessor{
+public class DuelScreen extends ApplicationAdapter implements Screen, InputProcessor{
 
     private SpriteBatch batch;
     private Texture background;
@@ -172,12 +172,38 @@ public class DuelScreen implements Screen, InputProcessor{
         shapeRenderer.rect(10,10,80,80);
         shapeRenderer.rect(100,10,80,80);
         shapeRenderer.rect(10,100,80,80);
+        shapeRenderer.end();
 
-        /*shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.circle(100, 300, 100);
-        shapeRenderer.end();*/
+        // drawing zoned circle
+        float x= 0;
+        float y = 36;
 
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.BLUE);
+        for(int i=0;i<10; i++){
+            shapeRenderer.arc(180,400,90,x,y);
+            x+=36;
+            y+=36;
+        }
+        shapeRenderer.end();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.RED);
+        for(int i=0;i<10; i++){
+            shapeRenderer.arc(180,400,90,x,y);
+            x+=36;
+            y+=36;
+        }
+        shapeRenderer.end();
+
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.GREEN);
+        shapeRenderer.circle(180,400,60);
+        shapeRenderer.end();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.circle(180,400,60);
         shapeRenderer.end();
 
     }
