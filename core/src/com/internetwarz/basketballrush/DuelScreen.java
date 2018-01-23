@@ -41,6 +41,9 @@ public class DuelScreen implements Screen, InputProcessor{
     private Label debugLabel3;
     private Label debugLabel4;
 
+    private Label debugLabel5;
+
+
     private Label.LabelStyle rightStyle;
     private Label.LabelStyle textStyle;
     private GlyphLayout layout;
@@ -61,7 +64,7 @@ public class DuelScreen implements Screen, InputProcessor{
 
     private PlayerTurn lastTurnData = null;
 
-    public DuelScreen(Xintuition game ) {
+    public DuelScreen(final Xintuition game ) {
 
         this.game = game;
 
@@ -92,6 +95,18 @@ public class DuelScreen implements Screen, InputProcessor{
             @Override
             public void Action(PlayerTurn param) {
                 lastTurnData = param;
+            }
+        });
+
+        Xintuition.getTurnBasedService().coreGameplayCallBacks.addMatchLeftCallback(new TurnBasedService.VoidAction() {
+            @Override
+            public void Action() {
+               Gdx.app.postRunnable(new Runnable() {
+                   @Override
+                   public void run() {
+                       game.setScreen(new MainMenuScreen(game));
+                   }
+               });
             }
         });
 
@@ -148,7 +163,7 @@ public class DuelScreen implements Screen, InputProcessor{
         layout.setText(font, "layout");
 
         label = new Label( "label ", textStyle);
-        label.setPosition(40, 40);
+        label.setPosition(520, 520);
         label.setSize(55, 55);
         label.setFontScale(1f, 1f);
 
@@ -173,6 +188,14 @@ public class DuelScreen implements Screen, InputProcessor{
         debugLabel4.setPosition(140, 300);
         debugLabel4.setSize(55, 55);
         debugLabel4.setFontScale(1f, 1f);
+
+
+        debugLabel5 = new Label( "label ", textStyle);
+        debugLabel5.setPosition(140, 350);
+        debugLabel5.setSize(155, 55);
+        debugLabel5.setFontScale(1f, 1f);
+
+
 
         stage.addActor(label);
         stage.addActor(debugLabel1);
@@ -207,6 +230,7 @@ public class DuelScreen implements Screen, InputProcessor{
            debugLabel2.setText("Selected number: " + lastTurnData.selectedNumber);
            debugLabel3.setText("player1Score: " + lastTurnData.player1Score);
            debugLabel4.setText("player2Score: " + lastTurnData.player2Score);
+           debugLabel5.setText("overall: " + lastTurnData.toString());
         }
 
 
@@ -280,9 +304,9 @@ public class DuelScreen implements Screen, InputProcessor{
 
         Gdx.app.log("Duel","worldX " +coord.x);
         Gdx.app.log("Duel","worldY " +coord.y);
-        rectangle= new Rectangle(10,10,80,80);
-        rectangle2= new Rectangle(100,10,80,80);
-        rectangle3= new Rectangle(10,100,80,80);
+        rectangle= new Rectangle(500,500,80,80);
+        rectangle2= new Rectangle(400,400,80,80);
+        rectangle3= new Rectangle(600,600,80,80);
 
         if(Intersector.overlaps(rectangle, new Rectangle(coord.x, coord.y, 1,1)))
         {

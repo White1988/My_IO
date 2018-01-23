@@ -261,7 +261,16 @@ public class TurnBasedAndroid extends TurnBasedService  {
         mTurnData = new PlayerTurn();
         mTurnData.turnCounter += 1;
         mTurnData.selectedNumber = selectedNumber;
-        mTurnData.player1Score = selectedNumber;
+
+        if(isPlayer1)
+        {
+            mTurnData.player1Score += selectedNumber;
+        }
+        else
+            {
+            mTurnData.player2Score += selectedNumber;
+            }
+
 
         mTurnBasedMultiplayerClient.takeTurn(mMatch.getMatchId(),
                 mTurnData.persist(), nextParticipantId)
@@ -478,6 +487,8 @@ public class TurnBasedAndroid extends TurnBasedService  {
         isDoingTurn = false;
         System.out.println( "You've left this match.");
         showToast("You've left this match.");
+
+       coreGameplayCallBacks.fireMatchLeftEvent();
     }
 
 

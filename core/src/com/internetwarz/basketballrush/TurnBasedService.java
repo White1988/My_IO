@@ -47,12 +47,18 @@ public abstract class TurnBasedService {
     public static class TurnBasedCallBacks {
 
          private  List<VoidAction> onMatchStartedCallbacks = new ArrayList<>();
+         private  List<VoidAction> onMatchLeftCallbacks = new ArrayList<>();
          private  List<EnemyTurnAction> onEnemyTurnCallbacks = new ArrayList<>();
 
             public void addMatchStartedCallback(VoidAction callback)
             {
                 onMatchStartedCallbacks.add(callback);
             }
+
+        public void addMatchLeftCallback(VoidAction callback)
+        {
+            onMatchLeftCallbacks.add(callback);
+        }
 
          public void addEnemyTurnFinishedCallback(EnemyTurnAction callback)
          {
@@ -62,6 +68,11 @@ public abstract class TurnBasedService {
         public void fireMatchStartedEvent()
         {
             for (VoidAction a : onMatchStartedCallbacks) a.Action();
+        }
+
+        public void fireMatchLeftEvent()
+        {
+            for (VoidAction a : onMatchLeftCallbacks) a.Action();
         }
 
         void fireEnemyTurnFinishedEvent(PlayerTurn param)
