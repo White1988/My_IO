@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.games.InvitationsClient;
 import com.google.android.gms.games.TurnBasedMultiplayerClient;
@@ -177,6 +178,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
     @Override
     //todo add in mainMenuScreen
     public void onLeaveClicked() {
+        Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onLeaveClicked!", Toast.LENGTH_SHORT).show();
 
         String nextParticipantId = getNextParticipantId();
 
@@ -195,6 +197,8 @@ public class TurnBasedAndroid extends TurnBasedService  {
     @Override
     //todo call after onFinish button from DuelScreen
     public void onFinishClicked() {
+
+        Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onFinishClicked!", Toast.LENGTH_SHORT).show();
 
         mTurnBasedMultiplayerClient.finishMatch(mMatch.getMatchId())
                 .addOnSuccessListener(new OnSuccessListener<TurnBasedMatch>() {
@@ -215,6 +219,8 @@ public class TurnBasedAndroid extends TurnBasedService  {
     @Override
     //todo call after move from DuelScreen
     public void onDoneClicked(int selectedNumber) {
+
+        Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onDoneClicked!", Toast.LENGTH_SHORT).show();
 
         String nextParticipantId = getNextParticipantId();
         // Create the next turn

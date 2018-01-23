@@ -143,7 +143,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        game.setScreen(new XintuitionGameplayScreen(game, Constants.ATTEMPTS_IN_GAMEMODE.get(EASY_MODE)));
+                        game.setScreen(new DuelScreen(game));
                     }
                 });
 

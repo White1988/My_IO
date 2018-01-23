@@ -1,5 +1,4 @@
 package com.internetwarz.basketballrush;
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -14,17 +13,15 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.internetwarz.basketballrush.model.PlayerTurn;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
 
-import jdk.nashorn.internal.codegen.MethodEmitter;
 
 
 
@@ -36,13 +33,13 @@ public class DuelScreen implements Screen, InputProcessor{
     private static int VIEWPORT_SCALE = 1;
 
 
+
     private Label label;
     private Label.LabelStyle rightStyle;
     private Label.LabelStyle textStyle;
     private GlyphLayout layout;
 
     private Stage stage;
-    private BitmapFont font;
 
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
@@ -51,10 +48,13 @@ public class DuelScreen implements Screen, InputProcessor{
     private float HEIGHT;
 
     private Rectangle rectangle;
+    private Rectangle rectangle2;
+    private Rectangle rectangle3;
 
 
 
     public DuelScreen(Xintuition game ) {
+
         this.game = game;
 
         WIDTH = (float) Gdx.graphics.getWidth();
@@ -70,15 +70,13 @@ public class DuelScreen implements Screen, InputProcessor{
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH/ VIEWPORT_SCALE, HEIGHT / VIEWPORT_SCALE);
 
-        shapeRenderer = new ShapeRenderer(15000); //increase smoothness of circle
+        shapeRenderer = new ShapeRenderer(15000);//increase smoothness of circle
+
 
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
 
-
         buttonsInit();
-        //font init
-        fontInit();
 
         InitLabels();
 
@@ -141,26 +139,6 @@ public class DuelScreen implements Screen, InputProcessor{
 
         stage.addActor(label);
     }
-    private void fontInit() {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
-        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
-            generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/DroidSansFallback.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 14;
-        parameter.color= Color.valueOf("#506878");
-        parameter.borderStraight = false;
-        parameter.borderWidth = 1;
-        parameter.borderColor = Color.valueOf("#e2e3e7");
-        parameter.shadowColor = Color.valueOf("#141a1e");
-
-        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
-        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
-            parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ただ手段ハード栄誉の殿堂統計遊びますゲームは終わった結果設定ただ手段ハードレベル実験右！間違いました！再起動はいいいえあなたは本当にゲームを再開しますか？ベストプレーヤーゲームは終わった！統計選手栄誉の殿堂ルールログアウト言語"
-                    +"명예의 전당통계놀이게임이결과설정다만방법단단한수평실험오른쪽잘못된다시 시작예아니오게임을 다시 시작 하시겠습니까?최고의 선수게임은끝났어!통계(플레이어)명예의 전당규칙로그 아웃언어"
-                    +"名人堂統計玩遊戲結束了結果設置只是手段硬水平實驗對錯了重新開始是的沒有你真的想重新啟動遊戲嗎？最好的球員遊戲結束了統計玩家名人堂規則註銷語言";
-        font=generator.generateFont(parameter);
-    }
-
 
     @Override
     public void show() {
@@ -190,7 +168,10 @@ public class DuelScreen implements Screen, InputProcessor{
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);//drawing rectangle
         shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.rect(10,10,130,90);
+        shapeRenderer.rect(10,10,80,80);
+        shapeRenderer.rect(100,10,80,80);
+        shapeRenderer.rect(10,100,80,80);
+
         shapeRenderer.end();
 
     }
@@ -237,14 +218,34 @@ public class DuelScreen implements Screen, InputProcessor{
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
         Vector3 coord =  camera.unproject(new Vector3(screenX, screenY, 0));
 
         System.out.println("worldX " +coord.x);
         System.out.println("worldY " +coord.y);
-        rectangle= new Rectangle(10,10,130,90);
+        rectangle= new Rectangle(10,10,80,80);
+        rectangle2= new Rectangle(100,10,80,80);
+        rectangle3= new Rectangle(10,100,80,80);
+
         if(Intersector.overlaps(rectangle, new Rectangle(coord.x, coord.y, 1,1)))
         {
-            System.out.println("Click on rectangle");
+
+            System.out.println("Click on Done");
+            Xintuition.getTurnBasedService().onDoneClicked(7);
+
+        }
+
+        if(Intersector.overlaps(rectangle2, new Rectangle(coord.x, coord.y, 1,1)))
+        {
+
+            System.out.println("Click on Leave");
+            Xintuition.getTurnBasedService().onLeaveClicked();
+        }
+        if(Intersector.overlaps(rectangle3, new Rectangle(coord.x, coord.y, 1,1)))
+        {
+
+            System.out.println("Click on Finish");
+            Xintuition.getTurnBasedService().onFinishClicked();
         }
 
         return false;

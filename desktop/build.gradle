@@ -36,3 +36,7 @@ task desctop_dist(type: Jar) {
 
 desctop_dist.dependsOn classes
 
+
+dependencies {
+    compile project(path: ':core')
+}
