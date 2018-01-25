@@ -1,5 +1,4 @@
 package com.internetwarz.basketballrush;
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -14,18 +13,21 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
-
-
+import com.internetwarz.basketballrush.utils.Score;
 
 
 public class DuelScreen implements Screen, InputProcessor{
+
 
     private SpriteBatch batch;
     private Texture background;
@@ -38,7 +40,6 @@ public class DuelScreen implements Screen, InputProcessor{
     private Label.LabelStyle rightStyle;
     private Label.LabelStyle textStyle;
     private GlyphLayout layout;
-
     private Stage stage;
 
     private ShapeRenderer shapeRenderer;
@@ -46,19 +47,44 @@ public class DuelScreen implements Screen, InputProcessor{
 
     private float WIDTH;
     private float HEIGHT;
+    private final float RADIUS;
+    private float startFilling = 0;
+    private float degrees = 0;
+
+    private boolean isGuessed = true;
+    private boolean isGameBegan = false;
+    private boolean isShow = false;
+
+    private int randomSector;
+    private int numSectors = 10;
+    private int curNumAttempts;
+    public int numAttempts;
+    private int points = 1;
+
+    private Color fillColor = new Color();
+    private final Score score;
 
     private Rectangle rectangle;
     private Rectangle rectangle2;
     private Rectangle rectangle3;
+
+    //for circle
+    private Circle playerCircle;
+    private Circle innerCircle;
+    Pixmap pixmap;
+    Texture circleTexture;
+    Image imageCircle;
 
 
 
     public DuelScreen(Xintuition game ) {
 
         this.game = game;
+        score = new Score(1);
 
         WIDTH = (float) Gdx.graphics.getWidth();
         HEIGHT = (float) Gdx.graphics.getHeight();
+        RADIUS = (WIDTH-WIDTH/10*2 - WIDTH/20)/3;
 
         stage = new Stage(new FitViewport(WIDTH, HEIGHT));
         stage.clear();
@@ -75,6 +101,15 @@ public class DuelScreen implements Screen, InputProcessor{
 
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
+
+        pixmap = new Pixmap((int)RADIUS*2 + 1, (int)RADIUS*2 + 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.valueOf("#abcdff"));
+        pixmap.fillCircle((int)RADIUS, (int)RADIUS, (int)RADIUS);
+        circleTexture = new Texture(pixmap);
+        pixmap.dispose();
+        imageCircle = new Image(circleTexture);
+        imageCircle.setPosition(90,310);
+        stage.addActor(imageCircle);
 
         buttonsInit();
 
@@ -98,6 +133,8 @@ public class DuelScreen implements Screen, InputProcessor{
         rect.dispose();
     }
     private void InitLabels(){
+
+
         layout = new GlyphLayout();
 
         //Labels init
@@ -175,7 +212,7 @@ public class DuelScreen implements Screen, InputProcessor{
         shapeRenderer.end();
 
         // drawing zoned circle
-        float x= 0;
+        float x= 54;
         float y = 36;
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -186,6 +223,7 @@ public class DuelScreen implements Screen, InputProcessor{
             y+=36;
         }
         shapeRenderer.end();
+
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.RED);
         for(int i=0;i<10; i++){
@@ -195,9 +233,8 @@ public class DuelScreen implements Screen, InputProcessor{
         }
         shapeRenderer.end();
 
-
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.GREEN);
+        shapeRenderer.setColor(Color.PURPLE);
         shapeRenderer.circle(180,400,60);
         shapeRenderer.end();
 
@@ -205,6 +242,8 @@ public class DuelScreen implements Screen, InputProcessor{
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.circle(180,400,60);
         shapeRenderer.end();
+
+
 
     }
 
@@ -261,26 +300,81 @@ public class DuelScreen implements Screen, InputProcessor{
 
         if(Intersector.overlaps(rectangle, new Rectangle(coord.x, coord.y, 1,1)))
         {
-
             System.out.println("Click on Done");
             Xintuition.getTurnBasedService().onDoneClicked(7);
-
         }
 
         if(Intersector.overlaps(rectangle2, new Rectangle(coord.x, coord.y, 1,1)))
         {
-
             System.out.println("Click on Leave");
             Xintuition.getTurnBasedService().onLeaveClicked();
         }
         if(Intersector.overlaps(rectangle3, new Rectangle(coord.x, coord.y, 1,1)))
         {
-
             System.out.println("Click on Finish");
             Xintuition.getTurnBasedService().onFinishClicked();
         }
 
+        playerCircle = new Circle(imageCircle.getX() + imageCircle.getWidth()/2, imageCircle.getY() + imageCircle.getHeight()/2, imageCircle.getHeight()/2);
+        innerCircle = new Circle(imageCircle.getX() + imageCircle.getWidth()/2, imageCircle.getY() + imageCircle.getHeight()/2, 60);
+
+        if(Intersector.overlaps(playerCircle, new Rectangle(coord.x, coord.y, 1,1))) {
+            if (!Intersector.overlaps(innerCircle, new Rectangle(coord.x, coord.y, 1, 1))) {
+                if (isGuessed) {
+                    randomSector = (int) (Math.random() * (numSectors) + 1);
+                    isGuessed = false;
+                }
+                isGameBegan = true;
+
+                System.out.println("Overlaps!");
+                Vector2 vector1 = new Vector2(coord.y - playerCircle.y, coord.x - playerCircle.x);
+                int pickedSector = getCircleSector(numSectors, vector1.angle());
+                //double angle = Math. atan2(yAxis.y, yAxis.x) - Math. atan2(vector1.y, vector1.x);
+                System.out.println("angle " + vector1.angle());
+                System.out.println("sector for " + numSectors + " is " + pickedSector);
+                System.out.println("Score: " + score.getScore());
+                System.out.println("RIGHT: " + randomSector);
+                System.out.println("------------------------------------");
+                if (randomSector == pickedSector) {
+                    isShow = true;
+                    setFillingParametrs(Color.GREEN, pickedSector);
+                    System.out.println("WON");
+                    //stage.getActors().removeRange(stage.getActors().size - numSectors, stage.getActors().size - 1 );
+                    curNumAttempts = numAttempts;
+                    isGuessed = true;
+                    score.setScore(score.getScore() + points);
+
+
+                    Xintuition.getTurnBasedService().onDoneClicked(2);
+
+                } else {
+                    isShow = true;
+                    setFillingParametrs(Color.RED, pickedSector);
+                    System.out.println("LOSE");
+                    curNumAttempts--;
+
+
+                    Xintuition.getTurnBasedService().onFinishClicked();
+                }
+            }
+
+        }
+
         return false;
+    }
+    private int getCircleSector(int sectorNumbers, float angle)
+    {
+        float deegreesPerSector = 360/sectorNumbers;
+
+        return (int) (angle / deegreesPerSector)  + 1;
+    }
+    private void setFillingParametrs(Color color, int pickedSector) {
+        isShow = true;
+        fillColor = color;
+        float angle = 360.0f / numSectors;
+        startFilling = pickedSector * angle - 90;
+        degrees = angle;
+
     }
 
     @Override

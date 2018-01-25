@@ -491,8 +491,6 @@ public class XintuitionGameplayScreen implements Screen,InputProcessor
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        System.out.println("screenX " +screenX);
-        System.out.println("screenY " +screenY);
 
         Vector3 coord =  camera.unproject(new Vector3(screenX, screenY, 0));
 
