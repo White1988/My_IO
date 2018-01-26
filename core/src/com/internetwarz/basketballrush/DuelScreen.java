@@ -33,10 +33,10 @@ public class DuelScreen implements Screen, InputProcessor{
     private Texture background;
     private final Xintuition game;
     private static int VIEWPORT_SCALE = 1;
+    BitmapFont font;
 
+    private Label label1;
 
-
-    private Label label;
     private Label.LabelStyle rightStyle;
     private Label.LabelStyle textStyle;
     private GlyphLayout layout;
@@ -98,7 +98,6 @@ public class DuelScreen implements Screen, InputProcessor{
 
         shapeRenderer = new ShapeRenderer(15000);//increase smoothness of circle
 
-
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
 
@@ -110,6 +109,7 @@ public class DuelScreen implements Screen, InputProcessor{
         imageCircle = new Image(circleTexture);
         imageCircle.setPosition(90,310);
         stage.addActor(imageCircle);
+
 
         buttonsInit();
 
@@ -149,7 +149,7 @@ public class DuelScreen implements Screen, InputProcessor{
             parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ただ手段ハード栄誉の殿堂統計遊びますゲームは終わった結果設定ただ手段ハードレベル実験右！間違いました！再起動はいいいえあなたは本当にゲームを再開しますか？ベストプレーヤーゲームは終わった！統計選手栄誉の殿堂ルールログアウト言語"
                     +"명예의 전당통계놀이게임이결과설정다만방법단단한수평실험오른쪽잘못된다시 시작예아니오게임을 다시 시작 하시겠습니까?최고의 선수게임은끝났어!통계(플레이어)명예의 전당규칙로그 아웃언어"
                     +"名人堂統計玩遊戲結束了結果設置只是手段硬水平實驗對錯了重新開始是的沒有你真的想重新啟動遊戲嗎？最好的球員遊戲結束了統計玩家名人堂規則註銷語言";
-        BitmapFont font = generator.generateFont(parameter);
+         font = generator.generateFont(parameter);
         rightStyle = new Label.LabelStyle(font, Color.GREEN);
 
         parameter.size = 18;
@@ -169,12 +169,6 @@ public class DuelScreen implements Screen, InputProcessor{
 
         layout.setText(font, "layout");
 
-        label = new Label( "label ", textStyle);
-        label.setPosition(40, 40);
-        label.setSize(55, 55);
-        label.setFontScale(1f, 1f);
-
-        stage.addActor(label);
     }
 
     @Override
@@ -192,9 +186,6 @@ public class DuelScreen implements Screen, InputProcessor{
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
-
-        label.setText("7");
-
 
         stage.act();
         batch.begin();
@@ -218,16 +209,17 @@ public class DuelScreen implements Screen, InputProcessor{
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLUE);
         for(int i=0;i<10; i++){
-            shapeRenderer.arc(180,400,90,x,y);
+            shapeRenderer.arc(imageCircle.getX() + imageCircle.getWidth()/2, imageCircle.getY() + imageCircle.getHeight()/2, imageCircle.getHeight()/2,x,y);
             x+=36;
             y+=36;
         }
+
         shapeRenderer.end();
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.RED);
         for(int i=0;i<10; i++){
-            shapeRenderer.arc(180,400,90,x,y);
+            shapeRenderer.arc(imageCircle.getX() + imageCircle.getWidth()/2, imageCircle.getY() + imageCircle.getHeight()/2, imageCircle.getHeight()/2,x,y);
             x+=36;
             y+=36;
         }
@@ -235,14 +227,45 @@ public class DuelScreen implements Screen, InputProcessor{
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.PURPLE);
-        shapeRenderer.circle(180,400,60);
+        shapeRenderer.circle(imageCircle.getX() + imageCircle.getWidth()/2, imageCircle.getY() + imageCircle.getHeight()/2, imageCircle.getHeight()/3);
         shapeRenderer.end();
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.circle(180,400,60);
+        shapeRenderer.circle(imageCircle.getX() + imageCircle.getWidth()/2, imageCircle.getY() + imageCircle.getHeight()/2, imageCircle.getHeight()/3);
         shapeRenderer.end();
 
+        //drawing sectors numbers
+        batch.begin();
+        font.draw(batch, "1", imageCircle.getX() + 110, imageCircle.getY() + 170);
+        batch.end();
+        batch.begin();
+        font.draw(batch, "2", imageCircle.getX() + 145, imageCircle.getY() + 140);
+        batch.end();
+        batch.begin();
+        font.draw(batch, "3", imageCircle.getX() + 160 , imageCircle.getY() + 95);
+        batch.end();
+        batch.begin();
+        font.draw(batch, "4", imageCircle.getX() + 145 , imageCircle.getY() + 55);
+        batch.end();
+        batch.begin();
+        font.draw(batch, "5", imageCircle.getX() + 107, imageCircle.getY() + 25);
+        batch.end();
+        batch.begin();
+        font.draw(batch, "6", imageCircle.getX() + 60, imageCircle.getY() + 25);
+        batch.end();
+        batch.begin();
+        font.draw(batch, "7", imageCircle.getX() + 25, imageCircle.getY() + 55);
+        batch.end();
+        batch.begin();
+        font.draw(batch, "8", imageCircle.getX() + 10, imageCircle.getY() + 95);
+        batch.end();
+        batch.begin();
+        font.draw(batch, "9", imageCircle.getX() + 25, imageCircle.getY() + 140);
+        batch.end();
+        batch.begin();
+        font.draw(batch, "10", imageCircle.getX() + 60, imageCircle.getY() + 170);
+        batch.end();
 
 
     }
@@ -344,7 +367,6 @@ public class DuelScreen implements Screen, InputProcessor{
                     isGuessed = true;
                     score.setScore(score.getScore() + points);
 
-
                     Xintuition.getTurnBasedService().onDoneClicked(2);
 
                 } else {
@@ -352,7 +374,6 @@ public class DuelScreen implements Screen, InputProcessor{
                     setFillingParametrs(Color.RED, pickedSector);
                     System.out.println("LOSE");
                     curNumAttempts--;
-
 
                     Xintuition.getTurnBasedService().onFinishClicked();
                 }
