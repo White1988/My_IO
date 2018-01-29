@@ -103,11 +103,11 @@ public class DuelScreen implements Screen, InputProcessor{
 
         pixmap = new Pixmap((int)RADIUS*2 + 1, (int)RADIUS*2 + 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.valueOf("#abcdff"));
-        pixmap.fillCircle((int)RADIUS, (int)RADIUS, (int)RADIUS);
+        pixmap.fillCircle(180, 400, (int)RADIUS);
         circleTexture = new Texture(pixmap);
         pixmap.dispose();
         imageCircle = new Image(circleTexture);
-        imageCircle.setPosition(90,310);
+        imageCircle.setPosition(180,400);
         stage.addActor(imageCircle);
 
 
@@ -209,7 +209,7 @@ public class DuelScreen implements Screen, InputProcessor{
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLUE);
         for(int i=0;i<10; i++){
-            shapeRenderer.arc(imageCircle.getX() + imageCircle.getWidth()/2, imageCircle.getY() + imageCircle.getHeight()/2, imageCircle.getHeight()/2,x,y);
+            shapeRenderer.arc(imageCircle.getX() , imageCircle.getY(), imageCircle.getHeight()/2,x,y);
             x+=36;
             y+=36;
         }
@@ -219,7 +219,7 @@ public class DuelScreen implements Screen, InputProcessor{
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.RED);
         for(int i=0;i<10; i++){
-            shapeRenderer.arc(imageCircle.getX() + imageCircle.getWidth()/2, imageCircle.getY() + imageCircle.getHeight()/2, imageCircle.getHeight()/2,x,y);
+            shapeRenderer.arc(imageCircle.getX() , imageCircle.getY() , imageCircle.getHeight()/2,x,y);
             x+=36;
             y+=36;
         }
@@ -227,44 +227,44 @@ public class DuelScreen implements Screen, InputProcessor{
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.PURPLE);
-        shapeRenderer.circle(imageCircle.getX() + imageCircle.getWidth()/2, imageCircle.getY() + imageCircle.getHeight()/2, imageCircle.getHeight()/3);
+        shapeRenderer.circle(imageCircle.getX() , imageCircle.getY() , imageCircle.getHeight()/3);
         shapeRenderer.end();
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.circle(imageCircle.getX() + imageCircle.getWidth()/2, imageCircle.getY() + imageCircle.getHeight()/2, imageCircle.getHeight()/3);
+        shapeRenderer.circle(imageCircle.getX() , imageCircle.getY(), imageCircle.getHeight()/3);
         shapeRenderer.end();
 
         //drawing sectors numbers
         batch.begin();
-        font.draw(batch, "1", imageCircle.getX() + 110, imageCircle.getY() + 170);
+        font.draw(batch, "1", imageCircle.getX()  +20, imageCircle.getY()  +75);
         batch.end();
         batch.begin();
-        font.draw(batch, "2", imageCircle.getX() + 145, imageCircle.getY() + 140);
+        font.draw(batch, "2", imageCircle.getX() + 50, imageCircle.getY() +50);
         batch.end();
         batch.begin();
-        font.draw(batch, "3", imageCircle.getX() + 160 , imageCircle.getY() + 95);
+        font.draw(batch, "3", imageCircle.getX() + 70 , imageCircle.getY() + 10 );
         batch.end();
         batch.begin();
-        font.draw(batch, "4", imageCircle.getX() + 145 , imageCircle.getY() + 55);
+        font.draw(batch, "4", imageCircle.getX() + 50 , imageCircle.getY() -40);
         batch.end();
         batch.begin();
-        font.draw(batch, "5", imageCircle.getX() + 107, imageCircle.getY() + 25);
+        font.draw(batch, "5", imageCircle.getX() +20, imageCircle.getY() -65);
         batch.end();
         batch.begin();
-        font.draw(batch, "6", imageCircle.getX() + 60, imageCircle.getY() + 25);
+        font.draw(batch, "6", imageCircle.getX() -20, imageCircle.getY() -65);
         batch.end();
         batch.begin();
-        font.draw(batch, "7", imageCircle.getX() + 25, imageCircle.getY() + 55);
+        font.draw(batch, "7", imageCircle.getX() -60, imageCircle.getY() -40);
         batch.end();
         batch.begin();
-        font.draw(batch, "8", imageCircle.getX() + 10, imageCircle.getY() + 95);
+        font.draw(batch, "8", imageCircle.getX() - 80, imageCircle.getY() +10);
         batch.end();
         batch.begin();
-        font.draw(batch, "9", imageCircle.getX() + 25, imageCircle.getY() + 140);
+        font.draw(batch, "9", imageCircle.getX() -60, imageCircle.getY() + 50);
         batch.end();
         batch.begin();
-        font.draw(batch, "10", imageCircle.getX() + 60, imageCircle.getY() + 170);
+        font.draw(batch, "10", imageCircle.getX() -30, imageCircle.getY() + 70);
         batch.end();
 
 
@@ -338,8 +338,8 @@ public class DuelScreen implements Screen, InputProcessor{
             Xintuition.getTurnBasedService().onFinishClicked();
         }
 
-        playerCircle = new Circle(imageCircle.getX() + imageCircle.getWidth()/2, imageCircle.getY() + imageCircle.getHeight()/2, imageCircle.getHeight()/2);
-        innerCircle = new Circle(imageCircle.getX() + imageCircle.getWidth()/2, imageCircle.getY() + imageCircle.getHeight()/2, 60);
+        playerCircle = new Circle(imageCircle.getX() , imageCircle.getY() , imageCircle.getHeight()/2);
+        innerCircle = new Circle(imageCircle.getX() , imageCircle.getY() , 60);
 
         if(Intersector.overlaps(playerCircle, new Rectangle(coord.x, coord.y, 1,1))) {
             if (!Intersector.overlaps(innerCircle, new Rectangle(coord.x, coord.y, 1, 1))) {
