@@ -272,7 +272,9 @@ public class DuelScreen implements Screen, InputProcessor{
 
     @Override
     public void resize(int width, int height) {
-
+        WIDTH = width;
+        HEIGHT = height;
+        camera.update();
     }
 
     @Override
