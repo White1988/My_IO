@@ -68,8 +68,8 @@ public class Xintuition extends Game {
 		assets = new Assets();
 		initDB();
         //Changing the screen to display splash screen
-//		this.setScreen(new SplashScreen(this));
-		this.setScreen(new DuelScreen(this));
+		this.setScreen(new SplashScreen(this));
+//		this.setScreen(new DuelScreen(this));
 //		this.setScreen(new XintuitionGameplayScreen(this));
 	}
 
