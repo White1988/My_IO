@@ -1,4 +1,5 @@
 package com.internetwarz.basketballrush;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -21,7 +22,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
 import com.internetwarz.basketballrush.utils.Score;
 
@@ -74,41 +76,45 @@ public class DuelScreen implements Screen, InputProcessor{
     Pixmap pixmap;
     Texture circleTexture;
     Image imageCircle;
-
-
+    // todo  check http://www.gamefromscratch.com/post/2014/12/09/LibGDX-Tutorial-Part-17-Viewports.aspx
+    Viewport viewport;
 
     public DuelScreen(Xintuition game ) {
 
         this.game = game;
         score = new Score(1);
 
-        WIDTH = (float) Gdx.graphics.getWidth();
-        HEIGHT = (float) Gdx.graphics.getHeight();
+        camera = new OrthographicCamera();
+        viewport = new FillViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),camera);
+        viewport.apply();
+
+        camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
+
+        WIDTH = camera.viewportWidth;
+        HEIGHT = camera.viewportHeight;
         RADIUS = (WIDTH-WIDTH/10*2 - WIDTH/20)/3;
 
-        stage = new Stage(new FitViewport(WIDTH, HEIGHT));
+        stage = new Stage(viewport);
         stage.clear();
 
         InputMultiplexer plex = new InputMultiplexer();
         plex.addProcessor(stage);
         plex.addProcessor(this);
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, WIDTH/ VIEWPORT_SCALE, HEIGHT / VIEWPORT_SCALE);
-
         shapeRenderer = new ShapeRenderer(15000);//increase smoothness of circle
 
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
 
-        pixmap = new Pixmap((int)RADIUS*2 + 1, (int)RADIUS*2 + 1, Pixmap.Format.RGBA8888);
+      /* pixmap = new Pixmap((int)RADIUS*2 + 1, (int)RADIUS*2 + 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.valueOf("#abcdff"));
-        pixmap.fillCircle(180, 400, (int)RADIUS);
+        pixmap.fillCircle((int) (WIDTH/2), (int) (HEIGHT/2), (int)RADIUS);
         circleTexture = new Texture(pixmap);
-        pixmap.dispose();
-        imageCircle = new Image(circleTexture);
-        imageCircle.setPosition(180,400);
-        stage.addActor(imageCircle);
+        pixmap.dispose();*/
+       // todo we actually dont work with imageCircle now, its used just for coordinates, maybe we'll use it later
+        imageCircle = new Image(new Texture(new Pixmap((int)RADIUS*2 + 1, (int)RADIUS*2 + 1, Pixmap.Format.RGBA8888)));
+        imageCircle.setPosition(camera.viewportWidth/2,camera.viewportHeight/2);
+        //stage.addActor(imageCircle);
 
 
         buttonsInit();
@@ -272,9 +278,16 @@ public class DuelScreen implements Screen, InputProcessor{
 
     @Override
     public void resize(int width, int height) {
-        WIDTH = width;
-        HEIGHT = height;
-        camera.update();
+        viewport.update(width,height);
+        camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
+
+        WIDTH = camera.viewportWidth;
+        HEIGHT = camera.viewportHeight;
+        imageCircle.setPosition((int) (camera.viewportWidth/2), (int) (camera.viewportHeight/2));
+        stage.getViewport().update(width,height,false);
+        playerCircle = new Circle(imageCircle.getX() , imageCircle.getY() , imageCircle.getHeight()/2);
+        innerCircle = new Circle(imageCircle.getX() , imageCircle.getY() , 60);
+
     }
 
     @Override
