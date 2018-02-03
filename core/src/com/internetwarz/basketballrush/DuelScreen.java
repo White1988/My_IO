@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.internetwarz.basketballrush.model.PlayerTurn;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
 import com.internetwarz.basketballrush.utils.Score;
 
@@ -37,7 +38,13 @@ public class DuelScreen implements Screen, InputProcessor{
     private static int VIEWPORT_SCALE = 1;
     BitmapFont font;
 
-    private Label label1;
+    private Label label;
+    private Label debugLabel1;
+    private Label debugLabel2;
+    private Label debugLabel3;
+    private Label debugLabel4;
+
+    private PlayerTurn lastTurnData ;
 
     private Label.LabelStyle rightStyle;
     private Label.LabelStyle textStyle;
@@ -120,6 +127,12 @@ public class DuelScreen implements Screen, InputProcessor{
         buttonsInit();
 
         InitLabels();
+        Xintuition.getTurnBasedService().coreGameplayCallBacks.addEnemyTurnFinishedCallback(new TurnBasedService.EnemyTurnAction() {
+            @Override
+            public void Action(PlayerTurn param) {
+                lastTurnData = param;
+            }
+        });
 
     }
     private void buttonsInit(){
@@ -175,6 +188,40 @@ public class DuelScreen implements Screen, InputProcessor{
 
         layout.setText(font, "layout");
 
+
+        label = new Label( "label ", textStyle);
+        label.setPosition(40, 40);
+        label.setSize(55, 55);
+        label.setFontScale(1f, 1f);
+
+
+
+        debugLabel1 = new Label( "label ", textStyle);
+        debugLabel1.setPosition(140, 140);
+        debugLabel1.setSize(55, 55);
+        debugLabel1.setFontScale(1f, 1f);
+
+        debugLabel2 = new Label( "label ", textStyle);
+        debugLabel2.setPosition(140, 200);
+        debugLabel2.setSize(55, 55);
+        debugLabel2.setFontScale(1f, 1f);
+
+        debugLabel3 = new Label( "label ", textStyle);
+        debugLabel3.setPosition(140, 250);
+        debugLabel3.setSize(55, 55);
+        debugLabel3.setFontScale(1f, 1f);
+
+        debugLabel4 = new Label( "label ", textStyle);
+        debugLabel4.setPosition(140, 300);
+        debugLabel4.setSize(55, 55);
+        debugLabel4.setFontScale(1f, 1f);
+
+        stage.addActor(label);
+        stage.addActor(debugLabel1);
+        stage.addActor(debugLabel2);
+        stage.addActor(debugLabel3);
+        stage.addActor(debugLabel4);
+
     }
 
     @Override
@@ -193,6 +240,14 @@ public class DuelScreen implements Screen, InputProcessor{
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
+        if(lastTurnData != null)
+        {
+            debugLabel1.setText("Turn count: " + lastTurnData.turnCounter);
+            debugLabel2.setText("Selected number: " + lastTurnData.selectedNumber);
+            debugLabel3.setText("player1Score: " + lastTurnData.player1Score);
+            debugLabel4.setText("player2Score: " + lastTurnData.player2Score);
+        }
+
         stage.act();
         batch.begin();
         stage.getBatch().begin();
@@ -200,13 +255,13 @@ public class DuelScreen implements Screen, InputProcessor{
         stage.getBatch().end();
         stage.draw();
         batch.end();
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);//drawing rectangle
-        shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.rect(10,10,80,80);
-        shapeRenderer.rect(100,10,80,80);
-        shapeRenderer.rect(10,100,80,80);
-        shapeRenderer.end();
+//
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);//drawing rectangle
+//        shapeRenderer.setColor(Color.WHITE);
+//        shapeRenderer.rect(10,10,80,80);
+//        shapeRenderer.rect(100,10,80,80);
+//        shapeRenderer.rect(10,100,80,80);
+//        shapeRenderer.end();
 
         // drawing zoned circle
         float x= 54;
@@ -332,26 +387,26 @@ public class DuelScreen implements Screen, InputProcessor{
 
         System.out.println("worldX " +coord.x);
         System.out.println("worldY " +coord.y);
-        rectangle= new Rectangle(10,10,80,80);
-        rectangle2= new Rectangle(100,10,80,80);
-        rectangle3= new Rectangle(10,100,80,80);
-
-        if(Intersector.overlaps(rectangle, new Rectangle(coord.x, coord.y, 1,1)))
-        {
-            System.out.println("Click on Done");
-            Xintuition.getTurnBasedService().onDoneClicked(7);
-        }
-
-        if(Intersector.overlaps(rectangle2, new Rectangle(coord.x, coord.y, 1,1)))
-        {
-            System.out.println("Click on Leave");
-            Xintuition.getTurnBasedService().onLeaveClicked();
-        }
-        if(Intersector.overlaps(rectangle3, new Rectangle(coord.x, coord.y, 1,1)))
-        {
-            System.out.println("Click on Finish");
-            Xintuition.getTurnBasedService().onFinishClicked();
-        }
+//        rectangle= new Rectangle(10,10,80,80);
+//        rectangle2= new Rectangle(100,10,80,80);
+//        rectangle3= new Rectangle(10,100,80,80);
+//
+//        if(Intersector.overlaps(rectangle, new Rectangle(coord.x, coord.y, 1,1)))
+//        {
+//            System.out.println("Click on Done");
+//            Xintuition.getTurnBasedService().onDoneClicked(7);
+//        }
+//
+//        if(Intersector.overlaps(rectangle2, new Rectangle(coord.x, coord.y, 1,1)))
+//        {
+//            System.out.println("Click on Leave");
+//            Xintuition.getTurnBasedService().onLeaveClicked();
+//        }
+//        if(Intersector.overlaps(rectangle3, new Rectangle(coord.x, coord.y, 1,1)))
+//        {
+//            System.out.println("Click on Finish");
+//            Xintuition.getTurnBasedService().onFinishClicked();
+//        }
 
         playerCircle = new Circle(imageCircle.getX() , imageCircle.getY() , imageCircle.getHeight()/2);
         innerCircle = new Circle(imageCircle.getX() , imageCircle.getY() , 60);
@@ -382,7 +437,7 @@ public class DuelScreen implements Screen, InputProcessor{
                     isGuessed = true;
                     score.setScore(score.getScore() + points);
 
-                    Xintuition.getTurnBasedService().onDoneClicked(2);
+                    Xintuition.getTurnBasedService().onDoneClicked(pickedSector);
 
                 } else {
                     isShow = true;
