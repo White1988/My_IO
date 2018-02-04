@@ -135,21 +135,19 @@ public class MainMenuScreen implements Screen,InputProcessor {
 
         Xintuition.getTurnBasedService().coreGameplayCallBacks = new TurnBasedService.TurnBasedCallBacks() ;
 
-        Xintuition.getTurnBasedService().coreGameplayCallBacks.addMatchStartedCallback(new TurnBasedService.VoidAction() {
+        Xintuition.getTurnBasedService().coreGameplayCallBacks.addMatchStartedCallback(new TurnBasedService.PlayerDataAction() {
             @Override
-            public void Action() {
+            public void Action(final PlayerTurn param) {
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        game.setScreen(new DuelScreen(game));
+                        game.setScreen(new DuelScreen(game, param));
                     }
                 });
-
-
             }
         });
 
-        Xintuition.getTurnBasedService().coreGameplayCallBacks.addEnemyTurnFinishedCallback(new TurnBasedService.EnemyTurnAction() {
+        Xintuition.getTurnBasedService().coreGameplayCallBacks.addEnemyTurnFinishedCallback(new TurnBasedService.PlayerDataAction() {
             @Override
             public void Action(PlayerTurn t) {
                 System.out.println("Enemy turn was: " + t);

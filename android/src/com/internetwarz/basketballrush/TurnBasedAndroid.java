@@ -33,8 +33,10 @@ import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatchConfig;
 import com.google.android.gms.games.multiplayer.turnbased.TurnBasedMatchUpdateCallback;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.crash.FirebaseCrash;
 import com.internetwarz.basketballrush.model.PlayerTurn;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.internetwarz.basketballrush.AndroidLauncher.RC_LOOK_AT_MATCHES;
@@ -158,7 +160,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
 
                         onInitiateMatch(turnBasedMatch);
 
-                        coreGameplayCallBacks.fireMatchStartedEvent();
+                        coreGameplayCallBacks.fireMatchStartedEvent(null);
                         gameStartedLocally = true;
                     }
                 })
@@ -428,11 +430,19 @@ public class TurnBasedAndroid extends TurnBasedService  {
         // OK, it's active. Check on turn status.
         switch (turnStatus) {
             case TurnBasedMatch.MATCH_TURN_STATUS_MY_TURN:
-                mTurnData = PlayerTurn.unpersist(mMatch.getData());
+
+                try {
+                    mTurnData = PlayerTurn.unpersist(mMatch.getData());
+                    mTurnData.matchStatus = PlayerTurn.MATCH_TURN_STATUS_MY_TURN;
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                    FirebaseCrash.log(e.getMessage());
+                }
+
 
                 if(!gameStartedLocally)
                 {
-                    coreGameplayCallBacks.fireMatchStartedEvent();
+                    coreGameplayCallBacks.fireMatchStartedEvent(mTurnData);
                 }
 
                 coreGameplayCallBacks.fireEnemyTurnFinishedEvent(mTurnData);
@@ -480,7 +490,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
             updateMatch(match);
             return;
         }
-        coreGameplayCallBacks.fireMatchStartedEvent();
+        coreGameplayCallBacks.fireMatchStartedEvent(null);
         gameStartedLocally = true;
         startMatch(match);
     }

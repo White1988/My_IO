@@ -32,6 +32,7 @@ import com.internetwarz.basketballrush.utils.Score;
 public class DuelScreen implements Screen, InputProcessor{
 
 
+    private static final String TAG = "DuelScreen";
     private SpriteBatch batch;
     private Texture background;
     private final Xintuition game;
@@ -87,9 +88,9 @@ public class DuelScreen implements Screen, InputProcessor{
     // todo  check http://www.gamefromscratch.com/post/2014/12/09/LibGDX-Tutorial-Part-17-Viewports.aspx
     Viewport viewport;
 
-    private boolean myTurn = false;
+    private boolean myTurn = true; // true by default
 
-    public DuelScreen(Xintuition game ) {
+    public DuelScreen(Xintuition game, PlayerTurn initialData ) {
 
         this.game = game;
         score = new Score(1);
@@ -126,11 +127,10 @@ public class DuelScreen implements Screen, InputProcessor{
         imageCircle.setPosition(camera.viewportWidth/2,camera.viewportHeight/2);
         //stage.addActor(imageCircle);
 
-
         buttonsInit();
 
         InitLabels();
-        Xintuition.getTurnBasedService().coreGameplayCallBacks.addEnemyTurnFinishedCallback(new TurnBasedService.EnemyTurnAction() {
+        Xintuition.getTurnBasedService().coreGameplayCallBacks.addEnemyTurnFinishedCallback(new TurnBasedService.PlayerDataAction() {
             @Override
             public void Action(PlayerTurn param) {
                 lastTurnData = param;
@@ -138,6 +138,16 @@ public class DuelScreen implements Screen, InputProcessor{
                 debugLabel5.setText("TOUR TURN");
             }
         });
+
+        if(initialData != null)
+        {
+            myTurn = initialData.matchStatus == PlayerTurn.MATCH_TURN_STATUS_MY_TURN;
+            debugLabel5.setText(myTurn ? "MY TURN" : "Enemy turn");
+        }
+        else
+        {
+            Gdx.app.log(TAG, "initialData == null!");
+        }
 
     }
     private void buttonsInit(){

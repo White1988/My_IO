@@ -46,11 +46,11 @@ public abstract class TurnBasedService {
      */
     public static class TurnBasedCallBacks {
 
-         private  List<VoidAction> onMatchStartedCallbacks = new ArrayList<>();
+         private  List<PlayerDataAction> onMatchStartedCallbacks = new ArrayList<>();
          private  List<VoidAction> onMatchLeftCallbacks = new ArrayList<>();
-         private  List<EnemyTurnAction> onEnemyTurnCallbacks = new ArrayList<>();
+         private  List<PlayerDataAction> onEnemyTurnCallbacks = new ArrayList<>();
 
-            public void addMatchStartedCallback(VoidAction callback)
+            public void addMatchStartedCallback(PlayerDataAction callback)
             {
                 onMatchStartedCallbacks.add(callback);
             }
@@ -60,14 +60,14 @@ public abstract class TurnBasedService {
             onMatchLeftCallbacks.add(callback);
         }
 
-         public void addEnemyTurnFinishedCallback(EnemyTurnAction callback)
+         public void addEnemyTurnFinishedCallback(PlayerDataAction callback)
          {
              onEnemyTurnCallbacks.add(callback);
          }
 
-        public void fireMatchStartedEvent()
+        public void fireMatchStartedEvent(PlayerTurn param)
         {
-            for (VoidAction a : onMatchStartedCallbacks) a.Action();
+            for (PlayerDataAction a : onMatchStartedCallbacks) a.Action(param);
         }
 
         public void fireMatchLeftEvent()
@@ -77,7 +77,7 @@ public abstract class TurnBasedService {
 
         void fireEnemyTurnFinishedEvent(PlayerTurn param)
         {
-            for (EnemyTurnAction a : onEnemyTurnCallbacks) a.Action(param);
+            for (PlayerDataAction a : onEnemyTurnCallbacks) a.Action(param);
         }
 
     }
@@ -87,7 +87,7 @@ public abstract class TurnBasedService {
          void Action();
     }
 
-    interface EnemyTurnAction{
+    interface PlayerDataAction {
 
          void Action(PlayerTurn param);
     }

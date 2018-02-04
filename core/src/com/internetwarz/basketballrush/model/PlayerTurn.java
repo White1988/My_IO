@@ -12,16 +12,26 @@ import java.io.Serializable;
 
 public class PlayerTurn implements Serializable {
 
+
+    /*CONSTANTS*/
+    public final static int MATCH_TURN_STATUS_INVITED = 0;
+    public final static int MATCH_TURN_STATUS_MY_TURN = 1;
+    public final static int  MATCH_TURN_STATUS_THEIR_TURN = 2;
+    public final static int MATCH_TURN_STATUS_COMPLETE = 3;
+
+
+
+    /*PERSISTED FIELDS*/
     public int selectedNumber;
     public int turnCounter;
-
-
     public String player1Id;
     public String player2Id;
-
-
     public int player1Score;
     public int player2Score;
+
+
+    /*NON-PERSISTED FIELDS*/  //need to fill manually on client
+    public int matchStatus;
 
     public byte[] persist() {
         try {
@@ -32,17 +42,11 @@ public class PlayerTurn implements Serializable {
         }
     }
 
-    public static PlayerTurn unpersist(byte[] data) {
+    public static PlayerTurn unpersist(byte[] data) throws IOException, ClassNotFoundException {
 
-        try {
+
             return (PlayerTurn) convertFromBytes(data);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
+
     }
 
 
