@@ -125,6 +125,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
     // Displays your inbox. You will get back onActivityResult where
     // you will need to figure out what you clicked on.
     public void showMatchMakingLobby() {
+        Log.d(TAG, "Start ShoMatchMakingLobby");
         mTurnBasedMultiplayerClient.getInboxIntent()
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
                     @Override
@@ -135,6 +136,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
                     }
                 })
                 .addOnFailureListener(createFailureListener("Cannot get inbox intent!"));
+        Log.d(TAG, "Finish ShoMatchMakingLobby");
     }
 
     //todo add in mainMenuScreen
@@ -255,7 +257,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
     public void onDoneClicked(int selectedNumber) {
 
      //   Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onDoneClicked!", Toast.LENGTH_SHORT).show();
-
+        Log.d(TAG, "Start onDoneClicked");
         String nextParticipantId = getNextParticipantId();
         // Create the next turn
         mTurnData = new PlayerTurn();
@@ -284,6 +286,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
                 .addOnFailureListener(createFailureListener("There was a problem taking a turn!"));
 
         mTurnData = null;
+        Log.d(TAG, "Finish onDoneClicked");
     }
 
 
@@ -296,6 +299,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
     // callback to OnTurnBasedMatchUpdated(), which will show the game
     // UI.
     public void startMatch(TurnBasedMatch match) {
+        Log.d(TAG, "StartMatch");
         mTurnData = new PlayerTurn();
         // Some basic turn data
         mTurnData.selectedNumber = -1;
@@ -328,6 +332,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
                     }
                 })
                 .addOnFailureListener(createFailureListener("There was a problem taking a turn!"));
+        Log.d(TAG, "Finish  StartMatch");
     }
 
     // If you choose to rematch, then call it and wait for a response.

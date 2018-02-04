@@ -265,7 +265,10 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 
     private void onConnected(GoogleSignInAccount googleSignInAccount) {
         Gdx.app.log(TAG,"onConnected" );
-
+        if(googleSignInAccount==null) {
+            Log.d(TAG, "GOOGLE ACC IS NULL");
+        }
+        else{
         turnBasedAndroid.     mTurnBasedMultiplayerClient = Games.getTurnBasedMultiplayerClient(this, googleSignInAccount);
         turnBasedAndroid.     mInvitationsClient = Games.getInvitationsClient(this, googleSignInAccount);
 
@@ -318,7 +321,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         // will replace notifications you would get otherwise. You do *NOT* have
         // to register a MatchUpdateListener.
         turnBasedAndroid.    mTurnBasedMultiplayerClient.registerTurnBasedMatchUpdateCallback(turnBasedAndroid.mMatchUpdateCallback);
-    }
+    }}
 
 
     // Returns false if something went wrong, probably. This should handle
