@@ -19,9 +19,12 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.internetwarz.basketballrush.model.PlayerTurn;
@@ -245,6 +248,44 @@ public class DuelScreen implements Screen, InputProcessor{
         stage.addActor(debugLabel4);
         stage.addActor(debugLabel5);
 
+
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+
+
+        TextButton b2 = new TextButton("Leave", textButtonStyle);
+        b2.setSize(100, 50);
+        b2.setPosition(WIDTH - 100, HEIGHT - 100);
+        b2.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y){
+                Xintuition.getTurnBasedService().onLeaveClicked();
+            }
+        });
+
+        TextButton b1 = new TextButton("Finish", textButtonStyle);
+        b1.setSize(100, 50);
+        b1.setPosition(WIDTH - 100, HEIGHT - 200);
+        b1.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y){
+                Xintuition.getTurnBasedService().onFinishClicked();
+            }
+        });
+
+
+        TextButton b3 = new TextButton("Cancel", textButtonStyle);
+        b3.setSize(100, 50);
+        b3.setPosition(WIDTH - 100, HEIGHT - 300);
+        b3.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y){
+                Xintuition.getTurnBasedService().onCancelClicked();
+            }
+        });
+
+        stage.addActor(b1);
+        stage.addActor(b2);
+        stage.addActor(b3);
+
+
     }
 
     @Override
@@ -278,13 +319,13 @@ public class DuelScreen implements Screen, InputProcessor{
         stage.getBatch().end();
         stage.draw();
         batch.end();
-//
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);//drawing rectangle
-//        shapeRenderer.setColor(Color.WHITE);
-//        shapeRenderer.rect(10,10,80,80);
-//        shapeRenderer.rect(100,10,80,80);
-//        shapeRenderer.rect(10,100,80,80);
-//        shapeRenderer.end();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);//drawing rectangle
+        shapeRenderer.setColor(Color.WHITE);
+        shapeRenderer.rect(550,10,20,20);
+        shapeRenderer.rect(550,40,80,80);
+        shapeRenderer.rect(550,100,80,80);
+        shapeRenderer.end();
 
         // drawing zoned circle
         float x= 54;
@@ -322,32 +363,14 @@ public class DuelScreen implements Screen, InputProcessor{
         //drawing sectors numbers
         batch.begin();
         font.draw(batch, "1", imageCircle.getX()  +20, imageCircle.getY()  +75);
-        batch.end();
-        batch.begin();
         font.draw(batch, "2", imageCircle.getX() + 50, imageCircle.getY() +50);
-        batch.end();
-        batch.begin();
         font.draw(batch, "3", imageCircle.getX() + 70 , imageCircle.getY() + 10 );
-        batch.end();
-        batch.begin();
         font.draw(batch, "4", imageCircle.getX() + 50 , imageCircle.getY() -40);
-        batch.end();
-        batch.begin();
         font.draw(batch, "5", imageCircle.getX() +20, imageCircle.getY() -65);
-        batch.end();
-        batch.begin();
         font.draw(batch, "6", imageCircle.getX() -20, imageCircle.getY() -65);
-        batch.end();
-        batch.begin();
         font.draw(batch, "7", imageCircle.getX() -60, imageCircle.getY() -40);
-        batch.end();
-        batch.begin();
         font.draw(batch, "8", imageCircle.getX() - 80, imageCircle.getY() +10);
-        batch.end();
-        batch.begin();
         font.draw(batch, "9", imageCircle.getX() -60, imageCircle.getY() + 50);
-        batch.end();
-        batch.begin();
         font.draw(batch, "10", imageCircle.getX() -30, imageCircle.getY() + 70);
         batch.end();
 

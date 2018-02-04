@@ -161,6 +161,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
        // buttonSkin.add("buttonPlay", new Image(buttonTexture));
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = font;
+
         textButtonStyle.up = buttonSkin.getDrawable("buttonPlay");
         textButtonStyle.down = buttonSkin.getDrawable("buttonPlayClick");
 
