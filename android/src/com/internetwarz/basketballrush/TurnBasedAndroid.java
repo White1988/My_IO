@@ -142,7 +142,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
         Log.d(TAG, "Finish ShoMatchMakingLobby");
     }
 
-    //todo add in mainMenuScreen
+
     @Override
     public void onQuickMatchClicked() {
 
@@ -190,7 +190,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
 
 
 
-     //todo add in Duelscreen
+
      @Override
 
     public void onCancelClicked() {
@@ -211,7 +211,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
 
     }
     @Override
-    //todo add in mainMenuScreen
+
     public void onLeaveClicked() {
      //   Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onLeaveClicked!", Toast.LENGTH_SHORT).show();
 
@@ -232,7 +232,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
     }
 
     @Override
-    //todo call after onFinish button from DuelScreen
+
     public void onFinishClicked() {
 
       //  Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onFinishClicked!", Toast.LENGTH_SHORT).show();
@@ -256,7 +256,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
 
 
     @Override
-    //todo call after move from DuelScreen
+
     public void onDoneClicked(int selectedNumber) {
 
      //   Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onDoneClicked!", Toast.LENGTH_SHORT).show();
@@ -313,7 +313,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
 
 
 
-        if(mMatch.getData() != null) //todo if its even possible?
+        if(mMatch.getData() != null)
         {
 
             mTurnData.player2Id = myParticipantId;

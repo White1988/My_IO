@@ -39,7 +39,7 @@ public class MainMenuScreen implements Screen,InputProcessor {
     Sound clickSound;
     Preferences prefs;
 
-    //TODO: font
+
     private Stage stage;
     private Skin buttonSkin;
     private TextureAtlas buttonAtlas;

@@ -599,7 +599,7 @@ public class XintuitionGameplayScreen implements Screen,InputProcessor
     }
 
     private void saveScore(Score score, String gameType) {
-        //TODO: add saving data
+
         System.out.println(gameType);
         game.firebaseHelper.updateData(gameType, score.getScore());
         game.getPlayServices().submitScore(score.getScore(),gameType);
