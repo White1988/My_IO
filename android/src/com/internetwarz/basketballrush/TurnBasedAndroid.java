@@ -126,6 +126,7 @@ public class TurnBasedAndroid extends TurnBasedService  {
     // you will need to figure out what you clicked on.
     public void showMatchMakingLobby() {
         Log.d(TAG, "Start ShoMatchMakingLobby");
+
         mTurnBasedMultiplayerClient.getInboxIntent()
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
                     @Override

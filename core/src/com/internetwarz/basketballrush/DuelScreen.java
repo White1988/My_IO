@@ -40,6 +40,7 @@ public class DuelScreen implements Screen, InputProcessor{
 
     private Label label;
     private Label debugLabel1;
+    private Label debugLabel5;
     private Label debugLabel2;
     private Label debugLabel3;
     private Label debugLabel4;
@@ -86,6 +87,8 @@ public class DuelScreen implements Screen, InputProcessor{
     // todo  check http://www.gamefromscratch.com/post/2014/12/09/LibGDX-Tutorial-Part-17-Viewports.aspx
     Viewport viewport;
 
+    private boolean myTurn = false;
+
     public DuelScreen(Xintuition game ) {
 
         this.game = game;
@@ -131,6 +134,8 @@ public class DuelScreen implements Screen, InputProcessor{
             @Override
             public void Action(PlayerTurn param) {
                 lastTurnData = param;
+                myTurn = true;
+                debugLabel5.setText("TOUR TURN");
             }
         });
 
@@ -206,6 +211,7 @@ public class DuelScreen implements Screen, InputProcessor{
         debugLabel2.setSize(55, 55);
         debugLabel2.setFontScale(1f, 1f);
 
+
         debugLabel3 = new Label( "label ", textStyle);
         debugLabel3.setPosition(140, 250);
         debugLabel3.setSize(55, 55);
@@ -216,11 +222,18 @@ public class DuelScreen implements Screen, InputProcessor{
         debugLabel4.setSize(55, 55);
         debugLabel4.setFontScale(1f, 1f);
 
+
+        debugLabel5 = new Label( "label ", textStyle);
+        debugLabel5.setPosition(140, 350);
+        debugLabel5.setSize(55, 55);
+        debugLabel5.setFontScale(1f, 1f);
+
         stage.addActor(label);
         stage.addActor(debugLabel1);
         stage.addActor(debugLabel2);
         stage.addActor(debugLabel3);
         stage.addActor(debugLabel4);
+        stage.addActor(debugLabel5);
 
     }
 
@@ -411,6 +424,7 @@ public class DuelScreen implements Screen, InputProcessor{
         playerCircle = new Circle(imageCircle.getX() , imageCircle.getY() , imageCircle.getHeight()/2);
         innerCircle = new Circle(imageCircle.getX() , imageCircle.getY() , 60);
 
+        if(!myTurn) return false;
         if(Intersector.overlaps(playerCircle, new Rectangle(coord.x, coord.y, 1,1))) {
             if (!Intersector.overlaps(innerCircle, new Rectangle(coord.x, coord.y, 1, 1))) {
                 if (isGuessed) {
@@ -428,7 +442,10 @@ public class DuelScreen implements Screen, InputProcessor{
                 System.out.println("Score: " + score.getScore());
                 System.out.println("RIGHT: " + randomSector);
                 System.out.println("------------------------------------");
-                if (randomSector == pickedSector) {
+                Xintuition.getTurnBasedService().onDoneClicked(pickedSector);
+                myTurn = false;
+                debugLabel5.setText("ENEMY TURN");
+                /*if (randomSector == pickedSector) {
                     isShow = true;
                     setFillingParametrs(Color.GREEN, pickedSector);
                     System.out.println("WON");
@@ -445,8 +462,8 @@ public class DuelScreen implements Screen, InputProcessor{
                     System.out.println("LOSE");
                     curNumAttempts--;
 
-                    Xintuition.getTurnBasedService().onFinishClicked();
-                }
+                  //  Xintuition.getTurnBasedService().onFinishClicked();
+                }*/
             }
 
         }

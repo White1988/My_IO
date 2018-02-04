@@ -15,7 +15,7 @@ public class PlayerTurn implements Serializable {
     public int selectedNumber;
     public int turnCounter;
 
-    // uased
+
     public String player1Id;
     public String player2Id;
 
