@@ -1,6 +1,7 @@
 package com.internetwarz.basketballrush;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
@@ -21,13 +23,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.internetwarz.basketballrush.model.PlayerTurn;
+import com.internetwarz.basketballrush.utils.Assets;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
 import com.internetwarz.basketballrush.utils.Score;
 
@@ -49,12 +54,13 @@ public class DuelScreen implements Screen, InputProcessor{
     private Label debugLabel3;
     private Label debugLabel4;
 
-    private PlayerTurn lastTurnData ;
+    private PlayerTurn lastTurnData = new PlayerTurn();
 
     private Label.LabelStyle rightStyle;
     private Label.LabelStyle textStyle;
     private GlyphLayout layout;
     private Stage stage;
+
 
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
@@ -91,9 +97,16 @@ public class DuelScreen implements Screen, InputProcessor{
     // todo  check http://www.gamefromscratch.com/post/2014/12/09/LibGDX-Tutorial-Part-17-Viewports.aspx
     Viewport viewport;
 
+    private Skin buttonSkin;
+    private TextureAtlas buttonAtlas;
+    private TextButton b1;
+    private TextButton b2;
+    private TextButton b3;
+
     private boolean myTurn = true; // true by default
 
     public DuelScreen(Xintuition game, PlayerTurn initialData ) {
+//        Gdx.input.setCatchBackKey(true);
 
         this.game = game;
         score = new Score(1);
@@ -104,16 +117,20 @@ public class DuelScreen implements Screen, InputProcessor{
 
         camera.position.set(camera.viewportWidth/2,camera.viewportHeight/2,0);
 
+
         WIDTH = camera.viewportWidth;
         HEIGHT = camera.viewportHeight;
         RADIUS = (WIDTH-WIDTH/10*2 - WIDTH/20)/3;
 
         stage = new Stage(viewport);
+
         stage.clear();
+
 
         InputMultiplexer plex = new InputMultiplexer();
         plex.addProcessor(stage);
         plex.addProcessor(this);
+
 
         shapeRenderer = new ShapeRenderer(15000);//increase smoothness of circle
 
@@ -133,6 +150,33 @@ public class DuelScreen implements Screen, InputProcessor{
         buttonsInit();
 
         InitLabels();
+
+        //Nikita initialisation
+        buttonSkin = new Skin();
+        buttonAtlas = game.assets.getButtonAtlas();
+        Pixmap rect = new Pixmap((int)widthPercent(25),(int)heightPercent(8),Pixmap.Format.RGBA8888);
+        rect.setColor(Color.LIGHT_GRAY);
+        rect.fillRectangle(0, 0, (int)widthPercent(25), (int)heightPercent(8));
+        Texture buttonChecked = new Texture(rect);
+        rect.setColor(Color.DARK_GRAY);
+        rect.drawRectangle(0,0,(int)widthPercent(25),(int)heightPercent(8));
+        buttonChecked.draw(rect, 0, 0);
+        rect.dispose();
+
+        Texture buttonTexture = new Texture("skins/buttonPlay.png");
+        buttonAtlas.addRegion("Button", buttonChecked, 0, 0, (int)widthPercent(25),(int)heightPercent(8));
+        buttonAtlas.addRegion("buttonPlay", buttonTexture, 0, 0, buttonTexture.getWidth(), buttonTexture.getHeight());
+
+
+        buttonSkin.addRegions(buttonAtlas);
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+
+        textButtonStyle.up = buttonSkin.getDrawable("buttonPlay");
+        textButtonStyle.down = buttonSkin.getDrawable("buttonPlayClick");
+
+
+
         Xintuition.getTurnBasedService().coreGameplayCallBacks.addEnemyTurnFinishedCallback(new TurnBasedService.PlayerDataAction() {
             @Override
             public void Action(PlayerTurn param) {
@@ -253,7 +297,7 @@ public class DuelScreen implements Screen, InputProcessor{
         textButtonStyle.font = font;
 
 
-        TextButton b2 = new TextButton("Leave", textButtonStyle);
+         b2 = new TextButton("Leave", textButtonStyle);
         b2.setSize(100, 50);
         b2.setPosition(WIDTH - 100, HEIGHT - 100);
         b2.addListener(new ClickListener(){
@@ -262,7 +306,7 @@ public class DuelScreen implements Screen, InputProcessor{
             }
         });
 
-        TextButton b1 = new TextButton("Finish", textButtonStyle);
+         b1 = new TextButton("Finish", textButtonStyle);
         b1.setSize(100, 50);
         b1.setPosition(WIDTH - 100, HEIGHT - 200);
         b1.addListener(new ClickListener(){
@@ -272,7 +316,7 @@ public class DuelScreen implements Screen, InputProcessor{
         });
 
 
-        TextButton b3 = new TextButton("Cancel", textButtonStyle);
+         b3 = new TextButton("Cancel", textButtonStyle);
         b3.setSize(100, 50);
         b3.setPosition(WIDTH - 100, HEIGHT - 300);
         b3.addListener(new ClickListener(){
@@ -320,12 +364,12 @@ public class DuelScreen implements Screen, InputProcessor{
         stage.draw();
         batch.end();
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);//drawing rectangle
+        /*shapeRenderer.begin(ShapeRenderer.ShapeType.Line);//drawing rectangle
         shapeRenderer.setColor(Color.WHITE);
         shapeRenderer.rect(550,10,20,20);
         shapeRenderer.rect(550,40,80,80);
         shapeRenderer.rect(550,100,80,80);
-        shapeRenderer.end();
+        shapeRenderer.end();*/
 
         // drawing zoned circle
         float x= 54;
@@ -375,6 +419,7 @@ public class DuelScreen implements Screen, InputProcessor{
         batch.end();
 
 
+
     }
 
     @Override
@@ -413,7 +458,67 @@ public class DuelScreen implements Screen, InputProcessor{
 
     @Override
     public boolean keyDown(int keycode) {
-        return false;
+        if(keycode == Input.Keys.BACK || keycode == Input.Keys.BACKSPACE){
+            exitConfirm();
+
+        }
+        return true;
+    }
+
+    private void exitConfirm() {
+        //Generate font
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magistral Bold.TTF"));
+        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
+            generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/DroidSansFallback.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 25;
+        parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+        if(LanguagesManager.getInstance().getLanguage().equals("KO") || LanguagesManager.getInstance().getLanguage().equals("JA") || LanguagesManager.getInstance().getLanguage().equals("ZH"))
+            parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "ただ" + "手段" + "ハード" + "栄誉の殿堂統計遊びますゲームは終わった結果設定ただ手段ハードレベル実験右！間違いました！再起動はいいいえあなたは本当にゲームを再開しますか？ベストプレーヤーゲームは終わった！統計（選手）栄誉の殿堂ルールログアウト言語";
+        BitmapFont font = generator.generateFont(parameter);
+        Label.LabelStyle textStyle = new Label.LabelStyle(font, Color.WHITE);
+
+        Dialog restartConfirmDialog = new Dialog("Exit", new Skin(Gdx.files.internal("skins/uiskin.json")));
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+        textButtonStyle.up = buttonSkin.getDrawable("buttonPlayClick");
+
+
+        TextButton yes = new TextButton(LanguagesManager.getInstance().getString("yes"), textButtonStyle);
+        yes.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+                System.out.println("EXIT");
+            }
+        });
+
+        TextButton no = new TextButton(LanguagesManager.getInstance().getString("no"), textButtonStyle);
+        no.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Stay");
+            }
+        });
+
+
+
+
+        restartConfirmDialog.text(LanguagesManager.getInstance().getString("exit"), textStyle);
+        restartConfirmDialog.button(yes);
+        restartConfirmDialog.button(no);
+        restartConfirmDialog.button(b1);
+
+
+
+        restartConfirmDialog.show(stage);
+
+        restartConfirmDialog.setSize(widthPercent(60),heightPercent(30));
+        restartConfirmDialog.setPosition(Gdx.graphics.getWidth()/3 - restartConfirmDialog.getWidth()/2, Gdx.graphics.getHeight()/3 - restartConfirmDialog.getHeight()/2);
+        yes.setSize(WIDTH/10,HEIGHT/20);
+        no.setSize(yes.getWidth(), yes.getHeight());
+        b1.setSize(WIDTH/10,HEIGHT/20);
+//        yes.setPosition(restartConfirmDialog.getWidth()/2, restartConfirmDialog.getY() + restartConfirmDialog.getHeight()/10);
+
+
     }
 
     @Override
@@ -460,10 +565,10 @@ public class DuelScreen implements Screen, InputProcessor{
         if(!myTurn) return false;
         if(Intersector.overlaps(playerCircle, new Rectangle(coord.x, coord.y, 1,1))) {
             if (!Intersector.overlaps(innerCircle, new Rectangle(coord.x, coord.y, 1, 1))) {
-                if (isGuessed) {
-                    randomSector = (int) (Math.random() * (numSectors) + 1);
-                    isGuessed = false;
-                }
+//                if (isGuessed) {
+//                    randomSector = (int) (Math.random() * (numSectors) + 1);
+//                    isGuessed = false;
+//                }
                 isGameBegan = true;
 
                 System.out.println("Overlaps!");
@@ -536,5 +641,15 @@ public class DuelScreen implements Screen, InputProcessor{
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+    public float widthPercent(int w){
+        float result;
+        result = (WIDTH*w)/100;
+        return result;
+    }
+    public float heightPercent(int h){
+        float result;
+        result = (HEIGHT*h)/100;
+        return result;
     }
 }

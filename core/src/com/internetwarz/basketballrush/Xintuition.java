@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.internetwarz.basketballrush.model.PlayerTurn;
 import com.internetwarz.basketballrush.utils.Assets;
 import com.internetwarz.basketballrush.utils.LanguagesManager;
 
@@ -69,7 +70,7 @@ public class Xintuition extends Game {
 		initDB();
         //Changing the screen to display splash screen
 		this.setScreen(new SplashScreen(this));
-//		this.setScreen(new DuelScreen(this));
+//		this.setScreen(new DuelScreen(this,new PlayerTurn()));
 //		this.setScreen(new XintuitionGameplayScreen(this));
 	}
 

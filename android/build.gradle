@@ -8,7 +8,7 @@ android {
         }
         debug {
             keyAlias 'key0'
-            storeFile file('C:/Users/Igor/Desktop/WORK/keys/xintuition.debug.jks')
+            storeFile file('D:/xintuition.debug.jks')
             keyPassword 'jsuqbpy3'
             storePassword 'jsuqbpy3'
         }
