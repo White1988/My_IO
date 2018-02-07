@@ -258,23 +258,24 @@ public class TurnBasedAndroid extends TurnBasedService  {
     @Override
 
     public void onDoneClicked(int selectedNumber) {
-
+        String myParticipantId = mMatch.getParticipantId(mPlayerId);
      //   Toast.makeText(contextActivity.getApplication().getApplicationContext(), "onDoneClicked!", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "Start onDoneClicked");
         String nextParticipantId = getNextParticipantId();
         // Create the next turn
-        mTurnData = new PlayerTurn();
+        if(mTurnData==null) mTurnData = new PlayerTurn();
         mTurnData.turnCounter += 1;
         mTurnData.selectedNumber = selectedNumber;
 
+        isPlayer1 = myParticipantId.equals(mTurnData.player1Id) ;
         if(isPlayer1)
         {
             mTurnData.player1Score += selectedNumber;
         }
         else
-            {
+         {
             mTurnData.player2Score += selectedNumber;
-            }
+         }
 
 
         mTurnBasedMultiplayerClient.takeTurn(mMatch.getMatchId(),
@@ -313,12 +314,11 @@ public class TurnBasedAndroid extends TurnBasedService  {
 
 
 
-        if(mMatch.getData() != null)
+       /* if(mMatch.getData() != null)
         {
-
-            mTurnData.player2Id = myParticipantId;
-        }
-        else
+        mTurnData.player2Id = myParticipantId;
+        }*/
+       // else
         {
             mTurnData.player1Id = myParticipantId;
         }
@@ -541,11 +541,21 @@ public class TurnBasedAndroid extends TurnBasedService  {
         }
     };
 
-             public TurnBasedMatchUpdateCallback mMatchUpdateCallback = new TurnBasedMatchUpdateCallback() {
+    public TurnBasedMatchUpdateCallback mMatchUpdateCallback = new TurnBasedMatchUpdateCallback() {
         @Override
         public void onTurnBasedMatchReceived(@NonNull TurnBasedMatch turnBasedMatch) {
             showToast("\"onTurnBasedMatchReceived\"" );
             System.out.println("\"onTurnBasedMatchReceived\"");
+
+            if(turnBasedMatch.getData() != null)
+                try {
+                    mTurnData = PlayerTurn.unpersist(turnBasedMatch.getData());
+                    mTurnData.matchStatus = PlayerTurn.MATCH_TURN_STATUS_MY_TURN;
+                    coreGameplayCallBacks.fireEnemyTurnFinishedEvent(mTurnData);
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                    FirebaseCrash.log(e.getMessage());
+                }
         }
 
         @Override

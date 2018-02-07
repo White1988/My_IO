@@ -126,7 +126,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
     @Override
     protected void onResume() {
         super.onResume();
-        signInSilently();
+        //signInSilently();
     }
 
     public void signInSilently() {
@@ -315,7 +315,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
         // This is *NOT* required; if you do not register a handler for
         // invitation events, you will get standard notifications instead.
         // Standard notifications may be preferable behavior in many cases.
-         turnBasedAndroid.     mInvitationsClient.registerInvitationCallback(turnBasedAndroid. mInvitationCallback);
+        // turnBasedAndroid.     mInvitationsClient.registerInvitationCallback(turnBasedAndroid. mInvitationCallback);
 
         // Likewise, we are registering the optional MatchUpdateListener, which
         // will replace notifications you would get otherwise. You do *NOT* have
@@ -552,45 +552,7 @@ public class AndroidLauncher extends AndroidApplication implements PlayServices 
 
     @Override
     public void unlockAchievement(int score, String gameType) {
-       /* if (isSignedIn()) {
-            if (gameType.equals("two color mode")) {
-                if (score == 25) {
-                    Games.Achievements.unlock(gameHelper.getApiClient(),
-                            getString(R.string.achievement_score_25_in_easy));
-                } else if (score == 50) {
-                    Games.Achievements.unlock(gameHelper.getApiClient(),
-                            getString(R.string.achievement_score_50_in_easy));
-                } else if (score == 100) {
-                    Games.Achievements.unlock(gameHelper.getApiClient(),
-                            getString(R.string.achievement_score_100_in_easy));
-                }
-            } else if (gameType.equals("three color mode")) {
-                if (score == 25) {
-                    Games.Achievements.unlock(gameHelper.getApiClient(),
-                            getString(R.string.achievement_score_25_in_medium));
-                } else if (score == 50) {
-                    Games.Achievements.unlock(gameHelper.getApiClient(),
-                            getString(R.string.achievement_score_50_in_medium));
-                } else if (score == 100) {
-                    Games.Achievements.unlock(gameHelper.getApiClient(),
-                            getString(R.string.achievement_score_100_in_medium));
-                }
-            } else if (gameType.equals("four color mode")) {
-                if (score == 25) {
-                    Games.Achievements.unlock(gameHelper.getApiClient(),
-                            getString(R.string.achievement_score_25_in_hard));
-                } else if (score == 50) {
-                    Games.Achievements.unlock(gameHelper.getApiClient(),
-                            getString(R.string.achievement_score_50_in_hard));
-                } else if (score == 80){
-                    Games.Achievements.unlock(gameHelper.getApiClient(),
-                            getString(R.string.achievement_score_80_in_hard));
-                } else if (score == 100) {
-                    Games.Achievements.unlock(gameHelper.getApiClient(),
-                            getString(R.string.achievement_score_100_in_hard));
-                }
-            }
-        }*/
+
     }
 
     @Override

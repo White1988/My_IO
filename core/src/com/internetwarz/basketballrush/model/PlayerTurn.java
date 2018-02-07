@@ -25,7 +25,6 @@ public class PlayerTurn implements Serializable {
     public int selectedNumber;
     public int turnCounter;
     public String player1Id;
-    public String player2Id;
     public int player1Score;
     public int player2Score;
 
@@ -78,7 +77,7 @@ public class PlayerTurn implements Serializable {
                 "selectedNumber=" + selectedNumber +
                 ", turnCounter=" + turnCounter +
                 ", player1Id='" + player1Id + '\'' +
-                ", player2Id='" + player2Id + '\'' +
+
                 ", player1Score=" + player1Score +
                 ", player2Score=" + player2Score +
                 '}';
