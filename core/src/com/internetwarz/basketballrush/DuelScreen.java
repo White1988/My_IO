@@ -106,7 +106,8 @@ public class DuelScreen implements Screen, InputProcessor{
     private boolean myTurn = true; // true by default
 
     public DuelScreen(Xintuition game, PlayerTurn initialData ) {
-//        Gdx.input.setCatchBackKey(true);
+        // Catching Back Menu
+       //Gdx.input.setCatchBackKey(true);
 
         this.game = game;
         score = new Score(1);
@@ -152,7 +153,7 @@ public class DuelScreen implements Screen, InputProcessor{
         InitLabels();
 
         //Nikita initialisation
-        buttonSkin = new Skin();
+      /*  buttonSkin = new Skin();
         buttonAtlas = game.assets.getButtonAtlas();
         Pixmap rect = new Pixmap((int)widthPercent(25),(int)heightPercent(8),Pixmap.Format.RGBA8888);
         rect.setColor(Color.LIGHT_GRAY);
@@ -173,10 +174,9 @@ public class DuelScreen implements Screen, InputProcessor{
         textButtonStyle.font = font;
 
         textButtonStyle.up = buttonSkin.getDrawable("buttonPlay");
-        textButtonStyle.down = buttonSkin.getDrawable("buttonPlayClick");
+        textButtonStyle.down = buttonSkin.getDrawable("buttonPlayClick");*/
 
-
-
+        // todo UNCOMMENT
         Xintuition.getTurnBasedService().coreGameplayCallBacks.addEnemyTurnFinishedCallback(new TurnBasedService.PlayerDataAction() {
             @Override
             public void Action(PlayerTurn param) {
@@ -195,7 +195,6 @@ public class DuelScreen implements Screen, InputProcessor{
         {
             Gdx.app.log(TAG, "initialData == null!");
         }
-
     }
     private void buttonsInit(){
         Pixmap rect = new Pixmap(40,20,Pixmap.Format.RGBA8888);
@@ -481,44 +480,18 @@ public class DuelScreen implements Screen, InputProcessor{
         Dialog restartConfirmDialog = new Dialog("Exit", new Skin(Gdx.files.internal("skins/uiskin.json")));
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = font;
-        textButtonStyle.up = buttonSkin.getDrawable("buttonPlayClick");
-
-
-        TextButton yes = new TextButton(LanguagesManager.getInstance().getString("yes"), textButtonStyle);
-        yes.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
-                System.out.println("EXIT");
-            }
-        });
-
-        TextButton no = new TextButton(LanguagesManager.getInstance().getString("no"), textButtonStyle);
-        no.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Stay");
-            }
-        });
-
-
-
+//        textButtonStyle.up = buttonSkin.getDrawable("buttonPlayClick");
 
         restartConfirmDialog.text(LanguagesManager.getInstance().getString("exit"), textStyle);
-        restartConfirmDialog.button(yes);
-        restartConfirmDialog.button(no);
         restartConfirmDialog.button(b1);
-
-
+        restartConfirmDialog.button(b2);
+        restartConfirmDialog.button(b3);
 
         restartConfirmDialog.show(stage);
 
         restartConfirmDialog.setSize(widthPercent(60),heightPercent(30));
         restartConfirmDialog.setPosition(Gdx.graphics.getWidth()/3 - restartConfirmDialog.getWidth()/2, Gdx.graphics.getHeight()/3 - restartConfirmDialog.getHeight()/2);
-        yes.setSize(WIDTH/10,HEIGHT/20);
-        no.setSize(yes.getWidth(), yes.getHeight());
-        b1.setSize(WIDTH/10,HEIGHT/20);
-//        yes.setPosition(restartConfirmDialog.getWidth()/2, restartConfirmDialog.getY() + restartConfirmDialog.getHeight()/10);
-
-
+//        b1.setSize(WIDTH/10,HEIGHT/20);
     }
 
     @Override
